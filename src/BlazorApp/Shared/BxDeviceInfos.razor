@@ -1,0 +1,38 @@
+﻿@if (ExCommonInfo != null!)
+{
+    <RadzenCard>
+        <RadzenStack Orientation="Orientation.Vertical">
+
+            <RadzenLabel class="labelstyeditheader">Statusinformationen:</RadzenLabel>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Status</RadzenLabel>
+                <RadzenLabel>@ExCommonInfo.Info</RadzenLabel>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Firmware Gerät</RadzenLabel>
+                <RadzenLabel>@ExCommonInfo.FirmwareversionDevice</RadzenLabel>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Firmware aktuell:</RadzenLabel>
+                <RadzenLabel>@ExCommonInfo.FirmwareversionService</RadzenLabel>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Config Version Gerät</RadzenLabel>
+                <RadzenLabel>@ExCommonInfo.ConfigversionDevice</RadzenLabel>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Config Version aktuell:</RadzenLabel>
+                <RadzenLabel>@ExCommonInfo.ConfigversionServer</RadzenLabel>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Device Secret</RadzenLabel>
+                <RadzenLabel>@ExCommonInfo.Secret</RadzenLabel>
+            </RadzenStack>
+            @if (CmdDevHelper != null!)
+            {
+                <RadzenLabel>Secret kopieren:</RadzenLabel>
+                <BxButton BissCommand="CmdDevHelper" BxButtonType="EnumBxButtonType.TextAndGlyph"></BxButton>
+            }
+        </RadzenStack>
+    </RadzenCard>
+}

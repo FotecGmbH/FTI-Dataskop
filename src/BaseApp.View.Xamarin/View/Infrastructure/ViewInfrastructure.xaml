@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--  ReSharper disable Xaml.RedundantNamespaceAlias  -->
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewInfrastructure"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:bccnv="http://biss.schemas.com/coreconverter"
+    xmlns:bcm="http://biss.schemas.com/markupextensions"
+    xmlns:converter="clr-namespace:BaseApp.View.Xamarin.Converter"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:infrastructure="clr-namespace:BaseApp.ViewModel.Infrastructure;assembly=BaseApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    d:DataContext="{x:Static infrastructure:VmInfrastructure.DesignInstance}"
+    x:TypeArguments="infrastructure:VmInfrastructure"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <!--  ReSharper restore Xaml.RedundantNamespaceAlias  -->
+    <view:BissContentPage.Resources>
+        <bccnv:ConverterBooleanValueColor
+            x:Key="BackgroundColorConverter"
+            ColorFalse="Transparent"
+            ColorTrue="{StaticResource ColorAccent}" />
+    </view:BissContentPage.Resources>
+
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+        <ScrollView>
+            <StackLayout
+                Margin="8,0,8,4"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand">
+
+                <Grid
+                    ColumnSpacing="8"
+                    HorizontalOptions="FillAndExpand"
+                    RowSpacing="4"
+                    VerticalOptions="FillAndExpand">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="48" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!--#region Obere Leiste-->
+                    <StackLayout
+                        Grid.Row="0"
+                        Margin="4"
+                        HorizontalOptions="FillAndExpand"
+                        Orientation="Horizontal">
+                        <Label
+                            Text="Firma:"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center" />
+                        <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
+                        <bcc:BxPicker
+                            HorizontalOptions="FillAndExpand"
+                            MinimumWidthRequest="200"
+                            ObservableCollectionSelectable="{Binding PickerCompanies}"
+                            WidthRequest="200" />
+                        <bcc:BxButton BissCommand="{Binding CmdEditCompanies}" />
+                    </StackLayout>
+                    <BoxView
+                        Grid.Row="0"
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{AppThemeBinding Dark={StaticResource ColorAccent},
+                                                Light={StaticResource ColorAccentLight}}" />
+                    <!--#endregion-->
+
+                    <!--#region Gateways-->
+                    <bcc:BxCollapseView
+                        Grid.Row="1"
+                        HeaderSubTitle="{Binding Dc.DcExCompanies.SelectedItem.Data.Information.Name}"
+                        HeaderTitle="Gateways">
+                        <StackLayout>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="16" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="8" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="8" />
+                                </Grid.RowDefinitions>
+
+                                <BoxView
+                                    Grid.Row="0"
+                                    Grid.RowSpan="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource ColorAccent},
+                                                                      Light={StaticResource ColorAccentLight}}"
+                                    Opacity="0.7" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="Gateways" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding Dc.DcExCompanies.SelectedItem.Data.Information.Name}" />
+
+                                <bcc:BxGlyphButton
+                                    Grid.Row="1"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="2"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding CmdAddGateway}"
+                                    CommandParameter="{Binding .}"
+                                    Glyph="{Binding CmdAddGateway.Glyph}"
+                                    IsVisible="{Binding CmdAddGateway.CanExecuteProperty}" />
+                            </Grid>
+                            <!--  ReSharper disable once ObsoleteElement  -->
+                            <bcc:BxListView ItemsSource="{Binding UiGateways}" SelectionMode="None">
+                                <!--  ReSharper disable once ObsoleteElement  -->
+                                <bcc:BxListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <Grid BackgroundColor="{Binding Data.IsSelected, Converter={StaticResource BackgroundColorConverter}}">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="2*" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="1*" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Grid
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="3"
+                                                        Grid.Column="0"
+                                                        Margin="5"
+                                                        HorizontalOptions="CenterAndExpand"
+                                                        VerticalOptions="CenterAndExpand">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="25" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="25" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <BoxView
+                                                            BackgroundColor="{Binding Data.DeviceCommon.State, Converter={StaticResource ConverterColorEnumDeviceOnlineState}}"
+                                                            HeightRequest="30"
+                                                            WidthRequest="30"
+                                                            Color="{Binding Data.DeviceCommon.State, Converter={StaticResource ConverterColorEnumDeviceOnlineState}}" />
+                                                    </Grid>
+
+                                                    <Label
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="2"
+                                                        Grid.Column="2"
+                                                        Style="{bcm:Sty LabelStyDetail}"
+                                                        Text="{Binding Index}"
+                                                        VerticalOptions="Center" />
+                                                    <Label
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="2"
+                                                        Grid.Column="1"
+                                                        Text="{Binding Data.Information.UiNameShort}"
+                                                        VerticalOptions="Center" />
+                                                    <Label
+                                                        Grid.Row="2"
+                                                        Grid.Column="1"
+                                                        Margin="0,-8,0,0"
+                                                        HorizontalOptions="Start"
+                                                        Style="{bcm:Sty LabelStyDetail}"
+                                                        Text="{Binding Data.DeviceCommon.Info}"
+                                                        VerticalOptions="Center" />
+
+                                                    <BoxView
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="4"
+                                                        Grid.Column="0"
+                                                        Grid.ColumnSpan="5"
+                                                        BackgroundColor="Transparent"
+                                                        Color="Transparent">
+                                                        <BoxView.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding ViewModel.CmdSelectListItem, Source={x:Reference MyViewConfigurationQ}}"
+                                                                CommandParameter="{Binding .}"
+                                                                NumberOfTapsRequired="1" />
+                                                        </BoxView.GestureRecognizers>
+                                                    </BoxView>
+
+                                                    <bcc:BxGlyphButton
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="3"
+                                                        Grid.Column="3"
+                                                        BackgroundColor="Transparent"
+                                                        Command="{Binding ViewModel.CmdDeleteGateway, Source={x:Reference MyViewConfigurationQ}}"
+                                                        CommandParameter="{Binding .}"
+                                                        Glyph="{Binding ViewModel.CmdDeleteGateway.Glyph, Source={x:Reference MyViewConfigurationQ}}"
+                                                        GlyphColor="DarkRed" />
+
+                                                    <bcc:BxGlyphButton
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="3"
+                                                        Grid.Column="4"
+                                                        BackgroundColor="Transparent"
+                                                        Command="{Binding ViewModel.CmdEditGateway, Source={x:Reference MyViewConfigurationQ}}"
+                                                        CommandParameter="{Binding .}"
+                                                        Glyph="{Binding ViewModel.CmdEditGateway.Glyph, Source={x:Reference MyViewConfigurationQ}}" />
+
+                                                    <BoxView
+                                                        Grid.Row="3"
+                                                        Grid.Column="0"
+                                                        Grid.ColumnSpan="5"
+                                                        Style="{bcm:Sty BoxViewStySeperator}">
+                                                        <BoxView.IsVisible>
+                                                            <OnPlatform x:TypeArguments="x:Boolean">
+                                                                <On Platform="iOS, Android, macOS">false</On>
+                                                                <On Platform="WPF">true</On>
+                                                            </OnPlatform>
+                                                        </BoxView.IsVisible>
+                                                    </BoxView>
+                                                </Grid>
+
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+
+                                </bcc:BxListView.ItemTemplate>
+
+                            </bcc:BxListView>
+                        </StackLayout>
+
+                    </bcc:BxCollapseView>
+                    <!--#endregion-->
+
+                    <!--#region IotDevices-->
+                    <bcc:BxCollapseView
+                        Grid.Row="1"
+                        HeaderSubTitle="{Binding SelectedGateway.Data.Information.Name}"
+                        HeaderTitle="IoT-Geräte">
+                        <StackLayout>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="16" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="8" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="8" />
+                                </Grid.RowDefinitions>
+
+                                <BoxView
+                                    Grid.Row="0"
+                                    Grid.RowSpan="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource ColorAccent},
+                                                                      Light={StaticResource ColorAccentLight}}"
+                                    Opacity="0.7" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="Iot - Geräte" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding SelectedGateway.Data.Information.Name}" />
+
+                                <bcc:BxGlyphButton
+                                    Grid.Row="1"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="2"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding CmdAddIotDevice}"
+                                    CommandParameter="{Binding .}"
+                                    Glyph="{Binding CmdAddIotDevice.Glyph}"
+                                    IsVisible="{Binding CmdAddIotDevice.CanExecuteProperty}" />
+                            </Grid>
+                            <!--  ReSharper disable once ObsoleteElement  -->
+                            <bcc:BxListView ItemsSource="{Binding UiIotDevices}" SelectionMode="None">
+                                <!--  ReSharper disable once ObsoleteElement  -->
+                                <bcc:BxListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <Grid BackgroundColor="{Binding Data.IsSelected, Converter={StaticResource BackgroundColorConverter}}">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="2*" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="1*" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Grid
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="3"
+                                                        Grid.Column="0"
+                                                        Margin="5"
+                                                        HorizontalOptions="CenterAndExpand"
+                                                        VerticalOptions="CenterAndExpand">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="25" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="25" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <BoxView
+                                                            BackgroundColor="{Binding Data.DeviceCommon.State, Converter={StaticResource ConverterColorEnumDeviceOnlineState}}"
+                                                            HeightRequest="30"
+                                                            WidthRequest="30"
+                                                            Color="{Binding Data.DeviceCommon.State, Converter={StaticResource ConverterColorEnumDeviceOnlineState}}" />
+                                                    </Grid>
+
+                                                    <Label
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="2"
+                                                        Grid.Column="2"
+                                                        Style="{bcm:Sty LabelStyDetail}"
+                                                        Text="{Binding Index}"
+                                                        VerticalOptions="Center" />
+                                                    <Label
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="2"
+                                                        Grid.Column="1"
+                                                        Text="{Binding Data.Information.UiNameShort}"
+                                                        VerticalOptions="Center" />
+                                                    <Label
+                                                        Grid.Row="2"
+                                                        Grid.Column="1"
+                                                        Margin="0,-8,0,0"
+                                                        HorizontalOptions="Start"
+                                                        Style="{bcm:Sty LabelStyDetail}"
+                                                        Text="{Binding Data.DeviceCommon.Info}"
+                                                        VerticalOptions="Center" />
+
+
+                                                    <BoxView
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="4"
+                                                        Grid.Column="0"
+                                                        Grid.ColumnSpan="5"
+                                                        BackgroundColor="Transparent"
+                                                        Color="Transparent">
+                                                        <BoxView.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding ViewModel.CmdSelectListItem, Source={x:Reference MyViewConfigurationQ}}"
+                                                                CommandParameter="{Binding .}"
+                                                                NumberOfTapsRequired="1" />
+                                                        </BoxView.GestureRecognizers>
+                                                    </BoxView>
+
+
+                                                    <bcc:BxGlyphButton
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="3"
+                                                        Grid.Column="3"
+                                                        BackgroundColor="Transparent"
+                                                        Command="{Binding ViewModel.CmdDeleteIotDevice, Source={x:Reference MyViewConfigurationQ}}"
+                                                        CommandParameter="{Binding .}"
+                                                        Glyph="{Binding ViewModel.CmdDeleteIotDevice.Glyph, Source={x:Reference MyViewConfigurationQ}}"
+                                                        GlyphColor="DarkRed" />
+
+                                                    <bcc:BxGlyphButton
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="3"
+                                                        Grid.Column="4"
+                                                        BackgroundColor="Transparent"
+                                                        Command="{Binding ViewModel.CmdEditIotDevice, Source={x:Reference MyViewConfigurationQ}}"
+                                                        CommandParameter="{Binding .}"
+                                                        Glyph="{Binding ViewModel.CmdEditIotDevice.Glyph, Source={x:Reference MyViewConfigurationQ}}" />
+
+                                                    <BoxView
+                                                        Grid.Row="3"
+                                                        Grid.Column="0"
+                                                        Grid.ColumnSpan="5"
+                                                        Style="{bcm:Sty BoxViewStySeperator}">
+                                                        <BoxView.IsVisible>
+                                                            <OnPlatform x:TypeArguments="x:Boolean">
+                                                                <On Platform="iOS, Android, macOS">false</On>
+                                                                <On Platform="WPF">true</On>
+                                                            </OnPlatform>
+                                                        </BoxView.IsVisible>
+                                                    </BoxView>
+                                                </Grid>
+
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+
+                                </bcc:BxListView.ItemTemplate>
+
+                            </bcc:BxListView>
+                        </StackLayout>
+                    </bcc:BxCollapseView>
+
+
+                    <!--#endregion-->
+
+                    <!--#region Messwerte-->
+                    <bcc:BxCollapseView
+                        Grid.Row="1"
+                        HeaderSubTitle="{Binding SelectedIotDevice.Data.Information.Name}"
+                        HeaderTitle="Messwertdefinitionen">
+                        <StackLayout>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="16" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="8" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="8" />
+                                </Grid.RowDefinitions>
+
+                                <BoxView
+                                    Grid.Row="0"
+                                    Grid.RowSpan="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource ColorAccent},
+                                                                      Light={StaticResource ColorAccentLight}}"
+                                    Opacity="0.7" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="Messwertdefinitionen" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding SelectedIotDevice.Data.Information.Name}" />
+
+                                <bcc:BxGlyphButton
+                                    Grid.Row="1"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="2"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding CmdAddMeasurementDefinition}"
+                                    CommandParameter="{Binding .}"
+                                    Glyph="{Binding CmdAddMeasurementDefinition.Glyph}"
+                                    IsVisible="{Binding CmdAddMeasurementDefinition.CanExecuteProperty}" />
+                            </Grid>
+                            <!--  ReSharper disable once ObsoleteElement  -->
+                            <bcc:BxListView ItemsSource="{Binding UiMeasurementDefinitions}">
+                                <!--  ReSharper disable once ObsoleteElement  -->
+                                <bcc:BxListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <Grid BackgroundColor="{Binding Data.IsSelected, Converter={StaticResource BackgroundColorConverter}}">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="2*" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="1*" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="8" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Label
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="2"
+                                                        Grid.Column="2"
+                                                        Style="{bcm:Sty LabelStyDetail}"
+                                                        Text="{Binding Index}"
+                                                        VerticalOptions="Center" />
+                                                    <Label
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="2"
+                                                        Grid.Column="1"
+                                                        Text="{Binding Data.Information.UiNameShort}"
+                                                        VerticalOptions="Center" />
+                                                    <Label
+                                                        Grid.Row="2"
+                                                        Grid.Column="1"
+                                                        Margin="0,-8,0,0"
+                                                        HorizontalOptions="Start"
+                                                        Style="{bcm:Sty LabelStyDetail}"
+                                                        Text="{Binding Data.CurrentValue.Value}"
+                                                        VerticalOptions="Center" />
+
+                                                    <bcc:BxGlyphButton
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="3"
+                                                        Grid.Column="3"
+                                                        BackgroundColor="Transparent"
+                                                        Command="{Binding ViewModel.CmdDeleteMeasurementDefinition, Source={x:Reference MyViewConfigurationQ}}"
+                                                        CommandParameter="{Binding .}"
+                                                        Glyph="{Binding ViewModel.CmdDeleteMeasurementDefinition.Glyph, Source={x:Reference MyViewConfigurationQ}}"
+                                                        GlyphColor="DarkRed" />
+
+                                                    <bcc:BxGlyphButton
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="3"
+                                                        Grid.Column="4"
+                                                        BackgroundColor="Transparent"
+                                                        Command="{Binding ViewModel.CmdEditMeasurementDefinition, Source={x:Reference MyViewConfigurationQ}}"
+                                                        CommandParameter="{Binding .}"
+                                                        Glyph="{Binding ViewModel.CmdEditMeasurementDefinition.Glyph, Source={x:Reference MyViewConfigurationQ}}" />
+
+                                                    <BoxView
+                                                        Grid.Row="3"
+                                                        Grid.Column="0"
+                                                        Grid.ColumnSpan="5"
+                                                        Style="{bcm:Sty BoxViewStySeperator}">
+                                                        <BoxView.IsVisible>
+                                                            <OnPlatform x:TypeArguments="x:Boolean">
+                                                                <On Platform="iOS, Android, macOS">false</On>
+                                                                <On Platform="WPF">true</On>
+                                                            </OnPlatform>
+                                                        </BoxView.IsVisible>
+                                                    </BoxView>
+                                                </Grid>
+
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+
+                                </bcc:BxListView.ItemTemplate>
+
+                            </bcc:BxListView>
+
+                        </StackLayout>
+
+                    </bcc:BxCollapseView>
+
+                    <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
+                    <!--#endregion-->
+
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

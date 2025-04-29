@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ContentView
+    x:Class="BaseApp.View.Xamarin.Controls.InformationView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="InformationViewBase">
+    <ContentView.Content>
+        <Frame x:Name="ContentFrame" BindingContext="{x:Reference InformationViewBase}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Text="{Binding ExInformation.Name}" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Text="{Binding ExInformation.Description}" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Text="Erzeugt:" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Text="{Binding ExInformation.CreatedDate}" />
+                <Label
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Text="Aktualisiert:" />
+                <Label
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Text="{Binding ExInformation.UpdatedDate}" />
+
+            </Grid>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

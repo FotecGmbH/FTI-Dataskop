@@ -1,0 +1,121 @@
+@page "/ViewUser"
+@page "/ViewUser/{Id:int}"
+@using BDA.Common.Exchange.Model
+@using BDA.Common.Exchange.Model.ConfigApp
+@inherits ProjectRazorPage<VmUser>
+
+@if (ViewModel != null && ViewModel.Dc != null! && ViewModel.Dc.DcExUser != null! && ViewModel.Dc.DcExUser.Data != null!)
+{
+    <RadzenCard>
+        <RadzenRow AlignItems="AlignItems.Center">
+            <RadzenColumn SizeXL="3" Size="12" class="text-center">
+                @if (!String.IsNullOrEmpty(ViewModel.Dc.DcExUser.Data.UserImageLink))
+                {
+                    <BxImage style="max-width: 250px;" Round="true" ImageSource="@ViewModel.Dc.DcExUser.Data.UserImageLink"></BxImage>
+                }
+                else
+                {
+                    <BxImage style="max-width: 250px;" Round="true" ImageSource="@ConverterImage.Convert(EnumEmbeddedImage.DefaultUserImage_png)"></BxImage>
+                }
+                <RadzenText TextStyle="TextStyle.DisplayH6">@ViewModel.Dc.DcExUser.Data.Fullname - @ViewModel.Dc.DcExUser.Data.LoginName</RadzenText>
+                <RadzenText>@ViewModel.UserId - @(ViewModel.Dc.DcExUser.Data.IsAdmin ? ResCommon.EnumUserRoleSysAdmin : "Benutzer")</RadzenText>
+            </RadzenColumn>
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
+                <BxButton BxButtonType="EnumBxButtonType.TextAndGlyph" BissCommand="@ViewModel.CmdEdit"/>
+                <BxButton BxButtonType="EnumBxButtonType.TextAndGlyph" BissCommand="@ViewModel.CmdAddToken"/>
+                <BxButton BxButtonType="EnumBxButtonType.TextAndGlyph" BissCommand="@ViewModel.CmdChangePassword"/>
+                <BxButton BxButtonType="EnumBxButtonType.TextAndGlyph" BissCommand="@ViewModel.CmdLogout"/>
+            </RadzenStack>
+        </RadzenRow>
+    </RadzenCard>
+    <RadzenRow class="mt-2">
+        <RadzenColumn>
+            <RadzenCard>
+                @if (ViewModel.UiPermissions.Count > 0)
+                {
+                    <RadzenText TextStyle="TextStyle.H5">@ResViewUser.LblPermissionsTitle</RadzenText>
+                    <BxCollectionView Collection="@ViewModel.UiPermissions"
+                                      TItem="UiPermission">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="UiPermission" Title="@ResViewUser.LblUserRole">
+                                <Template Context="per">
+                                    @per.UserRoleUi
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="UiPermission" Title="@ResViewUser.LblUserRight">
+                                <Template Context="per">
+                                    @per.UserRightUi
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="UiPermission" Title="@ResViewUser.LblCompany">
+                                <Template Context="per">
+                                    @per.Company
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </BxCollectionView>
+                }
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenCard>
+                @if (ViewModel.Dc.DcExUser.Data.UserDevices.Count > 0)
+                {
+                    <RadzenText TextStyle="TextStyle.H5">@ResViewUser.LblDevices</RadzenText>
+                    <BxCollectionView class="table table-striped"
+                                      AllowPaging="true"
+                                      PageSize="10"
+                                      Collection="@ViewModel.Dc.DcExUser.Data.UserDevices"
+                                      TItem="ExUserDevice">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="ExUserDevice" Title="@ResViewUser.LblDeviceName">
+                                <Template Context="dev">
+                                    @dev.DeviceName
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ExUserDevice" Title="@ResViewUser.LblDeviceManufacturer">
+                                <Template Context="dev">
+                                    @dev.Manufacturer
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ExUserDevice" Title="@ResViewUser.LblDeviceModel">
+                                <Template Context="dev">
+                                    @dev.Model
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </BxCollectionView>
+                }
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenCard>
+                @if (ViewModel.Dc.DcExUser.Data.Tokens.Count > 0)
+                {
+                    <RadzenText TextStyle="TextStyle.H5">@ResViewUser.LblAccessToken</RadzenText>
+                    <BxCollectionView class="table table-striped"
+                                      Collection="@ViewModel.Dc.DcExUser.Data.Tokens"
+                                      TItem="ExAccessToken">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="ExAccessToken" Title="@ResViewUser.LblToken">
+                                <Template Context="dev">
+                                    @dev.Token
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ExAccessToken" Title="@ResViewUser.LblValidTill">
+                                <Template Context="dev">
+                                    @dev.GuiltyUntilUtc.ToString("dd.MM.yyyy hh:mm")
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ExAccessToken">
+                                <Template Context="dev">
+                                    <BxButton ExecutionParameter="dev" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdCopyToken"></BxButton>
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </BxCollectionView>
+                }
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+}

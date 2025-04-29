@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+import "Protos/common.proto";
+import "Protos/enums.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BDA.Service.Com.GRPC.Protos";
+
+
+
+
+service MeasurementResult{
+	rpc UpdateMeasurementResultByID (ProtoFilterRequestByID) returns (ProtoResult);
+	rpc GetMeasurementResultByID (ProtoRequestByID) returns (ProtoMeasurementResultReply);
+	rpc QueryMeasurementResults (ProtoMeasurementResultQueryRequest) returns (ProtoMeasurementResultQueryReply);
+}
+
+// MeasurmentResult
+message ProtoMeasurementResultModel{
+	int64 ID = 1;
+	ProtoPositionModel Location = 2;
+	ProtoEnumValueTypes ValueType = 3;
+	string Value = 4;
+	string AdditionalProperties = 5;
+	google.protobuf.Timestamp TimeStamp = 6;
+}
+
+// Position
+message ProtoPositionModel{
+	double Longitude = 1;
+	double Latitude = 2;
+	double Altitude = 3;
+	double Presision = 4;
+	google.protobuf.Timestamp TimeStamp = 5;
+	ProtoEnumPositionSource Source = 6;
+}
+
+
+
+
+// Result of one measurement result plus a general result
+message ProtoMeasurementResultReply{
+	ProtoResult Result = 1;
+	ProtoMeasurementResultModel MeasurementResult = 2;
+}
+
+// Querying request of the measurement results.
+message ProtoMeasurementResultQueryRequest{
+	ProtoQueryRequest BasicQueryOptions = 1;
+	ProtoEnumValueTypes ValueType = 2;
+	bool AllValueTypes = 3;
+	string AdditionalPropertyFilter = 4;
+	string OrderBy = 5;
+}
+
+// Querying reply of the measurement results.
+message ProtoMeasurementResultQueryReply{
+	int32 Count = 1;
+	repeated ProtoMeasurementResultModel MeasurementResults = 2;
+	ProtoResult Result = 3;
+}
+
+
+
+
+

@@ -1,0 +1,58 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "BDA.Service.Com.GRPC.Protos";
+
+message Empty{
+}
+
+// General request by ID
+message ProtoRequestByID{
+	int64 ID = 1;
+}
+
+// A general request to update a model with additional properies by ID.
+message ProtoFilterRequestByID{
+	int64 ID = 1;
+	string AdditionalProperties = 2;
+}
+
+// General request by ID
+message ProtoQueryRequest{
+	int64 ID = 1;
+	int32 Take = 2;
+	int32 Skip = 3;
+}
+
+// General result of a method call
+message ProtoResult{
+	bool Success = 1;
+	string Message = 2;
+}
+
+// General information of a entity
+message ProtoInformation{
+	string Name = 1;
+	string Description = 2;
+	google.protobuf.Timestamp CreatedDate = 3;
+	google.protobuf.Timestamp UpdatedDate = 4;
+
+}
+
+// Basic information of a entity
+message ProtoBasicInformation{
+	int64 ID = 1;
+	string Name = 2;
+}
+
+// Represenst a coordinate
+message ProtoCoordinate{
+	float Latitude = 1;
+	float Longitude = 2;
+	float Altitude = 3;
+}
+
+
+
+
+
+

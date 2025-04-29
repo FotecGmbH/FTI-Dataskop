@@ -1,0 +1,20 @@
+﻿@page "/{{ViewName}}"
+@page "/{{ViewName}}/{Id:int}"
+
+@inherits ProjectRazorPage<{{ViewModelName}}>
+  
+<div>
+  <h3>@ViewModel.PageSubTitle</h3>
+</div>
+  
+@code
+{
+    /// <summary>
+    ///     Method invoked when the component is ready to start, having received its
+    ///     initial parameters from its parent in the render tree.
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+}

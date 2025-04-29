@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ResourceDictionary
+    x:Class="BaseApp.View.Xamarin.Styles.StyFonts"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!--#region Fonts-->
+
+    <x:String x:Key="Glyphicons">GlyphiconsNEW</x:String>
+    <x:String x:Key="StreamLineIcons">StreamLineIconsLightNEW</x:String>
+    <x:String x:Key="MontserratRegular">MontserratRegularNEW</x:String>
+    <x:String x:Key="MontserratSemiBold">MontserratSemiBoldNEW</x:String>
+    <x:String x:Key="MontserratBold">StreamLineIconsBoldNEW</x:String>
+    <x:String x:Key="TwCenMt">TwCenMtNEW</x:String>
+
+    <!--#endregion-->
+
+    <OnPlatform x:Key="FontDefault" x:TypeArguments="x:String">
+        <On Platform="iOS, Android, macOS">MontserratRegularNEW</On>
+        <On Platform="WPF">TwCenMtNEW</On>
+    </OnPlatform>
+
+    <!--#region Sizes-->
+
+    <OnPlatform x:Key="FontSizeLarge" x:TypeArguments="x:Double">
+        <On Platform="iOS, Android, macOS">20</On>
+        <On Platform="WPF">22</On>
+    </OnPlatform>
+
+    <OnPlatform x:Key="FontSizeDefault" x:TypeArguments="x:Double">
+        <On Platform="iOS, Android, macOS">16</On>
+        <On Platform="WPF">18</On>
+    </OnPlatform>
+
+    <OnPlatform x:Key="FontSizeSmall" x:TypeArguments="x:Double">
+        <On Platform="iOS, Android, macOS">12</On>
+        <On Platform="WPF">16</On>
+    </OnPlatform>
+
+    <OnPlatform x:Key="FontSizeSmallDetail" x:TypeArguments="x:Double">
+        <On Platform="iOS, Android, macOS">10</On>
+        <On Platform="WPF">14</On>
+    </OnPlatform>
+
+    <!--#endregion-->
+
+</ResourceDictionary>

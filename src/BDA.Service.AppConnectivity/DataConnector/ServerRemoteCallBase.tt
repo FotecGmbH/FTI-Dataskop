@@ -1,0 +1,281 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="System.Windows.Forms" #>
+<#@ Assembly Name="EnvDTE" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+// (C) 2021 FOTEC Forschungs- und Technologietransfer GmbH
+// Das Forschungsunternehmen der Fachhochschule Wiener Neustadt
+// 
+// Kontakt biss@fotec.at / www.fotec.at
+//
+// Automatisch generierter Code. Nicht verändern!
+// Erstellt am <#= DateTime.Now #>
+
+using System;
+// ReSharper disable once RedundantUsingDirective
+using System.Collections.Generic;
+using System.Threading.Tasks;
+// ReSharper disable once RedundantUsingDirective
+using System.Linq;
+using Biss.Dc.Core;
+using Biss.Dc.Server;
+using Biss.Serialize;
+using Exchange.Model;
+using Exchange.Model.ConfigApp;
+
+namespace BDA.Service.AppConnectivity.DataConnector
+{
+    /// <summary>
+    /// <para>ServerRemoteCallBase</para>
+    /// Klasse ServerRemoteCallBase. (C) 2020 FOTEC Forschungs- und Technologietransfer GmbH
+    /// </summary>
+    public abstract class ServerRemoteCallBase
+    {
+        /// <summary>
+        /// Zugriff auf die Kommunikation mit den angemeldeten Clients
+        /// </summary>
+        public IDcConnections ClientConnection { get; set; } = null!;
+
+        /// <summary>
+        /// Zugriff auf die Sync-Funktionen der Listen
+        /// </summary>
+        private static Func<string, long, long, DcListSyncData, DcListSyncProperties, Task<DcListSyncTransferData>> _syncFunc = null!;
+
+        /// <summary>
+        /// Workaround um in den Server-Funktionen den Zugriff auf alle angemeldeten Clients zu ermöglichen
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="syncFunc"></param>
+        public void SetClientConnection(object connection, Func<string, long, long, DcListSyncData, DcListSyncProperties, Task<DcListSyncTransferData>> syncFunc = null!)
+        {
+            if (connection is IDcConnections con)
+            {
+                ClientConnection = con;
+            }
+            else
+            {
+                throw new InvalidCastException();
+            }
+            
+            if (syncFunc != null! && _syncFunc == null!)
+            {
+                _syncFunc = syncFunc;
+            }
+        }
+
+        #region Sendefunktionen
+
+<#
+    //string app = @"C:\Code\FOTEC\BISS\Biss.Apps.Connectivity\DcHelper\bin\Debug\netcoreapp3.1\DcHelper.exe";
+    string app = @"DcHelper.exe";
+    
+    var serviceProvider = this.Host as IServiceProvider;
+    var dte = serviceProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+    var root = System.IO.Path.GetDirectoryName(dte.Solution.FullName);
+        string ass = root + @"\BaseApp\bin\Debug\netstandard2.1\BaseApp.dll";
+    FileInfo fi = new FileInfo(ass);
+    var test = fi.FullName;
+    List<string> addPath = new List<string>(){root + @"\AndroidApp\bin\Debug", 
+                                              root + @"\IOsApp\bin\iPhoneSimulator\Debug",
+                                              root + @"\WpfApp\bin\Debug\net6.0-windows"                                         
+    };
+    var n = GetNames(app,ass,addPath);
+
+
+    foreach (var s in n)
+    {
+        var t = s.Split(';');if (t[0] == "point")
+        {#>
+
+        /// <summary>
+        /// Daten an <#= t[1] #> senden.
+        /// Wenn deviceId und userId null sind werden die Daten an alle Geräte gesendet
+        /// </summary>
+        /// <param name="data">Daten</param>
+        /// <param name="deviceId">An ein bestimmtes Gerät</param>
+        /// <param name="userId">An einen bestimmten Benutzer</param>
+        /// <param name="excludeDeviceId">An alle Geräte auf Dieses</param>
+        /// <returns>Anzahl der erreichten Geräte</returns>
+        public async Task<int> Send<#= t[1] #>(<#=t[2]#> data, long? deviceId = null, long? userId = null, long? excludeDeviceId = null)
+        {
+            return await SendInternal("<#= t[1] #>", data.ToJson(), deviceId, userId,excludeDeviceId).ConfigureAwait(false);
+        }
+
+<#
+        }
+        else if (t[0] == "list")
+        {
+        #>
+
+        /// <summary>
+        /// Listen Daten an <#= t[1] #> senden.
+        /// Wenn deviceId und userId null sind werden die Daten an alle Geräte gesendet
+        /// </summary>
+        /// <param name="data">Daten</param>
+        /// <param name="deviceId">An ein bestimmtes Gerät</param>
+        /// <param name="userId">An einen bestimmten Benutzer</param>
+        /// <param name="excludeDeviceId">An alle Geräte auf Dieses</param>
+        /// <returns>Anzahl der erreichten Geräte</returns>
+        [Obsolete("Bitte Sync<#= t[1] #> verwenden!")]
+        public async Task<int> Send<#= t[1] #>(List<DcServerListItem<<#=t[2]#>>> data, long? deviceId = null, long? userId = null, long? excludeDeviceId = null)
+        {
+            var tmp = data.Select(item => item.ToDcTransferListItem()).ToList();
+            return await SendInternal("<#= t[1] #>", tmp.ToJson(), deviceId, userId).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Datenänderungen für <#= t[1] #> an Client weiter geben
+        /// </summary>
+        /// <param name="data">Sync-Daten</param>
+        /// <param name="deviceId">Gerät</param>
+        /// <param name="userId">Benutzer</param>
+        /// <param name="excludeDeviceId">An alle Geräte auf Dieses</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<int> Sync<#= t[1] #>(DcListSyncResultData<<#=t[2]#>> data, long? deviceId = null, long? userId = null, long? excludeDeviceId = null)
+        {
+            if (data is IDcListSyncResultData result)
+            {
+                var tmp = result.ToDcListSyncTransferData();
+                var tmp2 = new DcListSyncResult("<#= t[1] #>")
+                           {
+                               Data = tmp
+                           };
+
+                return await SendInternal("<#= t[1] #>",tmp2.ToJson() , deviceId, userId,excludeDeviceId,true).ConfigureAwait(false);
+            }
+
+            throw new ArgumentException("Sync<#= t[1] #> has wrong Data");
+        }
+
+        /// <summary>
+        /// Datenänderungen für <#= t[1] #> an Client weiter geben
+        /// </summary>
+        /// <param name="userIds">Benutzer</param>
+        /// <param name="excludeDeviceId">An alle Geräte auf</param>
+        /// <returns></returns>
+        public async Task<int> Sync<#= t[1] #>(List<long> userIds, long? excludeDeviceId = null)
+        {
+            if (userIds == null)
+            {
+                throw new ArgumentNullException(nameof(userIds));
+            }
+
+            var couter = 0;
+            foreach (var userId in userIds)
+            {
+                var clientDevices = ClientConnection.GetClients().Where(w => w.UserId == userId);
+                foreach (var device in clientDevices)
+                {
+                    if (excludeDeviceId.HasValue && excludeDeviceId.Value == device.DeviceId)
+                        continue;
+
+                    if (!device.ListLastSyncData.ContainsKey("<#= t[1] #>"))
+                    {
+                        //Noch kein Sync
+                        continue;
+                    }
+
+                    if (device.ListLastSyncData["<#= t[1] #>"].DcListSyncData == null!)
+                    {
+                        continue;
+                    }
+                    var data = await _syncFunc("<#= t[1] #>", device.DeviceId, device.UserId, device.ListLastSyncData["<#= t[1] #>"].DcListSyncData!, device.ListLastSyncData["<#= t[1] #>"].DcListSyncProperties!).ConfigureAwait(false);
+                    var tmp2 = new DcListSyncResult("<#= t[1] #>")
+                               {
+                                   Data = data
+                               };
+                    await SendInternal("<#= t[1] #>",tmp2.ToJson() , device.DeviceId, device.UserId,excludeDeviceId,true).ConfigureAwait(false);
+                    couter++;
+                }
+            }
+            return couter;
+        }
+
+<#
+        }
+    }
+#>
+
+        /// <summary>
+        /// Daten senden.
+        /// Wenn deviceId und userId null sind werden die Daten an alle Geräte gesendet
+        /// </summary>
+        /// <param name="dpId">Datenpunkt Id</param>
+        /// <param name="data">Daten in Json serialisiert</param>
+        /// <param name="deviceId">An ein bestimmtes Gerät</param>
+        /// <param name="userId">An einen bestimmten Benutzer</param>
+        /// <param name="excludeDeviceId">An alle Geräte auf Dieses</param>
+        /// <param name="sync">Neuer Sync Mode ab Version 8.x</param>
+        /// <returns>Anzahl der erreichten Geräte</returns>
+        private async Task<int> SendInternal(string dpId, string data, long? deviceId, long? userId, long? excludeDeviceId = null, bool sync = false)
+        {
+            var d = new DcResult(dpId,sync) {JsonData = data};
+            d.Checksum = DcChecksum.Generate(d.JsonData);
+
+            int result = 0;
+
+            if (deviceId == null && userId == null)
+            {
+                result = await ClientConnection.SendData(d,excludeDeviceId).ConfigureAwait(false);
+            }
+            else if (userId != null)
+            {
+                result = await ClientConnection.SendDataToUser(userId.Value,d,excludeDeviceId).ConfigureAwait(false);
+            }
+            else if (deviceId != null)
+            {
+                if (await ClientConnection.SendDataToDevice(deviceId.Value, d).ConfigureAwait(false))
+                {
+                    result = 1;
+                }
+            }
+            return result;
+        }
+
+        #endregion
+
+    }
+}
+
+<#+
+  // Insert any template procedures here
+  List<string> GetNames(string helper, string assembly, List<string> searchPaths = null)
+        {
+            var data = new List<string>();
+            Process p = new Process();
+
+            p.StartInfo.FileName = helper;
+            string param = "extract -a " + assembly;
+            if (searchPaths != null && searchPaths.Count > 0)
+            {
+                foreach (var path in searchPaths)
+                {
+                    param += " -p " + path;
+                }
+            }
+            p.StartInfo.Arguments = param;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+
+            p.OutputDataReceived += (sender, args) =>
+            {
+                if (!String.IsNullOrEmpty(args.Data))
+                    data.Add(args.Data);
+            };
+            var exitcode = p.Start();
+            p.BeginOutputReadLine();
+            p.WaitForExit();
+
+
+            //Process.Start(helper);
+
+            return data;
+        }
+#>

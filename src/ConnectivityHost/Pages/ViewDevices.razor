@@ -1,0 +1,195 @@
+﻿@page "/ViewDevices"
+@page "/ViewDevices/{Id:int}"
+
+@attribute [Authorize]
+@using Biss.Apps.Blazor.BissRadzenControls
+@using Biss.Apps.Blazor.Enum
+@using Database
+@inherits ProjectRazorPage<VmDevices>
+
+<RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H2">Geräte</RadzenText>
+
+@if (ViewModel != null!)
+{
+    @if (!ViewModel.Devices.Any())
+    {
+        <p>Keine Einträge vorhanden</p>
+    }
+    else
+    {
+        <RadzenRow class="pb-3">
+            <RadzenColumn Offset="8">
+                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End" Gap="10px">
+                    <BxButton class="w-100" BissCommand="@ViewModel.CmdPushNotifyAll" ButtonStyle="ButtonStyle.Primary"></BxButton>
+                    <BxButton class="w-100" BissCommand="@ViewModel.CmdDcNotifyAll" ButtonStyle="ButtonStyle.Secondary"></BxButton>
+                </RadzenStack>
+            </RadzenColumn>
+            @* ReSharper disable CSharpWarnings::CS0618 *@
+        </RadzenRow>
+
+        @if (ViewModel.ShowEntry)
+        {
+            <EntryControl Entry="@ViewModel.MessageEntry"></EntryControl>
+        }
+
+        <RadzenDataGrid PageSize="10"
+                        @* ReSharper restore CSharpWarnings::CS0618 *@
+                        AllowPaging="true"
+                        AllowSorting="true"
+                        AllowColumnResize="true"
+                        AllowAlternatingRows="true"
+                        AllowVirtualization="true"
+                        AllowFiltering="true"
+                        FilterMode="FilterMode.Simple"
+                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                        LogicalFilterOperator="LogicalFilterOperator.Or"
+                        PagerHorizontalAlign="HorizontalAlign.Left"
+                        Data="@ViewModel.Devices"
+                        TItem="TableDevice"
+                        ExpandMode="DataGridExpandMode.Single"
+                        Count="@ViewModel.Devices.Count">
+            <Template Context="device">
+                <RadzenCard class="mb-20">
+                    Pushtags:
+                    <b>@GetPushTags(device)</b>
+                </RadzenCard>
+                <RadzenCard class="mb-20">
+                    Pushtoken:
+                    <b>@device.DeviceToken</b>
+                </RadzenCard>
+                <RadzenCard class="mb-20">
+                    Modell + Marke:
+                    <b>@device.Manufacturer @device.Model</b>
+                </RadzenCard>
+                <RadzenCard class="mb-20">
+                    Auflösung:
+                    @device.ScreenResolution
+                </RadzenCard>
+            </Template>
+            <Columns>
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property="@nameof(TableDevice.Id)"
+                                      Title="Id"
+                                      Width="70px"
+                                      Sortable="true"
+                                      TextAlign="TextAlign.Center"/>
+
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property="@nameof(TableDevice.IsAppRunning)"
+                                      Width="70px"
+                                      TextAlign="TextAlign.Center"
+                                      Title="Aktiv">
+                    <Template Context="device">
+                        @if (ViewModel.DcConnections == null!)
+                        {
+                            <CheckComponent Value="false"></CheckComponent>
+                        }
+                        else
+                        {
+                            <CheckComponent Value="device.IsAppRunning"></CheckComponent>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+
+
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property="@nameof(TableDevice.AppVersion)"
+                                      TextAlign="TextAlign.Center"
+                                      Width="110px"
+                                      Title="Version"/>
+
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property="@nameof(TableDevice.DeviceName)"
+                                      TextAlign="TextAlign.Center"
+                                      Title="Gerätename"/>
+
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property="@nameof(TableDevice.LastLogin)"
+                                      TextAlign="TextAlign.Center"
+                                      Width="146px"
+                                      Title="Wann eingeloggt">
+                    <Template Context="device">
+                        @if (device.LastLogin == DateTime.MinValue)
+                        {
+                            <p>Noch nie</p>
+                        }
+                        else
+                        {
+                            @device.LastLogin
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property="@nameof(TableDevice.Plattform)"
+                                      TextAlign="TextAlign.Center"
+                                      Title="Plattform"/>
+
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property="@nameof(TableDevice.TblUserId)"
+                                      TextAlign="TextAlign.Center"
+                                      Width="80px"
+                                      Title="User Id"/>
+
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property="@nameof(TableDevice.DeviceType)"
+                                      TextAlign="TextAlign.Center"
+                                      Title="Typ"/>
+
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property="@nameof(TableDevice.OperatingSystemVersion)"
+                                      TextAlign="TextAlign.Center"
+                                      Title="OS"/>
+
+                <RadzenDataGridColumn TItem="TableDevice"
+                                      Property=""
+                                      TextAlign="TextAlign.Center"
+                                      Width="177px"
+                                      Title="Aktion">
+                    <Template Context="device">
+                        <RadzenRow JustifyContent="JustifyContent.End" AlignItems="AlignItems.Center" Gap="5px">
+                            @if (ViewModel.IsRunning(device))
+                            {
+                                <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdDcNotify" ExecuteParameter="@device" ButtonStyle="ButtonStyle.Warning"></BxButton>
+                            }
+                            @if (ViewModel.IsPushAvailable(device))
+                            {
+                                <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdPushNotify" ExecuteParameter="@device" ButtonStyle="ButtonStyle.Primary"></BxButton>
+                            }
+                            <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdDeleteDevice" ExecuteParameter="@device" ButtonStyle="ButtonStyle.Danger"></BxButton>
+                        </RadzenRow>
+                    </Template>
+                </RadzenDataGridColumn>
+
+            </Columns>
+        </RadzenDataGrid>
+    }
+}
+
+@code {
+
+    /// <summary>
+    ///     Entspricht VM OnLoaded, wird einmal pro View aufgerufen
+    /// </summary>
+    /// <returns></returns>
+    protected override Task OnViewLoaded()
+    {
+        if (ViewModel != null)
+        {
+            ViewModel.DcConnections = DcConnections;
+            ViewModel.ServerRemoteCalls = ServerRemoteCalls;
+            ViewModel.ServerRemoteCalls.SetClientConnection(ViewModel.DcConnections);
+        }
+
+        return base.OnViewLoaded();
+    }
+
+    // ReSharper disable once ReturnTypeCanBeNotNullable
+    private string? GetPushTags(TableDevice device)
+    {
+        using var db = new Db();
+        var user = db.TblUsers.FirstOrDefault(t => t.Id == device.TblUserId);
+        return user?.PushTags ?? string.Empty;
+    }
+
+}

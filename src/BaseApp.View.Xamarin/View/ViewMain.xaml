@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewMain"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    d:DataContext="{x:Static viewmodels:VmMain.DesignInstance}"
+    x:TypeArguments="viewmodels:VmMain"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+        <StackLayout>
+            <Frame
+                Padding="24"
+                BackgroundColor="#2196F3"
+                CornerRadius="0">
+                <Label
+                    FontSize="36"
+                    HorizontalTextAlignment="Center"
+                    Text="BDA"
+                    TextColor="White" />
+            </Frame>
+            <Label
+                Padding="30,10,30,10"
+                FontSize="Title"
+                Text="Work in PROGRESS" />
+            <Label
+                Padding="30,0,30,0"
+                FontSize="16"
+                Text="Die Views dieser Applikation sind noch nicht für das Phone optimiert! Bitte verwenden Sie die App auf einem Tablet!" />
+            <Label Padding="30,24,30,0" FontSize="16">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="Mehr unter " />
+                            <Span FontAttributes="Bold" Text="https://backend.dataskop.at" />
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </StackLayout>
+
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

@@ -1,0 +1,28 @@
+﻿@if (ExInformation != null!)
+{
+    <RadzenCard>
+        <RadzenStack Orientation="Orientation.Vertical">
+            <RadzenLabel class="labelstyeditheader">Allgemeine Informationen:</RadzenLabel>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Id:</RadzenLabel>
+                <RadzenLabel>@DbId</RadzenLabel>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Name:</RadzenLabel>
+                <RadzenLabel>@ExInformation.Name</RadzenLabel>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Beschreibung:</RadzenLabel>
+                <RadzenLabel>@ExInformation.Description</RadzenLabel>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Config erzeugt:</RadzenLabel>
+                <RadzenLabel>@ExInformation.CreatedDate.ToString("dd.MM.yyyy hh:mm")</RadzenLabel>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenLabel>Config aktualisiert:</RadzenLabel>
+                <RadzenLabel>@ExInformation.UpdatedDate.ToString("dd.MM.yyyy hh:mm")</RadzenLabel>
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>
+}

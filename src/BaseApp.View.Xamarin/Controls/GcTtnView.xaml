@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--  ReSharper disable once Xaml.RedundantNamespaceAlias  -->
+<ContentView
+    x:Class="BaseApp.View.Xamarin.Controls.GcTtnView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BaseApp.View.Xamarin.Controls;assembly=BaseApp.View.Xamarin"
+    x:Name="GcTtnViewBase">
+
+    <ContentView.Content>
+        <Grid BindingContext="{x:Reference GcTtnViewBase}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="Bezeichnung:" />
+            <Entry
+                Grid.Row="0"
+                Grid.Column="1"
+                Text="{Binding GlobalConfig.Name}" />
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="API Key:" />
+            <Entry
+                Grid.Row="1"
+                Grid.Column="1"
+                Text="{Binding GlobalConfig.ApiKey}" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Text="Zone:" />
+            <Entry
+                Grid.Row="2"
+                Grid.Column="1"
+                Text="{Binding GlobalConfig.Zone}" />
+        </Grid>
+    </ContentView.Content>
+</ContentView>

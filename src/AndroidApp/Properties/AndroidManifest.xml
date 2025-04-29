@@ -1,0 +1,17 @@
+﻿<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="at.fotec.biss.dataskop.dev"
+          android:versionCode="16910336" android:versionName="1.2.8.0" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<application android:label="BDA Dev" android:largeHeap="true" android:theme="@style/MainTheme"
+	             android:icon="@drawable/icon">
+		<!-- Standardordner für Fileaccess, zu ändern im genannten xml file. -->
+		<provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider"
+		          android:exported="false" android:grantUriPermissions="true">
+			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
+		</provider>
+		<!-- Default Icon für Toasts und falls vorhanden Pushes -->
+		<meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+		           android:resource="@drawable/ic_notification" />
+	</application>
+</manifest>

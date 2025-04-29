@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewEditGatewayQ"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bc="clr-namespace:BaseApp.View.Xamarin.Controls;assembly=BaseApp.View.Xamarin"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:infrastructure="clr-namespace:BaseApp.ViewModel.Infrastructure;assembly=BaseApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    d:DataContext="{x:Static infrastructure:VmEditGateway.DesignInstance}"
+    x:TypeArguments="infrastructure:VmEditGateway"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+        <Grid Margin="16,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="24" />
+                <ColumnDefinition Width="450" />
+            </Grid.ColumnDefinitions>
+
+            <!--#region Links-->
+
+            <ScrollView Grid.Row="0" Grid.Column="0">
+                <StackLayout>
+
+                    <!--#region Stammdaten-->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Stammdaten" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryName.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryName}"
+                            HasFrame="False" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryDescription.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryDescription}"
+                            HasFrame="False" />
+                    </Grid>
+                    <!--#endregion-->
+
+                    <!--#region Position-->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Gateway Position" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryPosLat.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryPosLat}"
+                            HasFrame="False" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryPosLon.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryPosLon}"
+                            HasFrame="False" />
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryPosAlt.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryPosAlt}"
+                            HasFrame="False" />
+
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescriptionPicker}"
+                            Text="Quelle der Position:" />
+                        <bcc:BxPicker
+                            Grid.Row="4"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            ObservableCollectionSelectable="{Binding PickerPositionType}" />
+                    </Grid>
+                    <!--#endregion-->
+
+                    <!--#region Zusätzliches-->
+
+                    <Grid Margin="0,16,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Zusätzliche (dynamische) Daten" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryAdditionalConfiguration.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryAdditionalConfiguration}"
+                            HasFrame="False"
+                            Mulitiline="True" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryAdditionalProperties.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryAdditionalProperties}"
+                            HasFrame="False"
+                            Mulitiline="True" />
+
+                    </Grid>
+                    <!--#endregion-->
+
+                </StackLayout>
+            </ScrollView>
+
+            <!--#endregion-->
+
+            <!--#region Rechts - Infos-->
+
+            <StackLayout Grid.Row="0" Grid.Column="2">
+                <bc:BxDeviceInfos Margin="0,0,0,16" ExCommonInfo="{Binding Data.DeviceCommon}" />
+                <bc:BxInformation DbId="{Binding DcListDataPoint.Index}" ExInformation="{Binding Data.Information}" />
+            </StackLayout>
+
+
+            <!--#endregion-->
+
+        </Grid>
+
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

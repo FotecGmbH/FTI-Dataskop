@@ -1,0 +1,56 @@
+﻿@page "/ViewAddGatewayToCompany"
+@page "/ViewAddGatewayToCompany/{Id:int}"
+
+@inherits ProjectRazorPage<VmAddGatewayToCompany>
+
+@if (ViewModel != null!)
+{
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenStack Orientation="Orientation.Vertical">
+                @if (ViewModel.ShowInputs)
+                {
+                    <RadzenCard>
+                        <RadzenStack>
+                            <RadzenLabel class="labelstyeditheader">Gateway hinzufügen</RadzenLabel>
+                            <RadzenStack Orientation="Orientation.Horizontal">
+                                <RadzenLabel class="labelstyeditdescription adjustlabel">Freie Gateways</RadzenLabel>
+                                <BxPicker PickerInstance="ViewModel.PickerGateways" @bind-SelectedItem="ViewModel.PickerGateways.SelectedItem"></BxPicker>
+                            </RadzenStack>
+                            @if (ViewModel.EntryGatewaySecret != null!)
+                            {
+                                <RadzenStack Orientation="Orientation.Horizontal">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryGatewaySecret.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="@ViewModel.EntryGatewaySecret"></BxEntry>
+                                </RadzenStack>
+                            }
+                        </RadzenStack>
+                    </RadzenCard>
+                }
+                <RadzenCard>
+                    <RadzenStack>
+                        <RadzenLabel class="labelstyeditheader">Gateway hinzufügen Hilfe</RadzenLabel>
+                        <RadzenStack Orientation="Orientation.Horizontal">
+                            <RadzenLabel>Schritt 1:</RadzenLabel>
+                            <RadzenLabel>Laden Sie die Gateway-Software und starten sie diese. Sobald der Gateway mit BDA verbunden ist erscheint dieser hier automatisch.</RadzenLabel>
+                        </RadzenStack>
+                        <BxButton BxButtonType="EnumBxButtonType.TextAndGlyph" BissCommand="ViewModel.CmdDownloadGateway"></BxButton>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenStack>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenStack Orientation="Orientation.Vertical">
+                @if (ViewModel.PickerGateways.SelectedItem != null!)
+                {
+                    <BxDeviceInfos ExCommonInfo="ViewModel.PickerGateways.SelectedItem.Key.Gateway.Data.DeviceCommon" CmdDevHelper="ViewModel.CmdDevHepler"></BxDeviceInfos>
+                    <BxInformation DbId="ViewModel.PickerGateways.SelectedItem.Key.Gateway.Index" ExInformation="ViewModel.PickerGateways.SelectedItem.Key.Gateway.Data.Information"></BxInformation>
+                }
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+}
+
+@code {
+
+}

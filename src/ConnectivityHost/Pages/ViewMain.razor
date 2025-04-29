@@ -1,0 +1,234 @@
+﻿@page "/viewmain"
+@page "/viewmain/{Id:int}"
+
+@attribute [Authorize]
+@using System.Collections.Specialized
+@inherits ProjectRazorPage<VmMain>
+
+@if (ViewModel != null!)
+{
+    <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H2">ConnectivityHost</RadzenText>
+    <RadzenStack Gap="10px">
+        <RadzenCard>
+            @if (ViewModel.DcConnection != null)
+            {
+                @if (ViewModel.DcConnection.GetClients().Count == 0)
+                {
+                    <p class="text-center">Aktuell sind <span class="fw-bold">KEINE</span> Devices verbunden.</p>
+                }
+                else
+                {
+                    <p class="text-center">Aktuell sind <span class="fw-bold">@ViewModel.DcConnection!.GetClients().Count</span> Devices verbunden.</p>
+                }
+            }
+            else
+            {
+                <p class="text-center">Aktuell sind <span class="fw-bold">KEINE</span> Devices verbunden.</p>
+            }
+
+            <RadzenRow JustifyContent="JustifyContent.Center" class="rz-text-align-center" Gap="0">
+                @if (ViewModel.DcConnection != null)
+                {
+                    <RadzenColumn class="rz-border-base-300 p-2">
+                        <strong>Android @ViewModel.DcConnection!.GetClients().GetAndroidDevices()</strong>
+                    </RadzenColumn>
+                    <RadzenColumn class="rz-border-base-300 p-2">
+                        <strong>IOS @ViewModel.DcConnection!.GetClients().GetIosDevices()</strong>
+                    </RadzenColumn>
+                    <RadzenColumn class="rz-border-base-300 p-2">
+                        <strong>Web @ViewModel.DcConnection!.GetClients().GetWebDevices()</strong>
+                    </RadzenColumn>
+                    <RadzenColumn class="rz-border-base-300 p-2">
+                        <strong>WPF @ViewModel.DcConnection!.GetClients().GetWpfDevices()</strong>
+                    </RadzenColumn>
+                }
+                else
+                {
+                    <RadzenColumn class="rz-border-base-300 p-2">
+                        <strong>Android 0</strong>
+                    </RadzenColumn>
+
+                    <RadzenColumn class="rz-border-base-300 p-2">
+                        <strong>IOS 0</strong>
+                    </RadzenColumn>
+
+                    <RadzenColumn class="rz-border-base-300 p-2">
+                        <strong>Web 0</strong>
+                    </RadzenColumn>
+
+                    <RadzenColumn class="rz-border-base-300 p-2">
+                        <strong>WPF 0</strong>
+                    </RadzenColumn>
+                }
+            </RadzenRow>
+        </RadzenCard>
+
+        <RadzenCard>
+            @* ReSharper disable once Razor.UnresolvedComponent *@
+            <BxButton class="mb-20" Size="ButtonSize.Medium" BissCommand="@ViewModel.CmdClearLog"></BxButton>
+            <RadzenDataGrid PageSize="15"
+                            @ref="_logGrid"
+                            AllowPaging="true"
+                            AllowSorting="true"
+                            AllowColumnResize="true"
+                            AllowAlternatingRows="true"
+                            AllowVirtualization="true"
+                            AllowFiltering="true"
+                            FilterMode="FilterMode.Simple"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            LogicalFilterOperator="LogicalFilterOperator.Or"
+                            PagerHorizontalAlign="HorizontalAlign.Left"
+                            Data="@VmProjectBase.LogEntries.ToList()"
+                            TItem="BissEventsLoggerEventArgs"
+                            Count="@VmProjectBase.LogEntries.ToList().Count"
+                            GridLines="DataGridGridLines.None">
+
+                <Columns>
+                    <RadzenDataGridColumn TItem="BissEventsLoggerEventArgs"
+                                          Property="LogLevel"
+                                          Title="LogLevel"
+                                          Width="185px"
+                                          Sortable="true"
+                                          TextAlign="TextAlign.Left">
+                        <Template Context="log">
+
+                            <span class="@GetCssClassForLogLevel(log.LogLevel)">@log.LogLevel</span>
+
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn TItem="BissEventsLoggerEventArgs"
+                                          Property="TimeStamp"
+                                          Title="TimeStamp"
+                                          Width="144px"
+                                          Sortable="true"
+                                          TextAlign="TextAlign.Center"/>
+
+                    <RadzenDataGridColumn TItem="BissEventsLoggerEventArgs"
+                                          Property="Message"
+                                          Title="Message"
+                                          Sortable="true"
+                                          TextAlign="TextAlign.Left"/>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenCard>
+        <RadzenCard>
+            <RadzenText TextStyle="TextStyle.H5" TextAlign="TextAlign.Center">Datenbank Infos</RadzenText>
+            <RadzenRow>
+                <RadzenColumn Size="2">
+                    <RadzenText TextStyle="TextStyle.Body1">
+                        <strong>Datenbank:</strong>
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn>
+                    <RadzenText TextStyle="TextStyle.Body1">@WebSettings.Current().ConnectionStringDb</RadzenText>
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow>
+                <RadzenColumn Size="2">
+                    <RadzenText TextStyle="TextStyle.Body1">
+                        <strong>Server:</strong>
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn>
+                    <RadzenText TextStyle="TextStyle.Body1">@WebSettings.Current().ConnectionStringDbServer</RadzenText>
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow>
+                <RadzenColumn Size="2">
+                    <RadzenText TextStyle="TextStyle.Body1">
+                        <strong>Migrations:</strong>
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn>
+                    @if (ViewModel.MigrationData.Count != 0)
+                    {
+                        <RadzenDataList Data="@ViewModel.MigrationData">
+                            <Template Context="data">
+                                <RadzenText>@data</RadzenText>
+                            </Template>
+                        </RadzenDataList>
+                    }
+                    else
+                    {
+                        <RadzenText TextStyle="TextStyle.Body1">Es wurden keine Daten gefunden.</RadzenText>
+                    }
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenCard>
+        <RadzenCard>
+            <a href="@ViewModel.PlaystoreLink" target="_blank" class="btn btn-outline-dark" role="button" aria-pressed="true">Playstore</a>
+            <a href="@ViewModel.AppcenterLink" target="_blank" class="btn btn-outline-success" role="button" aria-pressed="true">Appcenter</a>
+            <a href="@ViewModel.AppstoreLink" target="_blank" class="btn btn-outline-danger" role="button" aria-pressed="true">Appstore</a>
+            <a href="@ViewModel.FirebaseLink" target="_blank" class="btn btn-outline-warning" role="button" aria-pressed="true">Firebase</a>
+            <a href="@ViewModel.DevopsLink" target="_blank" class="btn btn-outline-primary" role="button" aria-pressed="true">Devops</a>
+        </RadzenCard>
+    </RadzenStack>
+}
+
+
+@code {
+    private RadzenDataGrid<BissEventsLoggerEventArgs>? _logGrid;
+
+    /// <summary>
+    ///     Entspricht VM OnLoaded, wird einmal pro View aufgerufen
+    /// </summary>
+    /// <returns></returns>
+    protected override async Task OnViewLoaded()
+    {
+        VmProjectBase.LogEntries.CollectionChanged += LogEntriesOnCollectionChanged;
+
+        await base.OnViewLoaded().ConfigureAwait(true);
+
+        if (ViewModel != null)
+        {
+            ViewModel.DcConnection = DcConnections;
+            await ViewModel.CalculateData().ConfigureAwait(true);
+        }
+    }
+
+    private void LogEntriesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            if (_logGrid != null)
+                await _logGrid.Reload().ConfigureAwait(true);
+        });
+    }
+
+    /// <summary>
+    ///     Entspricht VM OnDisappearing, wird einmal pro View aufgerufen
+    /// </summary>
+    /// <returns></returns>
+    protected override Task OnViewDisappearing()
+    {
+        VmProjectBase.LogEntries.CollectionChanged -= LogEntriesOnCollectionChanged;
+        return base.OnViewDisappearing();
+    }
+
+    /// <summary>
+    ///     Css Klasse für Logausgabe.
+    /// </summary>
+    /// <param name="loglevel"></param>
+    /// <returns></returns>
+    private string GetCssClassForLogLevel(LogLevel loglevel)
+    {
+        if (loglevel == LogLevel.Information)
+        {
+            return "prompt-i";
+        }
+
+        if (loglevel == LogLevel.Error)
+        {
+            return "prompt-e";
+        }
+
+        if (loglevel == LogLevel.Warning)
+        {
+            return "prompt-w";
+        }
+
+        return "prompt-t";
+    }
+
+}

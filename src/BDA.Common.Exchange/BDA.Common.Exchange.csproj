@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<LangVersion>9.0</LangVersion>
+		<!-- Package Infos -->
+		<Product>BDA</Product>
+		<Description>BDA Forschungsprojekt</Description>
+		<Company>FOTEC Forschungs- und Technologietransfer GmbH</Company>
+		<Copyright>(C) 2009-2022 FOTEC Forschungs- und Technologietransfer GmbH</Copyright>
+		<Authors>FOTEC BISS Developers</Authors>
+		<PackageProjectUrl>https://www.fotec.at</PackageProjectUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>BISS</PackageTags>
+		<Version>1.2.8</Version>
+		<PackageIcon>nugetImage.png</PackageIcon>
+		<NeutralLanguage>en</NeutralLanguage>
+		<PackageReleaseNotes>In Readme.md</PackageReleaseNotes>
+		<!-- Projekt Einstellungen -->
+		<Nullable>Enable</Nullable>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+		<EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+		<RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+		<RunAnalyzers>true</RunAnalyzers>
+		<!-- Build Einstellungen -->
+		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+		<SignAssembly>false</SignAssembly>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageCopyToOutput>true</PackageCopyToOutput>
+		<NoWarn>NU1701;NU1702;NU5104</NoWarn>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<RepositoryUrl>https://dev.azure.com/fotec/FTI-Dataskop/_git/Dataskop-Dsp</RepositoryUrl>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Biss" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps.Connectivity" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps.Push" Version="8.3.2" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="8.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.Text.Json" Version="9.0.4" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="nugetImage.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Configs\Attributes\Value\" />
+		<Folder Include="Configs\Downstreams\Modbus\" />
+		<Folder Include="Configs\Downstreams\Arduino\" />
+		<Folder Include="Configs\Downstreams\Pi\" />
+		<Folder Include="Configs\Downstreams\Pi\" />
+		<Folder Include="Configs\Downstreams\Spi\" />
+		<Folder Include="Configs\Upstream\Drei\" />
+		<Folder Include="Configs\Upstream\Opensense\" />
+		<Folder Include="GatewayService\Drei\" />
+		<Folder Include="Helper\" />
+		<Folder Include="OpenSense\" />
+	</ItemGroup>
+	<PropertyGroup>
+		<SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
+	</PropertyGroup>
+</Project>

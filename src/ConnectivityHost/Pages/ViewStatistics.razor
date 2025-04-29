@@ -1,0 +1,148 @@
+@page "/ViewStatistics"
+@page "/ViewStatistics/{Id:int}"
+
+@attribute [Authorize]
+
+@inherits ProjectRazorPage<VmStatistics>
+
+@try
+{
+    @if (ViewModel != null!)
+    {
+        @if (ViewModel.Devices.Count != 0)
+        {
+            <RadzenCard>
+                <RadzenText Text="Datenbank Geräte" TextAlign="TextAlign.Center" TextStyle="TextStyle.H6"/>
+                <RadzenRow>
+                    <RadzenColumn>
+                        <RadzenChart ColorScheme="ColorScheme.Monochrome" style="height:400px">
+                            <RadzenBarSeries Data="@ViewModel.Devices" CategoryProperty="Labels" ValueProperty="Value" Title="Geräte">
+                                <RadzenLegend Position="LegendPosition.Bottom"/>
+                            </RadzenBarSeries>
+                            <RadzenValueAxis Min="0">
+                                <RadzenGridLines Visible="true" LineType="LineType.Dashed"/>
+                            </RadzenValueAxis>
+                            <RadzenBarOptions Radius="5" Height="50"/>
+                        </RadzenChart>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenCard>
+        }
+
+        @if (ViewModel.AppVersions.Count != 0)
+        {
+            <RadzenCard>
+                <RadzenText Text="App-Versionen" TextAlign="TextAlign.Center" TextStyle="TextStyle.H6"/>
+                <RadzenRow>
+                    <RadzenColumn>
+                        <div style="transform: translate(8px, 0px)">
+                            <RadzenChart ColorScheme="ColorScheme.Divergent" style="height:600px">
+                                <RadzenDonutSeries Data="@ViewModel.AppVersions" CategoryProperty="Labels" ValueProperty="Value" Title="App Versionen">
+                                    <RadzenLegend Position="LegendPosition.Bottom"/>
+                                    <RadzenSeriesDataLabels Visible="true"/>
+                                </RadzenDonutSeries>
+                            </RadzenChart>
+                        </div>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenCard>
+        }
+
+        <RadzenCard>
+            <RadzenText Text="Statistiken nach Betriebssystemen" TextAlign="TextAlign.Center" TextStyle="TextStyle.H6"/>
+            <RadzenRow class="pb-50">
+                <RadzenColumn>
+                    <RadzenText Text="Android" TextAlign="TextAlign.Center"/>
+                    @if (ViewModel.AndroidChart.Count != 0)
+                    {
+                        <div style="transform: translate(8px, 0px)">
+                            <RadzenChart ColorScheme="ColorScheme.Palette">
+                                <RadzenPieSeries Data="@ViewModel.AndroidChart" CategoryProperty="Labels" ValueProperty="Value" Title="Android OS Version Chart">
+                                    <RadzenLegend Position="LegendPosition.Bottom"/>
+                                </RadzenPieSeries>
+                            </RadzenChart>
+                        </div>
+                    }
+                    else
+                    {
+                        <RadzenText Text="kein Gerät gefunden" TextAlign="TextAlign.Center"/>
+                    }
+                </RadzenColumn>
+                <RadzenColumn>
+                    <RadzenText Text="IOS" TextAlign="TextAlign.Center"/>
+                    @if (ViewModel.IosChart.Count != 0)
+                    {
+                        <div style="transform: translate(8px, 0px)">
+                            <RadzenChart ColorScheme="ColorScheme.Pastel">
+                                <RadzenPieSeries Data="@ViewModel.IosChart" CategoryProperty="Labels" ValueProperty="Value" Title="IOS OS Version Chart">
+                                    <RadzenLegend Position="LegendPosition.Bottom"/>
+                                </RadzenPieSeries>
+                            </RadzenChart>
+                        </div>
+                    }
+                    else
+                    {
+                        <RadzenText Text="kein Gerät gefunden" TextAlign="TextAlign.Center"/>
+                    }
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow class="pb-50">
+                <RadzenColumn>
+                    <RadzenText Text="WPF" TextAlign="TextAlign.Center"/>
+                    @if (ViewModel.WpfChart.Count != 0)
+                    {
+                        <div style="transform: translate(8px, 0px)">
+                            <RadzenChart ColorScheme="ColorScheme.Divergent">
+                                <RadzenPieSeries Data="@ViewModel.WpfChart" CategoryProperty="Labels" ValueProperty="Value" Title="WPF OS Version Chart">
+                                    <RadzenLegend Position="LegendPosition.Bottom"/>
+                                </RadzenPieSeries>
+                            </RadzenChart>
+                        </div>
+                    }
+                    else
+                    {
+                        <RadzenText Text="kein Gerät gefunden" TextAlign="TextAlign.Center"/>
+                    }
+                </RadzenColumn>
+                <RadzenColumn>
+                    <RadzenText Text="Web" TextAlign="TextAlign.Center"/>
+                    @if (ViewModel.WebChart.Count != 0)
+                    {
+                        <div style="transform: translate(8px, 0px)">
+                            <RadzenChart ColorScheme="ColorScheme.Monochrome">
+                                <RadzenPieSeries Data="@ViewModel.WebChart" CategoryProperty="Labels" ValueProperty="Value" Title="Web OS Version Chart">
+                                    <RadzenLegend Position="LegendPosition.Bottom"/>
+                                </RadzenPieSeries>
+                            </RadzenChart>
+                        </div>
+                    }
+                    else
+                    {
+                        <RadzenText Text="kein Gerät gefunden" TextAlign="TextAlign.Center"/>
+                    }
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenCard>
+    }
+}
+catch (Exception e)
+{
+    Logging.Log.LogTrace($"{e}");
+    throw;
+}
+
+@code{
+
+    /// <summary>
+    ///     Entspricht VM OnLoaded, wird einmal pro View aufgerufen
+    /// </summary>
+    /// <returns></returns>
+    protected override Task OnViewLoaded()
+    {
+        if (ViewModel != null)
+            ViewModel.DcConnection = DcConnections;
+
+        return base.OnViewLoaded();
+    }
+
+}

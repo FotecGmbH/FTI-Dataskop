@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewLogin"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    d:DataContext="{x:Static viewmodels:VmLogin.DesignInstance}"
+    x:TypeArguments="viewmodels:VmLogin"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <bcc:BxEntry
+                Grid.Row="0"
+                Margin="8"
+                EntryData="{Binding EntryLoginName}" />
+
+            <bcc:BxEntry
+                Grid.Row="1"
+                Margin="8"
+                EntryData="{Binding EntryPassword}"
+                IsPassword="True"
+                IsVisible="{Binding IsPasswordEntryVisible}" />
+
+            <StackLayout
+                Grid.Row="3"
+                Margin="0,0,0,8"
+                IsVisible="{Binding IsForgotPasswordVisible}">
+                <bcc:BxButton BissCommand="{Binding CmdForgotPassword}" />
+            </StackLayout>
+
+            <StackLayout
+                Grid.Row="3"
+                Margin="0,0,0,8"
+                IsVisible="{Binding IsResendAccessLinkVisible}">
+                <bcc:BxButton BissCommand="{Binding CmdResendAccessLink}" />
+            </StackLayout>
+
+            <bcc:BxButton
+                Grid.Row="4"
+                Margin="0,0,0,8"
+                BissCommand="{Binding CmdLogin}" />
+        </Grid>
+
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

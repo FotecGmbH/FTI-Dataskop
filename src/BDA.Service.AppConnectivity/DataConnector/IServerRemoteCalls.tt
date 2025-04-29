@@ -1,0 +1,159 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="System.Windows.Forms" #>
+<#@ Assembly Name="EnvDTE" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+// (C) 2021 FOTEC Forschungs- und Technologietransfer GmbH
+// Das Forschungsunternehmen der Fachhochschule Wiener Neustadt
+// 
+// Kontakt biss@fotec.at / www.fotec.at
+//
+// Automatisch generierter Code. Nicht verändern!
+// Erstellt am <#= DateTime.Now #>
+
+using System;
+// ReSharper disable once RedundantUsingDirective
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Biss.Dc.Core;
+using Biss.Dc.Server;
+using Exchange.Model;
+using Exchange.Model.ConfigApp;
+
+namespace BDA.Service.AppConnectivity.DataConnector
+{
+    /// <summary>
+    /// Diese Funktionen müssen am Server implementiert werden
+    /// </summary>
+    public interface IServerRemoteCalls : IDcCoreRemoteCalls
+    {
+<#
+    //string app = @"C:\Code\FOTEC\BISS\Biss.Apps.Connectivity\DcHelper\bin\Debug\netcoreapp3.1\DcHelper.exe";
+    string app = @"DcHelper.exe";
+    var serviceProvider = this.Host as IServiceProvider;
+    var dte = serviceProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+    var root = System.IO.Path.GetDirectoryName(dte.Solution.FullName);
+    string ass = root + @"\BaseApp\bin\Debug\netstandard2.1\BaseApp.dll";
+    FileInfo fi = new FileInfo(ass);
+    var test = fi.FullName;
+    List<string> addPath = new List<string>(){root + @"\AndroidApp\bin\Debug", 
+                                              root + @"\IOsApp\bin\iPhoneSimulator\Debug",
+                                              root + @"\WpfApp\bin\Debug\net6.0-windows"
+    };
+    var n = GetNames(app,ass,addPath);
+
+    foreach (var s in n)
+    {
+        var t = s.Split(';');
+        if (t[0] == "point")
+        {#>
+        #region <#= t[1] #>         
+
+        /// <summary>
+        /// Device fordert Daten für <#= t[1] #>
+        /// </summary>
+        /// <param name="deviceId">Id des Gerätes</param>
+        /// <param name="userId">Id des Benutzers oder -1 wenn nicht angemeldet</param>
+        /// <returns>Daten oder eine Exception auslösen</returns>
+        Task<<#=t[2]#>> Get<#= t[1] #>(long deviceId, long userId);
+
+        /// <summary>
+        /// Device will Daten für DcExNewUserData sichern
+        /// </summary>
+        /// <param name="deviceId">Id des Gerätes</param>
+        /// <param name="userId">Id des Benutzers oder -1 wenn nicht angemeldet</param>
+        /// <param name="data">Eingetliche Daten</param>
+        /// <returns>Ergebnis (bzw. Infos zum Fehler)</returns>
+        Task<DcStoreResult> Set<#= t[1] #>(long deviceId, long userId, <#=t[2]#> data);
+
+        #endregion
+
+<#
+        }
+        else if (t[0] == "list")
+        {#>
+        #region <#= t[1] #>         
+
+        /// <summary>
+        /// Device fordert Listen Daten für <#= t[1] #>
+        /// </summary>
+        /// <param name="deviceId">Id des Gerätes</param>
+        /// <param name="userId">Id des Benutzers oder -1 wenn nicht angemeldet</param>
+        /// <param name="startIndex">Lesen ab Index (-1 für Start)</param>
+        /// <param name="elementsToRead">Anzahl der Elemente welche maximal gelesen werden sollen (-1 für alle verfügbaren Daten)</param>
+        /// <param name="secondId">Optionale 2te Id um schnellen Wechsel zwischen Listen zu ermöglichen bzw. dynamische Listen. Zb. für Chats</param>
+        /// <param name="filter">Optionaler Filter für die Daten</param>
+        /// <returns>Daten oder eine Exception auslösen</returns>
+        [Obsolete]
+        Task<List<DcServerListItem<<#=t[2]#>>>> Get<#= t[1] #>(long deviceId, long userId, long startIndex, long elementsToRead, long secondId, string filter);
+
+        /// <summary>
+        /// Device will Listen Daten für <#= t[1] #> sichern
+        /// </summary>
+        /// <param name="deviceId">Id des Gerätes</param>
+        /// <param name="userId">Id des Benutzers oder -1 wenn nicht angemeldet</param>
+        /// <param name="data">Eingetliche Daten</param>
+        /// <param name="secondId">Optionale 2te Id um schnellen Wechsel zwischen Listen zu ermöglichen bzw. dynamische Listen. Zb. für Chats</param>
+        /// <returns>Ergebnis (bzw. Infos zum Fehler)</returns>
+        Task<DcListStoreResult> Store<#= t[1] #>(long deviceId, long userId, List<DcStoreListItem<<#=t[2]#>>> data, long secondId);
+
+        /// <summary>
+        /// Daten Synchronisieren für <#= t[1] #>
+        /// </summary>
+        /// <param name="deviceId">Gerät</param>
+        /// <param name="userId">User Id oder -1 wenn nicht angemeldet</param>
+        /// <param name="current">Aktuelle Datensätze am Gerät</param>
+        /// <param name="props">Zusätzliche Optionen</param>
+        /// <returns>Neuer, aktualisierte und gelöschte Datensätze</returns>
+        Task<DcListSyncResultData<<#=t[2]#>>> Sync<#= t[1] #>(long deviceId, long userId, DcListSyncData current, DcListSyncProperties props);
+
+        #endregion
+
+<#
+        }
+    }
+#>
+    }
+}
+
+<#+
+  // Insert any template procedures here
+  List<string> GetNames(string helper, string assembly, List<string> searchPaths = null)
+        {
+            var data = new List<string>();
+            Process p = new Process();
+
+            p.StartInfo.FileName = helper;
+            string param = "extract -a " + assembly;
+            if (searchPaths != null && searchPaths.Count > 0)
+            {
+                foreach (var path in searchPaths)
+                {
+                    param += " -p " + path;
+                }
+            }
+            p.StartInfo.Arguments = param;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            
+            p.OutputDataReceived += (sender, args) =>
+            {
+                if (!String.IsNullOrEmpty(args.Data))
+                    data.Add(args.Data);
+            };
+            var exitcode = p.Start();
+            p.BeginOutputReadLine();
+            p.WaitForExit();
+
+
+            //Process.Start(helper);
+
+            return data;
+        }
+#>

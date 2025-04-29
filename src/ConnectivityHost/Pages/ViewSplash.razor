@@ -1,0 +1,41 @@
+﻿@page "/admin"
+
+@inherits ProjectRazorPage<VmMenu>
+
+<RadzenRow>
+    <RadzenColumn Size="6" Offset="3" class=" splash">
+        <RadzenStack AlignItems="AlignItems.Center" class="m-20">
+            <RadzenImage Path="/content/Loewe_weiß.png" Style="width: 15rem;"/>
+            <RadzenText Text="Applikation wird gestartet ..." TextStyle="TextStyle.Body1" class="rz-color-white"/>
+            <div class="spinner-border text-primary" role="status"></div>
+        </RadzenStack>
+    </RadzenColumn>
+</RadzenRow>
+
+@code{
+
+    /// <summary>
+    ///     Entspricht VM OnLoaded, wird einmal pro View aufgerufen
+    /// </summary>
+    /// <returns></returns>
+    protected override async Task OnViewLoaded()
+    {
+        await base.OnViewLoaded().ConfigureAwait(true);
+
+        if (VmProjectBase.GetVmBaseStatic.CmdAllMenuCommands.SelectedItem == null)
+        {
+            VmProjectBase.LaunchFirstView();
+        }
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        else if (VmProjectBase.GetVmBaseStatic.CmdAllMenuCommands.SelectedItem != ViewModel.GCmdHome)
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+        {
+            VmProjectBase.GetVmBaseStatic.CmdAllMenuCommands.SelectedItem = ViewModel.GCmdHome;
+        }
+        else
+        {
+            NavigationManager.NavigateTo("viewmain");
+        }
+    }
+
+}

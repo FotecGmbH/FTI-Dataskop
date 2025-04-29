@@ -1,0 +1,190 @@
+﻿@using System.ComponentModel
+@using Exchange.Resources
+@inherits BissMainLayout
+
+@if (ViewModel != null && ViewModel.View.ShowHeader)
+{
+    <header class="navbar navbar-dark sticky-top bg-dark p-0 shadow">
+        <div class="d-flex flex-row">
+            @if (ViewModel != null && ViewModel.View.ShowBack)
+            {
+                <div class="p-2">
+                    <button class="menu-icon p-2" @onclick="GoBack">
+                        <span class="oi sl-icon" aria-hidden="true">@Glyphs.Arrow_thick_left_2</span>
+                    </button>
+                </div>
+            }
+            @if (ViewModel != null && ViewModel.View.ShowMenu)
+            {
+                <div class="p-2">
+                    <button class="menu-icon p-2" @onclick="ToggleMenu">
+                        <span class="oi sl-icon" aria-hidden="true">@Glyphs.Navigation_menu_1</span>
+                    </button>
+                </div>
+            }
+
+            @if (ViewModel != null)
+            {
+                @if (ViewModel.View.ShowTitle)
+                {
+                    <div class="p-2">
+                        <span class="p-2 app-title app-title-big">@ViewModel.PageTitle</span>
+                    </div>
+                }
+
+                @if (ViewModel.View.ShowSubTitle)
+                {
+                    <div class="p-2">
+                        <span class="p-2 app-title">@ViewModel.PageSubTitle</span>
+                    </div>
+                }
+            }
+        </div>
+        <div>
+            <div class="p-2 align-content-end">
+                @* ReSharper disable once Html.PathError *@
+                <a href="/login" class="menu-icon p-2">
+                    <span class="oi sl-icon" aria-hidden="true">@Glyphs.Logout_1</span>
+                </a>
+            </div>
+        </div>
+    </header>
+}
+
+
+<div class="container-fluid px-0">
+
+    <CascadingValue Value="this">
+        <main>
+
+            <BissNavControl></BissNavControl>
+            <MessageBoxControl Item="@MsgBox"></MessageBoxControl>
+            <FileUploadControl></FileUploadControl>
+
+            <BusyIndicatorControl IsBusy="@ViewModel?.View.IsBusy" BusyContent="@ViewModel?.View.BusyContent"></BusyIndicatorControl>
+
+            <div class="row g-0 @GetCssClassForFooter()">
+                @if (!MenuCollapsed && (ViewModel != null && ViewModel.View.ShowMenu))
+                {
+                    <NavMenu Item="@ViewModel"/>
+                }
+
+                <div class="@GetCssClassForBody() p-3">
+
+                    @Body
+                </div>
+            </div>
+
+        </main>
+        <ToastControl Item="@Toast"></ToastControl>
+        @if (ViewModel != null)
+        {
+            <FooterControl Visible="@ViewModel?.View.ShowFooter" VmCommands="VmProjectBase.GetVmBaseStatic.CmdAllMenuCommands"></FooterControl>
+        }
+    </CascadingValue>
+
+</div>
+
+
+@code
+{
+
+    #region Properties
+
+    /// <summary>
+    ///     Nav Menu für View Binding
+    /// </summary>
+    private NavMenu? MenuProject
+    {
+        get => NavMenu as NavMenu;
+        // ReSharper disable once UnusedMember.Local
+        set => NavMenu = value;
+    }
+
+    /// <summary>
+    ///     ViewModel für View Binding
+    /// </summary>
+    // ReSharper disable once UnusedMember.Local
+    private VmProjectBase? ViewModelProject
+    {
+        get => ViewModel as VmProjectBase;
+        set => ViewModel = value;
+    }
+
+    #endregion
+
+    /// <inheritdoc />
+    public override async Task AttachDetachEvents(bool attach)
+    {
+        if (ViewModel != null)
+        {
+            if (attach)
+            {
+                ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
+                ViewModel.View.PropertyChanged += ViewOnPropertyChanged;
+
+                if (ViewModel.View.CmdSaveHeader != null)
+                {
+                    ViewModel.View.CmdSaveHeader.PropertyChanged += CmdSaveHeaderOnPropertyChanged;
+                }
+            }
+            else
+            {
+                ViewModel.PropertyChanged -= ViewModelOnPropertyChanged;
+                ViewModel.View.PropertyChanged -= ViewOnPropertyChanged;
+
+                if (ViewModel.View.CmdSaveHeader != null)
+                {
+                    ViewModel.View.CmdSaveHeader.PropertyChanged -= CmdSaveHeaderOnPropertyChanged;
+                }
+            }
+        }
+
+        if (MenuProject != null)
+        {
+            await MenuProject.AttachDetachEvents(attach).ConfigureAwait(true);
+        }
+
+        await base.AttachDetachEvents(attach).ConfigureAwait(true);
+
+        Logging.Log.LogInfo($"[{nameof(MainLayout)}]({nameof(AttachDetachEvents)}): {attach}");
+        await InvokeStateHasChangedAsync().ConfigureAwait(true);
+    }
+
+    private async void ViewOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(VmViewProperties.CmdSaveHeader))
+        {
+            // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+            if (ViewModel?.View?.CmdSaveHeader != null)
+            {
+                ViewModel.View.CmdSaveHeader.PropertyChanged += CmdSaveHeaderOnPropertyChanged;
+            }
+        }
+
+        Logging.Log.LogInfo($"[{nameof(MainLayout)}]({nameof(ViewOnPropertyChanged)}): VM.View - {e.PropertyName}");
+        await InvokeStateHasChangedAsync().ConfigureAwait(true);
+    }
+
+    private async void ViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ViewModel.IsLoaded))
+        {
+            return;
+        }
+
+        Logging.Log.LogInfo($"[{nameof(MainLayout)}]({nameof(ViewModelOnPropertyChanged)}): VM.PC - {e.PropertyName}");
+        await InvokeStateHasChangedAsync().ConfigureAwait(true);
+    }
+
+    /// <summary>
+    ///     Property Changed des Header Commands.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void CmdSaveHeaderOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        Logging.Log.LogInfo($"[{nameof(MainLayout)}]({nameof(CmdSaveHeaderOnPropertyChanged)}): SaveHeader - {e.PropertyName}");
+        await InvokeStateHasChangedAsync().ConfigureAwait(true);
+    }
+}

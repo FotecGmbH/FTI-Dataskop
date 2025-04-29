@@ -1,0 +1,45 @@
+﻿@using Biss.AppConfiguration
+@using Exchange
+@inherits BissNavMenu
+@if (Item != null)
+{
+    <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 bg-light sidebar @GetCssClass()">
+        <div class="position-sticky">
+
+            <ul class="nav flex-column">
+                @foreach (var cmd in VmProjectBase.GetVmBaseStatic.CmdAllMenuCommands)
+                {
+                    <li class="nav-item">
+                        <div class="nav-link @IsActive(cmd)" @onclick="@(async args => { await Navigate(cmd, args); })" disabled="@cmd.Disabled">
+                            <span class="oi sl-icon" aria-hidden="true">@cmd.Glyph</span>@cmd.DisplayName
+                        </div>
+                    </li>
+                }
+                <li>
+                    <hr/>
+                </li>
+                <li>
+                    <div class="ps-3 pe-3 mt-2 mb-2" style="color: lightgray">
+                        Version @(AppSettings.Current().AppVersion)
+                    </div>
+                </li>
+
+                @if (Constants.AppConfiguration.CurrentBuildType != EnumCurrentBuildType.CustomerRelease)
+                {
+                    @*DebugInfos*@
+                    <li class="ps-3 pe-3" style="color: lightgray">
+                        <div>
+                            User-ID @VmProjectBase.GetVmBaseStatic.Dc.CoreConnectionInfos.UserId - @VmProjectBase.GetVmBaseStatic.Dc.DcExUser.Data.Id
+                        </div>
+                    </li>
+
+                    <li class="ps-3 pe-3" style="color: lightgray">
+                        <div>
+                            DeviceId-ID @VmProjectBase.GetVmBaseStatic.Dc.CoreConnectionInfos.DeviceId
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}

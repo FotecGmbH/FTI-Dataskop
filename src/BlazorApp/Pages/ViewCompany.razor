@@ -1,0 +1,170 @@
+@page "/ViewCompany"
+@page "/ViewCompany/{Id:int}"
+@using System.ComponentModel
+@using BaseApp.Connectivity
+@using BDA.Common.Exchange.Model.ConfigApp
+@using Biss.Dc.Client
+@inherits ProjectRazorPage<VmCompany>
+
+@if (ViewModel != null!)
+{
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenStack>
+                <BxCollectionView Collection="@ViewModel.UiProjects" TItem="DcListTypeProject">
+                    <HeaderTemplate>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenStack>
+                                <RadzenLabel>Projekte</RadzenLabel>
+                                <RadzenLabel>?</RadzenLabel>
+                            </RadzenStack>
+                            <BxButton Variant="Variant.Text" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdAddProject"></BxButton>
+                        </RadzenStack>
+                    </HeaderTemplate>
+                    <Columns>
+                        <RadzenDataGridColumn TItem="DcListTypeProject">
+                            <Template Context="data">
+                                <RadzenStack>
+                                    <RadzenLabel>@data.Data.Information.Name</RadzenLabel>
+                                    <RadzenLabel>@data.Data.Information.Description</RadzenLabel>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="DcListTypeProject" Width="170px">
+                            <Template Context="data">
+                                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
+                                    <BxButton BxButtonType="EnumBxButtonType.JustGlyph" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" BissCommand="ViewModel.CmdEditProject" ExecutionParameter="data"></BxButton>
+                                    <BxButton BxButtonType="EnumBxButtonType.JustGlyph" Variant="Variant.Text" ButtonStyle="ButtonStyle.Danger" BissCommand="ViewModel.CmdDeleteProject" ExecutionParameter="data"></BxButton>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </BxCollectionView>
+            </RadzenStack>
+        </RadzenColumn>
+        <RadzenColumn>
+            <BxCollectionView Collection="ViewModel.UiGlobalConfig" TItem="DcListDataPoint<ExGlobalConfig>">
+                <HeaderTemplate>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenStack>
+                            <RadzenLabel>Globale Konfigurationen</RadzenLabel>
+                            <RadzenLabel>Alle</RadzenLabel>
+                        </RadzenStack>
+                        <BxButton BxButtonType="EnumBxButtonType.JustGlyph" Variant="Variant.Text" BissCommand="@ViewModel.CmdAddGlobalConfig"></BxButton>
+                    </RadzenStack>
+                </HeaderTemplate>
+                <Columns>
+                    <RadzenDataGridColumn TItem="DcListDataPoint<ExGlobalConfig>">
+                        <Template Context="data">
+                            <RadzenStack>
+                                <RadzenLabel>@data.Data.Information.Name</RadzenLabel>
+                                <RadzenLabel>@data.Data.Information.Description</RadzenLabel>
+                            </RadzenStack>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="DcListDataPoint<ExGlobalConfig>">
+                        <Template Context="data">
+                            <RadzenStack AlignItems="AlignItems.Center">
+                                <RadzenLabel>@data.Data.ConfigType</RadzenLabel>
+                            </RadzenStack>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="DcListDataPoint<ExGlobalConfig>" Width="170px">
+                        <Template Context="data">
+                            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
+                                <BxButton BxButtonType="EnumBxButtonType.JustGlyph" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" BissCommand="ViewModel.CmdEditGlobalConfig" ExecutionParameter="data"></BxButton>
+                                <BxButton BxButtonType="EnumBxButtonType.JustGlyph" Variant="Variant.Text" ButtonStyle="ButtonStyle.Danger" BissCommand="ViewModel.CmdDeleteGlobalConfig" ExecutionParameter="data"></BxButton>
+                            </RadzenStack>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </BxCollectionView>
+        </RadzenColumn>
+        <RadzenColumn>
+            <BxCollectionView Collection="ViewModel.UiUsers" TItem="DcListDataPoint<ExCompanyUser>">
+                <HeaderTemplate>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenStack>
+                            <RadzenLabel>User der Firma</RadzenLabel>
+                            <RadzenLabel>Aktuelle Benutzer</RadzenLabel>
+                        </RadzenStack>
+                        <BxButton BxButtonType="EnumBxButtonType.JustGlyph" Variant="Variant.Text" BissCommand="@ViewModel.CmdAddUser"></BxButton>
+                    </RadzenStack>
+                </HeaderTemplate>
+                <Columns>
+                    <RadzenDataGridColumn TItem="DcListDataPoint<ExCompanyUser>">
+                        <Template Context="user">
+                            <RadzenRow>
+                                <RadzenColumn Size="1">
+                                    @if (user.Data.HasImage)
+                                    {
+                                        <BxImage Style="max-width: 25px; max-height: 25px;" Round="true" ImageSource="@user.Data.UserImageLink"></BxImage>
+                                    }
+                                    else if (user.Data.LoginDoneByUser)
+                                    {
+                                        <div class="rounded-circle" style="width: 25px; height: 25px; background-color: green;"></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="rounded-circle" style="width: 25px; height: 25px; background-color: red;"></div>
+                                    }
+                                </RadzenColumn>
+                                <RadzenColumn>
+                                    <RadzenRow>
+                                        <RadzenText>@user.Data.FullNameUi</RadzenText>
+                                    </RadzenRow>
+                                    <RadzenRow>
+                                        <RadzenText>@user.Data.UserLoginEmail</RadzenText>
+                                    </RadzenRow>
+                                </RadzenColumn>
+                                <RadzenColumn>
+                                    <RadzenRow>
+                                        <RadzenText>@user.Data.UserId</RadzenText>
+                                    </RadzenRow>
+                                    <RadzenRow>
+                                        <RadzenText>@user.Data.UserRoleUi</RadzenText>
+                                    </RadzenRow>
+                                </RadzenColumn>
+                                <RadzenColumn>
+                                    <RadzenRow JustifyContent="JustifyContent.Right">
+                                        <BxButton BxButtonType="EnumBxButtonType.JustGlyph" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" BissCommand="@ViewModel.CmdEditUser" ExecutionParameter="user"/>
+                                        <BxButton BxButtonType="EnumBxButtonType.JustGlyph" Variant="Variant.Text" ButtonStyle="ButtonStyle.Danger" BissCommand="@ViewModel.CmdDeleteUser" ExecutionParameter="user"/>
+                                    </RadzenRow>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </BxCollectionView>
+        </RadzenColumn>
+    </RadzenRow>
+}
+
+@code
+{
+    /// <inheritdoc />
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            ViewModel!.PropertyChanged += ViewModelOnPropertyChanged;
+            ViewModel!.UiGlobalConfig.SelectedItemChanged += UiGlobalConfigOnSelectedItemChanged;
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void ViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(VmCompany.UiGlobalConfig))
+        {
+            ViewModel!.UiGlobalConfig.SelectedItemChanged -= UiGlobalConfigOnSelectedItemChanged;
+            ViewModel!.UiGlobalConfig.SelectedItemChanged += UiGlobalConfigOnSelectedItemChanged;
+        }
+    }
+
+    private void UiGlobalConfigOnSelectedItemChanged(object? sender, SelectedItemEventArgs<DcListDataPoint<ExGlobalConfig>> e)
+    {
+        ViewModel!.Dc.DcExGlobalConfig.SelectedItem = e.CurrentItem;
+    }
+}

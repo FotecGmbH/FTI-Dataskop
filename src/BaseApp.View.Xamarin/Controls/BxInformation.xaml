@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ContentView
+    x:Class="BaseApp.View.Xamarin.Controls.BxInformation"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="BxInformationBase">
+    <ContentView.Content>
+
+        <StackLayout BindingContext="{x:Reference BxInformationBase}">
+
+            <!--#region Allgemeine Infos-->
+            <Label
+                Style="{StaticResource LabelStyEditHeader}"
+                Text="Allgemeine Informationen" />
+            <Frame Margin="8,0,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="8" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Id:" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Text="{Binding DbId}" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="Name:" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Text="{Binding ExInformation.Name}" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="Beschreibung:" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Text="{Binding ExInformation.Description}" />
+
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Text="Config erzeugt:" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Text="{Binding ExInformation.CreatedDate}" />
+
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Text="Config aktualisiert:" />
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        Text="{Binding ExInformation.UpdatedDate}" />
+                </Grid>
+            </Frame>
+
+            <!--#endregion-->
+        </StackLayout>
+
+
+    </ContentView.Content>
+</ContentView>

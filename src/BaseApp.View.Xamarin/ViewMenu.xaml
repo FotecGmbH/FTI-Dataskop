@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<nav:BaseMenu
+    x:Class="BaseApp.View.Xamarin.ViewMenu"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Biss.Apps.ViewModel;assembly=Biss.Apps"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:bccnv="http://biss.schemas.com/coreconverter"
+    xmlns:bcm="http://biss.schemas.com/markupextensions"
+    xmlns:constants="clr-namespace:Exchange;assembly=Exchange"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iOsSpecific="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:nav="clr-namespace:Biss.Apps.XF.Navigation.Base;assembly=Biss.Apps.XF"
+    xmlns:viewModel="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    Title="{x:Static constants:Constants.MainTitle}"
+    d:DataContext="{x:Static viewModel:VmMenu.DesignInstance}"
+    iOsSpecific:Page.UseSafeArea="True"
+    BackgroundColor="{AppThemeBinding Dark={StaticResource ColorBackgroundFocus},
+                                      Light={StaticResource ColorBackgroundFocusLight}}"
+    mc:Ignorable="d">
+
+    <nav:BaseMenu.Resources>
+        <bccnv:ConverterBooleanValueColor
+            x:Key="BackgroundColorConverter"
+            ColorFalse="Transparent"
+            ColorTrue="{StaticResource ColorTextDetail}" />
+        <bccnv:ConverterBooleanValueColor
+            x:Key="LabelColorConverter"
+            ColorFalse="{StaticResource ColorTextDetail}"
+            ColorTrue="{StaticResource ColorAccent}" />
+    </nav:BaseMenu.Resources>
+
+    <Grid>
+
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  Titel  -->
+            <Label
+                Grid.Row="0"
+                Margin="8,16"
+                FontSize="{StaticResource FontSizeDefault}"
+                Text="{x:Static constants:Constants.MainTitle}" />
+
+            <bcc:BxCollectionView
+                x:Name="MenuCollectionView"
+                Grid.Row="1"
+                AutomationId="ListViewMenuItems"
+                Collection="{Binding CmdAllMenuCommands}"
+                SelectedItem="{Binding CmdAllMenuCommands.SelectedItem}"
+                SelectionMode="Single"
+                SeparatorEnabled="False"
+                TouchMarginLeft="0"
+                TouchMarginRight="0">
+
+
+                <bcc:BxCollectionView.DataTemplate>
+                    <DataTemplate>
+                        <Grid d:DataContext="{x:Static base:VmCommandSelectable.DesignInstance}"
+                              BackgroundColor="{Binding IsSelected, Converter={StaticResource BackgroundColorConverter}}">
+                            <Grid
+                                Padding="15,10"
+                                HorizontalOptions="FillAndExpand"
+                                IsEnabled="{Binding CanExecuteProperty}"
+                                IsVisible="{Binding CanExecuteProperty}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label
+                                    Grid.Column="0"
+                                    Margin="0,0,12,0"
+                                    Style="{bcm:Sty LabelStyGlyph}"
+                                    Text="{Binding Glyph}"
+                                    TextColor="{Binding IsSelected, Converter={StaticResource LabelColorConverter}}"
+                                    VerticalOptions="FillAndExpand"
+                                    VerticalTextAlignment="Center" />
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding DisplayName}"
+                                    TextColor="{Binding IsSelected, Converter={StaticResource LabelColorConverter}}"
+                                    VerticalOptions="FillAndExpand"
+                                    VerticalTextAlignment="Center" />
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </bcc:BxCollectionView.DataTemplate>
+            </bcc:BxCollectionView>
+
+            <!--  Info unten  -->
+            <Label
+                Grid.Row="2"
+                Margin="8,16"
+                FontSize="{StaticResource FontSizeDefault}"
+                HorizontalOptions="End"
+                IsVisible="{Binding TabletMode, Converter={bcm:Sty ConverterBoolInverted}}"
+                Text="Phone Mode" />
+            <Label
+                Grid.Row="2"
+                Margin="8,16"
+                FontSize="{StaticResource FontSizeDefault}"
+                HorizontalOptions="End"
+                IsVisible="{Binding TabletMode}"
+                Text="Tablet(Q) Mode" />
+        </Grid>
+
+        <BoxView
+            BackgroundColor="{AppThemeBinding Dark={StaticResource ColorBackgroundFocusTransparent},
+                                              Light={StaticResource ColorBackgroundFocusTransparentLight}}"
+            HorizontalOptions="FillAndExpand"
+            IsVisible="{Binding MenuBusy}"
+            VerticalOptions="FillAndExpand" />
+
+    </Grid>
+</nav:BaseMenu>

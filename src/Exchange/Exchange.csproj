@@ -1,0 +1,141 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Resources\Images\Dataskop.png" />
+		<None Remove="Resources\Images\DefaultUserImage.png" />
+		<None Remove="Resources\Images\Duk.png" />
+		<None Remove="Resources\Images\Fhsp.png" />
+		<None Remove="Resources\Images\Fotec.png" />
+		<None Remove="Resources\Images\Imc.png" />
+		<None Remove="Resources\Images\Logo.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Images\Dataskop.png" />
+		<EmbeddedResource Include="Resources\Images\DefaultUserImage.png" />
+		<EmbeddedResource Include="Resources\Images\Duk.png" />
+		<EmbeddedResource Include="Resources\Images\Fhsp.png" />
+		<EmbeddedResource Include="Resources\Images\Fotec.png" />
+		<EmbeddedResource Include="Resources\Images\Imc.png" />
+		<EmbeddedResource Include="Resources\Images\Logo.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Biss" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps.Connectivity" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps.Push" Version="8.3.2" />
+		<PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="8.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.Text.Json" Version="9.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Model\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Resources\ResCommon.Designer.cs">
+			<DependentUpon>ResCommon.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewAddUser.Designer.cs">
+			<DependentUpon>ResViewAddUser.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewEditUser.Designer.cs">
+			<DependentUpon>ResViewEditUser.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewEditUserPassword.Designer.cs">
+			<DependentUpon>ResViewEditUserPassword.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewLogin.Designer.cs">
+			<DependentUpon>ResViewLogin.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewMain.Designer.cs">
+			<DependentUpon>ResViewMain.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewNewValueNotification.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>ResViewNewValueNotification.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\ResViewSettings.Designer.cs">
+			<DependentUpon>ResViewSettings.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewSettingsPush.Designer.cs">
+			<DependentUpon>ResViewSettingsPush.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewUser.Designer.cs">
+			<DependentUpon>ResViewUser.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\ResCommon.resx">
+			<SubType>Designer</SubType>
+			<LastGenOutput>ResCommon.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewAddUser.resx">
+			<LastGenOutput>ResViewAddUser.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewEditUser.resx">
+			<LastGenOutput>ResViewEditUser.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewEditUserPassword.resx">
+			<LastGenOutput>ResViewEditUserPassword.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewLogin.resx">
+			<LastGenOutput>ResViewLogin.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewMain.resx">
+			<LastGenOutput>ResViewMain.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewNewValueNotification.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>ResViewNewValueNotification.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewSettings.resx">
+			<LastGenOutput>ResViewSettings.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewSettingsPush.resx">
+			<LastGenOutput>ResViewSettingsPush.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewUser.resx">
+			<LastGenOutput>ResViewUser.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+	</ItemGroup>
+
+</Project>

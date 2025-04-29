@@ -1,0 +1,246 @@
+# BISS Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+
+trigger:
+  - main
+
+jobs:
+- job: Dotnet
+  displayName: Windows BUILD
+  dependsOn: Apple
+  pool:
+    vmImage: 'windows-2019'
+
+  steps:
+
+  - task: DotNetCoreCLI@2
+    enabled: true
+    displayName: dotnet restore
+    inputs:
+      command: 'restore'
+      projects: |
+        **/Biss.Apps.csproj
+        **/Biss.Apps.Generator.csproj
+        **/Biss.Apps.XF.csproj
+        **/Biss.Apps.XF.Wpf.csproj
+        **/Biss.Apps.Blazor.csproj
+      feedsToUse: 'select'
+      vstsFeed: 'cf382ab6-ea55-43ac-86b9-2db39f34933d'
+
+  - task: DotNetCoreCLI@2
+    enabled: true
+    displayName: Build Biss.Apps.*.csproj
+    inputs:
+      command: 'build'
+      projects: |
+        **/Biss.Apps.csproj
+        **/Biss.Apps.Generator.csproj
+        **/Biss.Apps.XF.csproj
+        **/Biss.Apps.XF.Wpf.csproj
+        **/Biss.Apps.Blazor.csproj
+
+  - task: NuGetToolInstaller@1
+
+  - task: NuGetCommand@2
+    displayName: Restore Biss.Apps.XF.Droid.csproj
+    inputs:
+      command: 'restore'
+      restoreSolution: '**/Biss.Apps.XF.Droid.csproj'
+      feedsToUse: 'select'
+      vstsFeed: 'cf382ab6-ea55-43ac-86b9-2db39f34933d'
+
+  - task: XamarinAndroid@1
+    displayName: Build Biss.Apps.XF.Droid.csproj
+    inputs:
+      projectFile: '**/Biss.Apps.XF.Droid.csproj'
+      createAppPackage: false
+      msbuildVersionOption: 'latest'
+      jdkOption: 'JDKVersion'
+
+  - task: DownloadBuildArtifacts@0
+    displayName: Download iOS Build
+    inputs:
+      buildType: 'current'
+      downloadType: 'single'
+      artifactName: 'iosBuild'
+      downloadPath: '$(System.ArtifactsDirectory)'
+
+  - task: CopyFiles@2
+    displayName: Copy iOS Build
+    inputs:
+      SourceFolder: '$(System.ArtifactsDirectory)\iosBuild'
+      Contents: '**'
+      TargetFolder: 'Biss.Apps.XF.iOS/bin'
+
+  - task: PublishSymbols@2
+    displayName: Indexing an publishing Symols
+    inputs:
+      SearchPattern: '**/bin/**/*.pdb'
+      SymbolServerType: 'TeamServices'
+
+  - task: PowerShell@2
+    displayName: 'Generate BETA Version Number'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/beta'))
+    inputs:
+      filePath: 'BuildNumber.ps1'
+      arguments: '$(System.DefaultWorkingDirectory)/Biss.Apps/Biss.Apps.csproj'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack Biss.Apps BETA Package'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/beta'))
+    inputs:
+      command: pack
+      packagesToPack: '**/Biss.Apps.csproj'
+      nobuild: true
+      versioningScheme: byEnvVar
+      versionEnvVar: biss.build
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack Biss.Apps Package'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/Biss.Apps.csproj'
+      nobuild: true
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack Biss.Apps.Generator BETA Package'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/beta'))
+    inputs:
+      command: pack
+      packagesToPack: '**/Biss.Apps.Generator.csproj'
+      nobuild: true
+      versioningScheme: byEnvVar
+      versionEnvVar: biss.build
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack Biss.Apps.Generator Package'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/Biss.Apps.Generator.csproj'
+      nobuild: true
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack Biss.Apps.XF.Wpf BETA Package'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/beta'))
+    inputs:
+      command: pack
+      packagesToPack: '**/Biss.Apps.XF.Wpf.csproj'
+      nobuild: true
+      versioningScheme: byEnvVar
+      versionEnvVar: biss.build
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack Biss.Apps.XF.Wpf Package'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/Biss.Apps.XF.Wpf.csproj'
+      nobuild: true
+
+  - task: NuGetCommand@2
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/beta'))
+    displayName: 'Pack Biss.Apps.XF BETA Package'
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/Biss.Apps.XF.nuspec'
+      versioningScheme: 'byEnvVar'
+      versionEnvVar: 'biss.build'
+
+  - task: NuGetCommand@2
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    displayName: 'Pack Biss.Apps.XF Package'
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/Biss.Apps.XF.nuspec'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack Biss.Apps.Blazor BETA Package'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/beta'))
+    inputs:
+      command: pack
+      packagesToPack: '**/Biss.Apps.Blazor.csproj'
+      nobuild: true
+      versioningScheme: byEnvVar
+      versionEnvVar: biss.build
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack Biss.Apps.Blazor Package'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/Biss.Apps.Blazor.csproj'
+      nobuild: true
+
+  - task: NuGetCommand@2
+    displayName: 'Upload Nugets'
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.snupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: 'cf382ab6-ea55-43ac-86b9-2db39f34933d'
+      allowPackageConflicts: true
+
+
+
+- job: Apple
+  displayName: MAC Build
+
+  pool:
+    vmImage: 'macOS-latest'
+
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: dotnet restore
+    enabled: true
+    inputs:
+      command: 'restore'
+      projects: |
+        **/Biss.Apps.csproj
+        **/Biss.Apps.XF.csproj
+      feedsToUse: 'select'
+      vstsFeed: 'cf382ab6-ea55-43ac-86b9-2db39f34933d'
+
+  - task: DotNetCoreCLI@2
+    enabled: true
+    displayName: Build Biss.Apps.*.csproj
+    inputs:
+      command: 'build'
+      projects: |
+        **/Biss.Apps.csproj
+        **/Biss.Apps.XF.csproj
+
+  - task: NuGetToolInstaller@1
+
+  - task: NuGetCommand@2
+    displayName: Nuget restore Biss.Apps.XF.iOs.csproj
+    inputs:
+      command: 'restore'
+      restoreSolution: '**/Biss.Apps.XF.iOs.csproj'
+      feedsToUse: 'select'
+      vstsFeed: 'cf382ab6-ea55-43ac-86b9-2db39f34933d'
+
+  - task: XamariniOS@2
+    displayName: Build Biss.Apps.XF.iOs.csproj
+    inputs:
+      solutionFile: '**/Biss.Apps.XF.iOs.csproj'
+      configuration: 'Debug'
+      packageApp: false
+      buildForSimulator: true
+      runNugetRestore: false
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: 'Biss.Apps.XF.iOS/bin'
+      Contents: '**'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'iosBuild'
+      publishLocation: 'Container'

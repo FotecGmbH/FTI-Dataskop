@@ -1,0 +1,57 @@
+﻿@page "/ViewSettings"
+@page "/ViewSettings/{Id:int}"
+
+@attribute [Authorize]
+
+@inherits ProjectRazorPage<VmSettings>
+
+@if (ViewModel != null!)
+{
+    <RadzenCard>
+        <RadzenRow>
+            <RadzenColumn>
+                @* ReSharper disable CSharpWarnings::CS0618 *@
+                <EntryControl ShowFrame="false" Entry="@ViewModel.EntryCommonMessage"/>
+                
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenColumn>
+                <EntryControl ShowFrame="false" Entry="@ViewModel.EntryCurrentAppVersion"/>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenColumn>
+                <EntryControl ShowFrame="false" Entry="@ViewModel.EntryMinAppVersion"/>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenColumn>
+                <EntryControl ShowFrame="false" Entry="@ViewModel.EntryAgb"/>
+                @* ReSharper restore CSharpWarnings::CS0618 *@
+            </RadzenColumn>
+        </RadzenRow>
+        @* ReSharper disable once Razor.UnresolvedComponent *@
+        <BxButton BissCommand="ViewModel.CmdSendPerDc"/>
+    </RadzenCard>
+}
+
+@code{
+
+    /// <summary>
+    ///     Entspricht VM OnLoaded, wird einmal pro View aufgerufen
+    /// </summary>
+    /// <returns></returns>
+    protected override Task OnViewLoaded()
+    {
+        if (ViewModel != null)
+        {
+            ViewModel.DcConnection = DcConnections;
+            ViewModel.ServerRemoteCalls = ServerRemoteCalls;
+            ViewModel.ServerRemoteCalls.SetClientConnection(ViewModel.DcConnection);
+        }
+
+        return base.OnViewLoaded();
+    }
+
+}

@@ -1,0 +1,239 @@
+﻿@import url("open-iconic/font/css/open-iconic-bootstrap.min.css");
+@font-face {
+    font-family: 'StreamLineIconsLight';
+    src: url("streamline/fonts/StreamLineIconsLight.ttf") format("truetype"), url("streamline/fonts/StreamLineIconsLight.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+.navbar-dark {
+  height: 56px; }
+
+.valid.modified:not([type=checkbox]) {
+  outline: 1px solid #26b050; }
+
+.invalid {
+  outline: 1px solid red; }
+
+.validation-message {
+  color: red; }
+
+.visible {
+  visibility: visible; }
+
+.hidden {
+  visibility: hidden; }
+
+.myButton {
+  width: 180px; }
+
+.shareicon {
+  padding: 10px;
+  width: 50px;
+  text-align: center;
+  text-decoration: none; }
+
+.shareicon-text {
+  padding-left: 10px;
+  font-size: 18px; }
+
+.shareicon:hover {
+  opacity: 0.7;
+  color: white; }
+
+.shareicon-twitter {
+  background: #55ACEE;
+  color: white; }
+
+.shareicon-facebook {
+  background: #3B5998;
+  color: white; }
+
+.shareicon-linkedin {
+  color: white;
+  background: #007bb5; }
+
+.shareicon-mail {
+  background: #ff5700;
+  color: white; }
+
+#blazor-error-ui {
+  background: lightyellow;
+  bottom: 0;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+  display: none;
+  left: 0;
+  padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+  position: fixed;
+  width: 100%;
+  z-index: 1000; }
+
+#blazor-error-ui .dismiss {
+  cursor: pointer;
+  position: absolute;
+  right: 0.75rem;
+  top: 0.5rem; }
+
+.gridContainer {
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  display: grid; }
+
+.pointer {
+  cursor: pointer; }
+
+.sl-icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'StreamLineIconsLight' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  font-size: 18px;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.nav-item:hover {
+  background: darkgrey;
+  color: white;
+  cursor: pointer; }
+
+.nav-link span {
+  margin-right: 10px; }
+
+body {
+  font-size: .875rem; }
+
+.feather {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom; }
+
+/*
+ * Sidebar
+ */
+.sidebar {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  /* Behind the navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0; }
+
+.sidebar-pt {
+  padding: 56px 0 0;
+  /* Height of navbar */ }
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 56px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Scrollable contents if viewport is shorter than content. */ }
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333; }
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #727272; }
+
+.sidebar .nav-link.active {
+  background: #528dee;
+  color: white; }
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit; }
+
+.sidebar-heading {
+  font-size: .75rem;
+  text-transform: uppercase; }
+
+/*
+ * Navbar
+ */
+.navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25); }
+
+.navbar .navbar-toggler {
+  top: .25rem;
+  right: 1rem; }
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+  border-width: 0;
+  border-radius: 0; }
+
+.form-control-dark {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1); }
+
+.form-control-dark:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25); }
+
+.nav-item-active {
+  color: white !important;
+  background-color: #6c757d !important; }
+
+.nav-item-active:hover {
+  color: white !important;
+  background-color: #6c757d !important; }
+
+.nav-item-inactive {
+  background-color: white !important;
+  color: #6c757d !important; }
+
+.nav-item-inactive:hover {
+  color: white !important;
+  background-color: #6c757d !important; }
+
+.nav-link:hover {
+  color: white; }
+
+.view-card {
+  border-radius: 50px;
+  margin: 10px; }
+
+.app-title {
+  color: white;
+  text-decoration: none;
+  line-height: 2.5; }
+
+.app-title-big {
+  font-size: 25px;
+  line-height: 1.4; }
+
+.app-title:hover {
+  color: white;
+  text-decoration: none; }
+
+.menu-icon {
+  color: white;
+  background: none;
+  border: none;
+  outline: none; }
+
+.menu-icon:hover {
+  background: #528dee;
+  outline: none;
+  border-radius: 50%; }
+
+.mb-footer {
+  padding-bottom: 2.5rem !important; }

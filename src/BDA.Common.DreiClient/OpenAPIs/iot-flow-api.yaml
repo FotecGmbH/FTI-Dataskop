@@ -1,0 +1,3505 @@
+openapi: 3.0.3
+info:
+  version: 1.7.13
+  title: ThingPark X IoT Flow API
+  description: >
+    An API to configure uplink ingestion and downlink sending with any king of thing using any kind of technology.
+servers:
+  - url: '/iot-flow/v1'
+externalDocs:
+  description: 'The online documentation with examples'
+  url: 'https://docs.thingpark.com/thingpark-x/latest/'
+tags:
+  - name: Driver
+    description: >
+      Module responsible to decode uplinks and optionally encode downlinks based on thing applicative payload
+  - name: Codec
+    description: >
+      Functions exposed by drivers to decode uplinks and encode/decode downlinks
+  - name: Ontology
+    description: >
+      Inject and retrieve units/sensors available in the ontology database
+  - name: Connector
+    description: >
+      Module responsible of feeding an IoT platform and receiving applicative downlinks
+  - name: Connection
+    description: >
+      An active connection to a connector
+  - name: Flow
+    description: >
+      A complete IoT flow gathering a Binder, Driver, Ontology and several Connectors for a thing, a list of things,
+      a thing family or all things
+  - name: Event
+    description: >
+      Events that occurred on the IoT Flow platform for debugging purpose
+  - name: Processor
+    description: >
+      Processing an uplink
+paths:
+  /drivers:
+    get:
+      summary: Retrieves the list of drivers
+      description: Retrieves the list of drivers
+      operationId: listDrivers
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/perPage'
+        - $ref: '#/components/parameters/q'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/manufacturer'
+        - $ref: '#/components/parameters/protocolId'
+      tags:
+        - Driver
+      responses:
+        '200':
+          description: The list of drivers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drivers'
+          headers:
+            X-Total:
+              schema:
+                type: integer
+              description: The total number of results
+            X-Total-Pages:
+              schema:
+                type: integer
+              description: The total number of pages
+            X-Per-Page:
+              schema:
+                type: integer
+              description: The number results per page
+            X-Page:
+              schema:
+                type: integer
+              description: The current page
+            X-Next-Page:
+              schema:
+                type: integer
+              description: The number of the next page
+            X-Prev-Page:
+              schema:
+                type: integer
+              description: The number of the previous page
+            Link:
+              schema:
+                type: string
+              description: Links to the first, the previous, the next and the last pages
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notActivated'
+        default:
+          $ref: '#/components/responses/error'
+    post:
+      summary: Create a driver
+      operationId: createDriver
+      tags:
+        - Driver
+      requestBody:
+        description: >
+          The driver to create
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/driverCreate'
+      responses:
+        '201':
+          description: >
+            The created driver
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/driver'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notActivated'
+        '409':
+          $ref: '#/components/responses/notActivated'
+        default:
+          $ref: '#/components/responses/error'
+  '/drivers/{driverId}':
+    parameters:
+      - $ref: '#/components/parameters/driverId'
+    get:
+      summary: Retrieves the driver resource
+      operationId: getDriver
+      tags:
+        - Driver
+      responses:
+        '200':
+          description: Full representation of the retrieved driver resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/driver'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      summary: Deletes the driver resource
+      operationId: deleteDriver
+      tags:
+        - Driver
+      responses:
+        '204':
+          description: The driver is deleted
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+    patch:
+      summary: Patch a driver
+      operationId: patchDriver
+      tags:
+        - Driver
+      requestBody:
+        description: The driver to be patched
+        required: true
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/mergePatch'
+      responses:
+        '200':
+          description: Full representation of the patched driver
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/driver'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  '/drivers/providers':
+    parameters:
+      - $ref: '#/components/parameters/q'
+      - $ref: '#/components/parameters/source'
+    get:
+      summary: Retrieves the providers of the drivers
+      operationId: listProviders
+      tags:
+        - Driver
+      responses:
+        '200':
+          description: The list of the providers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example:
+                - actility
+                - abeeway
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  '/drivers/manufacturers':
+    parameters:
+      - $ref: '#/components/parameters/q'
+      - $ref: '#/components/parameters/source'
+    get:
+      summary: Retrieves the manufacturers of the devices
+      operationId: listManufacturers
+      tags:
+        - Driver
+      responses:
+        '200':
+          description: The list of the manufacturers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example:
+                - nke
+                - adeunis
+                - abeeway
+
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  '/drivers/validate/code':
+    post:
+      summary: Validate a driver's code
+      operationId: validateDriverCode
+      tags:
+        - Driver
+      requestBody:
+        description: >
+          The driver's code that is going to be injected in database
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/validateCode'
+      responses:
+        '200':
+          description: The driver is valid
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+  '/decode':
+    post:
+      summary: Decode the provided raw uplink/downlink by automatically selecting the driver
+      operationId: decode
+      tags:
+        - Codec
+      requestBody:
+        description: >
+          The uplink/downlink message with its meta and raw payload to decode
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/decodeInput'
+      responses:
+        '200':
+          description: >
+            The uplink/downlink message with its meta, raw payload and decoded
+            message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/codecOutput'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+  '/decode/batch':
+    post:
+      summary: Decode the provided list of raw uplinks/downlinks by automatically selecting the driver
+      operationId: decodeBatch
+      tags:
+        - Codec
+      requestBody:
+        description: >
+          The list of uplink/downlink messages with their meta and raw payload
+          to decode
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/decodeBatchInput'
+      responses:
+        '200':
+          description: >
+            The list of uplink/downlink messages with their meta, raw payload
+            and decoded message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/decodeBatchOutput'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+  '/decode/code':
+    post:
+      summary: Validate a driver's code and decode a payload
+      operationId: testDecode
+      tags:
+        - Codec
+      requestBody:
+        description: >
+          The uplink/downlink message with its meta and raw payload to decode
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/testDecodeInput'
+      responses:
+        '200':
+          description: >
+            The uplink/downlink message with its meta, raw payload and decoded
+            message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/testCodecOutput'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+  '/encode':
+    post:
+      summary: Encode the provided downlink message by automatically selecting the driver
+      operationId: encode
+      tags:
+        - Codec
+      requestBody:
+        description: >
+          The downlink message with its meta and message to encode
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/encodeInput'
+      responses:
+        '200':
+          description: >
+            The downlink message with its meta, message and encoded raw payload
+          content:
+            application/json:
+              example:
+                direction: downlink
+                sourceTime: "2021-01-01T11:00:00+01:00"
+                meta:
+                  lorawan:
+                    fPort: 15
+                thing:
+                  model:
+                    producerId: my-manufacturer
+                    moduleId: my-device-model
+                    version: "1"
+                  application:
+                    producerId: my-manufacturer
+                    moduleId: my-applicative-stack
+                    version: "2"
+                raw:
+                  binary: "229355c151f1cf2e117c824f67997548"
+                message:
+                  temperatureCfg: 20
+                  temparaturePeriod: 10
+              schema:
+                $ref: '#/components/schemas/codecOutput'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+  '/encode/code':
+    post:
+      summary: Validate a driver's code and encode a message
+      operationId: testEncode
+      tags:
+        - Codec
+      requestBody:
+        description: >
+          The downlink message with its meta and message to encode
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/testEncodeInput'
+      responses:
+        '200':
+          description: >
+            The downlink message with its meta, message and encoded raw payload
+          content:
+            application/json:
+              example:
+                direction: downlink
+                sourceTime: "2019-01-01T11:00:00+01:00"
+                meta:
+                  lorawan:
+                    fPort: 15
+                raw:
+                  binary: "229355c151f1cf2e117c824f67997548"
+                message:
+                  temperatureCfg: 20
+                  temparaturePeriod: 10
+              schema:
+                $ref: '#/components/schemas/testCodecOutput'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+  '/ontology/units':
+    get:
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/perPage'
+      summary: Retrieves the list of units
+      operationId: listUnits
+      tags:
+        - Ontology
+      responses:
+        '200':
+          description: The list of units
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/units'
+          headers:
+            X-Total:
+              schema:
+                type: integer
+              description: The total number of results
+            X-Total-Pages:
+              schema:
+                type: integer
+              description: The total number of pages
+            X-Per-Page:
+              schema:
+                type: integer
+              description: The number results per page
+            X-Page:
+              schema:
+                type: integer
+              description: The current page
+            X-Next-Page:
+              schema:
+                type: integer
+              description: The number of the next page
+            X-Prev-Page:
+              schema:
+                type: integer
+              description: The number of the previous page
+            Link:
+              schema:
+                type: string
+              description: Links to the first, the previous, the next and the last pages
+        default:
+          $ref: '#/components/responses/error'
+  '/ontology/units/{unitId}':
+    parameters:
+      - $ref: '#/components/parameters/unitId'
+    get:
+      summary: Retrieves the unit resource
+      operationId: getUnit
+      tags:
+        - Ontology
+      responses:
+        '200':
+          description: Full representation of the retrieved unit resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unit'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  '/ontology/sensors':
+    get:
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/perPage'
+      summary: Retrieves the list of sensors
+      operationId: listSensors
+      tags:
+        - Ontology
+      responses:
+        '200':
+          description: The list of sensors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sensors'
+          headers:
+            X-Total:
+              schema:
+                type: integer
+              description: The total number of results
+            X-Total-Pages:
+              schema:
+                type: integer
+              description: The total number of pages
+            X-Per-Page:
+              schema:
+                type: integer
+              description: The number results per page
+            X-Page:
+              schema:
+                type: integer
+              description: The current page
+            X-Next-Page:
+              schema:
+                type: integer
+              description: The number of the next page
+            X-Prev-Page:
+              schema:
+                type: integer
+              description: The number of the previous page
+            Link:
+              schema:
+                type: string
+              description: Links to the first, the previous, the next and the last pages
+        default:
+          $ref: '#/components/responses/error'
+  '/ontology/sensors/{sensorId}':
+    parameters:
+      - $ref: '#/components/parameters/sensorId'
+    get:
+      summary: Retrieves the sensor resource
+      operationId: getSensor
+      tags:
+        - Ontology
+      responses:
+        '200':
+          description: Full representation of the retrieved sensor resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sensor'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  '/ontology/fields':
+    get:
+      deprecated: true
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/perPage'
+      summary: Retrieves the list of fields
+      operationId: listFields
+      tags:
+        - Ontology
+      responses:
+        '200':
+          description: The list of fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fields'
+          headers:
+            X-Total:
+              schema:
+                type: integer
+              description: The total number of results
+            X-Total-Pages:
+              schema:
+                type: integer
+              description: The total number of pages
+            X-Per-Page:
+              schema:
+                type: integer
+              description: The number results per page
+            X-Page:
+              schema:
+                type: integer
+              description: The current page
+            X-Next-Page:
+              schema:
+                type: integer
+              description: The number of the next page
+            X-Prev-Page:
+              schema:
+                type: integer
+              description: The number of the previous page
+            Link:
+              schema:
+                type: string
+              description: Links to the first, the previous, the next and the last pages
+        default:
+          $ref: '#/components/responses/error'
+  '/ontology/fields/{fieldId}':
+    parameters:
+      - $ref: '#/components/parameters/fieldId'
+    get:
+      deprecated: true
+      summary: Retrieves the field resource
+      operationId: getField
+      tags:
+        - Ontology
+      responses:
+        '200':
+          description: Full representation of the retrieved field resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/field'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  /connectors:
+    get:
+      summary: Retrieves the list of available connectors
+      operationId: listConnectors
+      tags:
+        - Connector
+      responses:
+        '200':
+          description: The list of connectors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectors'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notActivated'
+        default:
+          $ref: '#/components/responses/error'
+  '/connectors/{connectorId}':
+    parameters:
+      - $ref: '#/components/parameters/connectorId'
+    get:
+      summary: Retrieves a connector
+      operationId: getConnector
+      tags:
+        - Connector
+      responses:
+        '200':
+          description: The connector representation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connector'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  '/connections':
+    get:
+      summary: Retrieves the list of connections to a connector
+      operationId: listConnections
+      tags:
+        - Connection
+      responses:
+        '200':
+          description: The list of connections to a connector
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connections'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+    post:
+      summary: Creates a connection to a connector
+      operationId: createConnection
+      tags:
+        - Connection
+      requestBody:
+        description: The connection to a connector to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectionRequest'
+            examples:
+              http-connection-create:
+                summary: HTTP connection creation
+                value:
+                  connectorId: actility-http-iot
+                  name: Test HTTP Connection
+                  configuration:
+                    headers:
+                      Authorisation: ee32e34ed!=
+                      X-Thing: '{DevEUI}'
+                      X-Site: BuildingA
+                    destinationURL: https://posthere.io/4b19-48f6-94cc
+                x-id: http-connection-create
+      responses:
+        '201':
+          description: The created connection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connection'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+  '/connections/{connectionId}':
+    parameters:
+      - $ref: '#/components/parameters/connectionId'
+    get:
+      summary: Retrieves the connection to a connector
+      operationId: getConnection
+      tags:
+        - Connection
+      responses:
+        '200':
+          description: The connection representation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connection'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+    put:
+      summary: Updates the connection to a connector
+      operationId: updateConnection
+      tags:
+        - Connection
+      requestBody:
+        description: The connection to a connector to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectionRequest'
+      responses:
+        '200':
+          description: The connection to a connector is updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connection'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+    patch:
+      summary: Patches the connection to a connector
+      operationId: patchConnection
+      tags:
+        - Connection
+      requestBody:
+        description: The connection to a connector to be patched
+        required: true
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/mergePatch'
+      responses:
+        '200':
+          description: The connection to a connector is updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connection'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      summary: Deletes the connection to a connector
+      operationId: deleteConnection
+      tags:
+        - Connection
+      responses:
+        '204':
+          description: The connection to a connector is deleted
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  '/connections/{connectionId}/restart':
+    parameters:
+      - $ref: '#/components/parameters/connectionId'
+    post:
+      summary: Restarts the connection
+      operationId: restartConnection
+      tags:
+        - Connection
+      responses:
+        '202':
+          description: The restart command has been accepted
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  '/connections/{connectionId}/metrics':
+    parameters:
+      - $ref: '#/components/parameters/connectionId'
+    get:
+      summary: Retrieves the metrics for a connection to a connector
+      operationId: getConnectionMetrics
+      tags:
+        - Connection
+      responses:
+        '200':
+          description: The connection metrics representation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectionMetrics'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  '/connections/metrics':
+    get:
+      summary: Retrieves the metrics for all connections matching the current users profile
+      operationId: getAllConnectionMetrics
+      tags:
+        - Connection
+      responses:
+        '200':
+          description: The connection metrics representation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/allConnectionMetrics'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        default:
+          $ref: '#/components/responses/error'
+  /flows:
+    get:
+      summary: Retrieves the list of IoT flows
+      operationId: listFlows
+      tags:
+        - Flow
+      responses:
+        '200':
+          description: The list of IoT flows
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/flows'
+          headers:
+            X-Total:
+              schema:
+                type: integer
+              description: The total number of results
+            X-Total-Pages:
+              schema:
+                type: integer
+              description: The total number of pages
+            X-Per-Page:
+              schema:
+                type: integer
+              description: The number results per page
+            X-Page:
+              schema:
+                type: integer
+              description: The current page
+            X-Next-Page:
+              schema:
+                type: integer
+              description: The number of the next page
+            X-Prev-Page:
+              schema:
+                type: integer
+              description: The number of the previous page
+            Link:
+              schema:
+                type: string
+              description: Links to the first, the previous, the next and the last pages
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notActivated'
+        default:
+          $ref: '#/components/responses/error'
+    post:
+      summary: Creates an IoT flow
+      operationId: createFlow
+      tags:
+        - Flow
+      requestBody:
+        description: The IoT flow to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/flowRequest'
+      responses:
+        '201':
+          description: The IoT flow is created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/flow'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notActivated'
+        default:
+          $ref: '#/components/responses/error'
+  '/flows/{flowId}':
+    parameters:
+      - $ref: '#/components/parameters/flowId'
+    get:
+      summary: Retrieves the IoT flow
+      operationId: getFlow
+      tags:
+        - Flow
+      responses:
+        '200':
+          description: The IoT flow representation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/flow'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+    put:
+      summary: Updates the IoT flow
+      operationId: updateFlow
+      tags:
+        - Flow
+      requestBody:
+        description: The IoT flow to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/flowRequest'
+      responses:
+        '200':
+          description: The IoT flow is updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/flow'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+    patch:
+      summary: Patches the IoT flow
+      operationId: patchFlow
+      tags:
+        - Flow
+      requestBody:
+        description: The IoT flow to be patched
+        required: true
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/mergePatch'
+      responses:
+        '200':
+          description: The IoT flow is patched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/flow'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      summary: Deletes the IoT flow
+      operationId: deleteFlow
+      tags:
+        - Flow
+      responses:
+        '204':
+          description: The IoT flow resource is deleted
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notFound'
+        default:
+          $ref: '#/components/responses/error'
+  /events:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/startTime'
+        - $ref: '#/components/parameters/endTime'
+        - $ref: "#/components/parameters/q_connectionId"
+        - $ref: '#/components/parameters/q'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/perPage'
+      summary: Retrieves the list of IoT Flow events on the platform
+      operationId: listEvents
+      tags:
+        - Event
+      responses:
+        '200':
+          description: The list of events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/events'
+          headers:
+            X-Total:
+              schema:
+                type: integer
+              description: The total number of results
+            X-Total-Pages:
+              schema:
+                type: integer
+              description: The total number of pages
+            X-Per-Page:
+              schema:
+                type: integer
+              description: The number results per page
+            X-Page:
+              schema:
+                type: integer
+              description: The current page
+            X-Next-Page:
+              schema:
+                type: integer
+              description: The number of the next page
+            X-Prev-Page:
+              schema:
+                type: integer
+              description: The number of the previous page
+            Link:
+              schema:
+                type: string
+              description: Links to the first, the previous, the next and the last pages
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/notActivated'
+        default:
+          $ref: '#/components/responses/error'
+  '/processor/execute':
+    post:
+      summary: Apply a tranformation to an uplink
+      operationId: executeTransformation
+      tags:
+        - Processor
+      requestBody:
+        description: >
+          Transformation data with an uplink
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/executeTransformation'
+            examples:
+              jslt-transformation:
+                summary: JSLT transformation
+                value: 
+                  upOperations:
+                    - type: customOutput
+                      output:
+                        id: JSLT_TRANSFORMATION
+                        transformation: "{\"Time\": .DevEUI_uplink.Time, \"DevEUI\": .DevEUI_uplink.DevEUI, \"FPort\": .DevEUI_uplink.FPort, \"FCntUp\": .DevEUI_uplink.FCntUp, \"FCntDn\": .DevEUI_uplink.FCntDn, \"payload\": .DevEUI_uplink.payload_hex, \"batteryLevel\": round(.DevEUI_uplink.payload.batteryVoltage * 100 / 3.6) + \"%\", \"temperature\": (.DevEUI_uplink.payload.temperature * 9/5) + 32 + \" °F\", \"special\": \"救恩\"}"
+                  uplink:
+                    DevEUI_uplink:
+                      Time: '2021-12-01T00:00:11.013+01:00'
+                      DevEUI: 402C765000000074
+                      FPort: 2
+                      FCntUp: 53
+                      ADRbit: 1
+                      FCntDn: 54
+                      payload_hex: '02300040a0'
+                      mic_hex: '61fa24cf'
+                      DevAddr: 04D2848E
+                      payload:
+                        temperature: 0.5
+                        batteryVoltage: 3.6
+              jsonata-transformation:
+                summary: JSONata transformation
+                value: 
+                  upOperations:
+                    - type: customOutput
+                      output:
+                        id: JSONATA_TRANSFORMATION
+                        transformation: "{\"Time\": DevEUI_uplink.Time, \"DevEUI\": DevEUI_uplink.DevEUI, \"FPort\": DevEUI_uplink.FPort, \"FCntUp\": DevEUI_uplink.FCntUp, \"FCntDn\": DevEUI_uplink.FCntDn, \"payload\": DevEUI_uplink.payload_hex, \"batteryLevel\": $round(DevEUI_uplink.payload.batteryVoltage * 100 / 3.6) & \"%\", \"temperature\": (DevEUI_uplink.payload.temperature * 9/5) + 32 & \" °F\", \"special\": \"救恩\"}"
+                  uplink:
+                    DevEUI_uplink:
+                      Time: '2021-12-01T00:00:11.013+01:00'
+                      DevEUI: 402C765000000074
+                      FPort: 2
+                      FCntUp: 53
+                      ADRbit: 1
+                      FCntDn: 54
+                      payload_hex: '02300040a0'
+                      mic_hex: '61fa24cf'
+                      DevAddr: 04D2848E
+                      payload:
+                        temperature: 0.5
+                        batteryVoltage: 3.6
+              jmespath-transformation:
+                summary: JMESPath transformation
+                value: 
+                  upOperations:
+                    - type: customOutput
+                      output:
+                        id: JMESPATH_TRANSFORMATION
+                        transformation: "{\"Time\": \"{{ DevEUI_uplink.Time }}\", \"DevEUI\": \"{{ DevEUI_uplink.DevEUI }}\", \"FPort\": \"{{ DevEUI_uplink.FPort }}\", \"FCntUp\": \"{{ DevEUI_uplink.FCntUp }}\", \"FCntDn\": \"{{ DevEUI_uplink.FCntDn }}\", \"payload\": \"{{ DevEUI_uplink.payload_hex }}\", \"batteryVoltage\": \"{{ DevEUI_uplink.payload.batteryVoltage }}\", \"temperature\": \"{{ DevEUI_uplink.payload.temperature }}\", \"special\": \"救恩\"}"
+                  uplink:
+                    DevEUI_uplink:
+                      Time: '2021-12-01T00:00:11.013+01:00'
+                      DevEUI: 402C765000000074
+                      FPort: 2
+                      FCntUp: 53
+                      ADRbit: 1
+                      FCntDn: 54
+                      payload_hex: '02300040a0'
+                      mic_hex: '61fa24cf'
+                      DevAddr: 04D2848E
+                      payload:
+                        temperature: 0.5
+                        batteryVoltage: 3.6
+      responses:
+        '200':
+          description: The transformation is done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transformationResult'
+              examples:
+                jslt-transformation:
+                  summary: JSLT transformation
+                  value: 
+                    Time: '2021-12-01T00:00:11.013+01:00'
+                    DevEUI: '402C765000000074'
+                    FPort: 2
+                    FCntUp: 53
+                    FCntDn: 54
+                    payload: '02300040a0'
+                    batteryLevel: '100%'
+                    temperature: '32.9 °F'
+                    special: '救恩'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '415':
+          $ref: '#/components/responses/mediaUnsupported'
+        default:
+          $ref: '#/components/responses/error'
+components:
+  schemas:
+    executeTransformation:
+      type: object
+      required:
+        - upOperations
+        - uplink
+      properties:
+        upOperations:
+          $ref: '#/components/schemas/upOperations'
+        uplink:
+          type: object
+          x-is-object-schema: true
+    transformationResult:
+      type: object
+      x-is-object-schema: true
+    mergePatch:
+      description: >
+        JSON Merge Patch (RFC 7386) request body. You can refer to the body definition of the
+        PUT method on the same resource to know the possible attributes
+      type: object
+      x-is-object-schema: true
+      # Marker type as JSON Merge Patch requests can not be fully specified as a JSON Schema type
+    drivers:
+      type: array
+      items:
+        $ref: '#/components/schemas/driverLite'
+    driverType:
+      type: string
+      enum:
+        - ttn
+        - thingpark-x-js
+        - thingpark-x-java
+        - chirpstack
+        - lora-alliance
+    exampleType:
+      type: string
+      enum:
+        - uplink
+        - downlink
+    driverId:
+      type: string
+      description: The unique driver identifier
+    driverName:
+      type: string
+      description: The name of the driver
+    driverProducerId:
+      type: string
+      description: The producerId of the driver
+    driverModuleId:
+      type: string
+      description: The moduleId of the driver
+    driverSource:
+      type: string
+      description: The source of the driver
+      enum:
+        - custom
+        - system
+        - imported
+    driverVersion:
+      type: string
+      description: The version of the driver
+    driverPrivate:
+      type: boolean
+      description: Indicates if the source code is private or not
+    driverSystemVersion:
+      type: string
+      description: The version of the installed system driver when the driver is imported
+    driverDescription:
+      description: The description of the driver
+      type: string
+    driverSpecification:
+      description: The url of the official documentation or datasheet of the device
+      type: string
+      format: uri
+    deviceImageUrl:
+      description: The url of an official image of the device
+      type: string
+      format: uri
+    manufacturerLogoUrl:
+      description: The url of an official logo of the manufacturer
+      type: string
+      format: uri
+    providerLogoUrl:
+      description: The url of an official logo of the provider
+      type: string
+      format: uri
+    driverStable:
+      type: boolean
+      description: Whether or not the driver is stable
+    driverDecodedUplinksSequenceWoError:
+      type: integer
+      format: int64
+      description: The number of consecutive uplinks decoded without error
+    driverDecodedDownlinksSequenceWoError:
+      type: integer
+      format: int64
+      description: The number of consecutive downlinks decoded without error
+    driverEncodedDownlinksSequenceWoError:
+      type: integer
+      format: int64
+      description: The number of consecutive downlink encoded without error
+    driverCode:
+      description: The code of the driver
+      type: string
+      format: base64
+      x-is-binary-schema: true
+    driver:
+      type: object
+      required:
+        - id
+        - type
+        - producerId
+        - moduleId
+        - version
+        - application
+        - private
+        - source
+      properties:
+        id:
+          $ref: '#/components/schemas/driverId'
+        name:
+          $ref: '#/components/schemas/driverName'
+        description:
+          $ref: '#/components/schemas/driverDescription'
+        specification:
+          $ref: '#/components/schemas/driverSpecification'
+        deviceImageUrl:
+          $ref: '#/components/schemas/deviceImageUrl'
+        manufacturerLogoUrl:
+          $ref: '#/components/schemas/manufacturerLogoUrl'
+        providerLogoUrl:
+          $ref: '#/components/schemas/providerLogoUrl'
+        producerId:
+          $ref: '#/components/schemas/driverProducerId'
+        moduleId:
+          $ref: '#/components/schemas/driverModuleId'
+        source:
+          $ref: '#/components/schemas/driverSource'
+        version:
+          $ref: '#/components/schemas/driverVersion'
+        application:
+          $ref: '#/components/schemas/moduleSpec'
+        type:
+          $ref: '#/components/schemas/driverType'
+        private:
+          $ref: '#/components/schemas/driverPrivate'
+        systemVersion:
+          $ref: '#/components/schemas/driverSystemVersion'
+        examples:
+          $ref: '#/components/schemas/payloadExamples'
+        pointsSchema:
+          $ref: '#/components/schemas/pointsDescription'
+        uplinkJsonSchema:
+          description: The json schema that describes the output of decoding an uplink
+          type: object
+        downlinkJsonSchema:
+          description: The json schema that describes the output of decoding a downlink
+          type: object
+        stable:
+          $ref: '#/components/schemas/driverStable'
+        decodedUplinksSequenceWoError:
+          $ref: '#/components/schemas/driverDecodedUplinksSequenceWoError'
+        decodedDownlinksSequenceWoError:
+          $ref: '#/components/schemas/driverDecodedDownlinksSequenceWoError'
+        encodedDownlinksSequenceWoError:
+          $ref: '#/components/schemas/driverEncodedDownlinksSequenceWoError'
+        code:
+          $ref: '#/components/schemas/driverCode'
+      example:
+        id: myprovider:mydriver:1
+        producerId: myprovider
+        name: My driver
+        description: My driver description
+        moduleId: mydriver
+        version: 1.0.0
+        source: system
+        private: false
+        application:
+          producerId: applicationProvider
+          moduleId: applicationModule
+          version: 1.0.0
+        type: thingpark-x-js
+        code: ZnVuY3Rpb24gZGVjb2RlVXBsaW5rKGlucHV0KXsgcmV0dXJuICJ0ZXN0IiB9
+        examples:
+          - description: decode uplink containing three measurements
+            type: uplink
+            bytes: 001f01011f01020a
+            fPort: 1
+            time: "2021-08-02T20:00:00.000+05:00"
+            data:
+              temperature: 79.37
+              humidity: 79.37
+              pulseCounter: 10
+          - description: decode downlink containing only alarm
+            type: downlink
+            bytes: 0101
+            fPort: 1
+            time: "2021-08-02T20:00:00.000+05:00"
+            data:
+              alarm: true
+        pointsSchema:
+          temperature:
+            type: double
+            unitId: Cel
+    driverLite:
+      type: object
+      required:
+        - id
+        - type
+        - producerId
+        - moduleId
+        - source
+        - version
+        - application
+        - private
+      properties:
+        id:
+          $ref: '#/components/schemas/driverId'
+        name:
+          $ref: '#/components/schemas/driverName'
+        description:
+          $ref: '#/components/schemas/driverDescription'
+        producerId:
+          $ref: '#/components/schemas/driverProducerId'
+        moduleId:
+          $ref: '#/components/schemas/driverModuleId'
+        source:
+          $ref: '#/components/schemas/driverSource'
+        version:
+          $ref: '#/components/schemas/driverVersion'
+        application:
+          $ref: '#/components/schemas/moduleSpec'
+        type:
+          $ref: '#/components/schemas/driverType'
+        private:
+          $ref: '#/components/schemas/driverPrivate'
+        systemVersion:
+          $ref: '#/components/schemas/driverSystemVersion'
+        decodedUplinksSequenceWoError:
+          $ref: '#/components/schemas/driverDecodedUplinksSequenceWoError'
+        decodedDownlinksSequenceWoError:
+          $ref: '#/components/schemas/driverDecodedDownlinksSequenceWoError'
+        encodedDownlinksSequenceWoError:
+          $ref: '#/components/schemas/driverEncodedDownlinksSequenceWoError'
+      example:
+        id: myprovider:mydriver:1
+        name: My driver
+        description: My driver description
+        producerId: myprovider
+        moduleId: mydriver
+        source: system
+        version: 1.0.0
+        application:
+          producerId: applicationProvider
+          moduleId: applicationModule
+          version: 1.0.0
+        type: thingpark-x-js
+        private: false
+    driverCreate:
+      type: object
+      required:
+        - name
+        - type
+        - moduleId
+        - version
+        - application
+        - code
+      properties:
+        name:
+          $ref: '#/components/schemas/driverName'
+        description:
+          $ref: '#/components/schemas/driverDescription'
+        specification:
+          $ref: '#/components/schemas/driverSpecification'
+        deviceImageUrl:
+          $ref: '#/components/schemas/deviceImageUrl'
+        manufacturerLogoUrl:
+          $ref: '#/components/schemas/manufacturerLogoUrl'
+        providerLogoUrl:
+          $ref: '#/components/schemas/providerLogoUrl'
+        moduleId:
+          $ref: '#/components/schemas/driverModuleId'
+        version:
+          $ref: '#/components/schemas/driverVersion'
+        application:
+          $ref: '#/components/schemas/moduleSpec'
+        type:
+          $ref: '#/components/schemas/driverType'
+        code:
+          $ref: '#/components/schemas/driverCode'
+        examples:
+          $ref: '#/components/schemas/payloadExamples'
+        pointsSchema:
+          $ref: '#/components/schemas/pointsDescription'
+        uplinkJsonSchema:
+          description: The json schema that describes the output of decoding an uplink
+          type: object
+        downlinkJsonSchema:
+          description: The json schema that describes the output of decoding a downlink
+          type: object
+      example:
+        name: My driver
+        description: My driver description
+        moduleId: mydriver
+        version: 1.0.0
+        application:
+          producerId: applicationProvider
+          moduleId: applicationModule
+          version: 1.0.0
+        type: thingpark-x-js
+        code: ZnVuY3Rpb24gZGVjb2RlVXBsaW5rKGlucHV0KXsgcmV0dXJuICJ0ZXN0IiB9
+        examples:
+          - description: decode uplink containing three measurements
+            type: uplink
+            bytes: 001f01011f01020a
+            fPort: 1
+            time: "2021-08-02T20:00:00.000+05:00"
+            data:
+              temperature: 79.37
+              humidity: 79.37
+              pulseCounter: 10
+          - description: decode downlink containing only alarm
+            type: downlink
+            bytes: 0101
+            fPort: 1
+            time: "2021-08-02T20:00:00.000+05:00"
+            data:
+              alarm: true
+        pointsSchema:
+          temperature:
+            type: double
+            unitId: Cel
+    validatedDriver:
+      type: object
+      deprecated: true
+      required:
+        - producerId
+        - moduleId
+        - version
+        - application
+        - type
+        - code
+      properties:
+        id:
+          $ref: '#/components/schemas/driverId'
+        name:
+          $ref: '#/components/schemas/driverName'
+        description:
+          $ref: '#/components/schemas/driverDescription'
+        specification:
+          $ref: '#/components/schemas/driverSpecification'
+        deviceImageUrl:
+          $ref: '#/components/schemas/deviceImageUrl'
+        manufacturerLogoUrl:
+          $ref: '#/components/schemas/manufacturerLogoUrl'
+        providerLogoUrl:
+          $ref: '#/components/schemas/providerLogoUrl'
+        producerId:
+          $ref: '#/components/schemas/driverProducerId'
+        moduleId:
+          $ref: '#/components/schemas/driverModuleId'
+        version:
+          $ref: '#/components/schemas/driverVersion'
+        type:
+          $ref: '#/components/schemas/driverType'
+        application:
+          $ref: '#/components/schemas/moduleSpec'
+        code:
+          $ref: '#/components/schemas/driverCode'
+        pointsSchema:
+          $ref: '#/components/schemas/pointsDescription'
+        examples:
+          $ref: '#/components/schemas/payloadExamples'
+        uplinkJsonSchema:
+          description: The json schema that describes the output of decoding an uplink
+          type: object
+        downlinkJsonSchema:
+          description: The json schema that describes the output of decoding a downlink
+          type: object
+      example:
+        producerId: myprovider
+        moduleId: mydriver
+        version: 1.0.0
+        type: thingpark-x-js
+        application:
+          producerId: applicationProvider
+          moduleId: applicationModule
+          version: 1.0.0
+        code: "wKprwDcpeYa1arvwfHrf1A=="
+        pointsSchema:
+          temperature:
+            type: double
+            unitId: Cel
+        examples:
+          - description: decode uplink containing three measurements
+            type: uplink
+            bytes: 001f01011f01020a
+            fPort: 1
+            time: "2021-08-02T20:00:00.000+05:00"
+            data:
+              temperature: 79.37
+              humidity: 79.37
+              pulseCounter: 10
+          - description: decode downlink containing only alarm
+            type: downlink
+            bytes: 0101
+            fPort: 1
+            time: "2021-08-02T20:00:00.000+05:00"
+            data:
+              alarm: true
+    pointsDescription:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/pointDescription'
+    pointDescription:
+      type: object
+      properties:
+        unitId:
+          type: string
+        type:
+          type: string
+        standardNaming:
+          $ref: '#/components/schemas/standardNaming'
+    standardNaming:
+      type: string
+      description: Specify if the ontology naming standard is supported
+      enum:
+        - unsupported
+    validateCode:
+      type: object
+      deprecated: true
+      required:
+        - type
+        - code
+      properties:
+        type:
+          $ref: '#/components/schemas/driverType'
+        code:
+          type: string
+          format: base64
+          x-is-binary-schema: true
+      example:
+        type: thingpark-x-js
+        code: "wKprwDcpeYa1arvwfHrf1A=="
+    payloadExamples:
+      description: Examples of payload for the driver
+      type: array
+      items:
+        $ref: '#/components/schemas/payloadExample'
+    payloadExample:
+      example:
+        description: decode uplink containing three measurements
+        type: uplink
+        bytes: 001f01011f01020a
+        fPort: 1
+        time: "2021-08-02T20:00:00.000+05:00"
+        points:
+          temperature:
+            type: double
+            unitId: Cel
+            record: 79.37
+        data:
+          temperature: 79.37
+      type: object
+      required:
+        - description
+        - type
+        - bytes
+        - fPort
+        - data
+      properties:
+        description:
+          description: The description of the payload uplink/downlink
+          type: string
+        type:
+          $ref: '#/components/schemas/exampleType'
+        bytes:
+          description: The uplink or downlink payload expressed in hexadecimal
+          type: string
+        fPort:
+          description: The uplink or downlink message LoRaWAN fPort
+          type: number
+        time:
+          description: The uplink or downlink message time as an ISO 8601 Datetime
+          type: string
+        points:
+          $ref: '#/components/schemas/points'
+        data:
+          description: The decoded uplink or downlink view
+          type: object
+    codecDriver:
+      type: object
+      required:
+        - id
+        - checksum
+        - accountId
+        - realmId
+      deprecated: true
+      properties:
+        id:
+          type: string
+        checksum:
+          type: string
+        accountId:
+          type: string
+        realmId:
+          type: string
+      example:
+        codecDriver:
+          accountId: "100000507.eu"
+          realmId: tpx-users-iot-ope
+          id: "100000507.eu:mydriver:1"
+          checksum: "e517efe40875333477ccc617c3739317ff98ee4c980294895958a97cda6e4093"
+    decodeInput:
+      example:
+        direction: uplink
+        sourceTime: "2021-01-01T10:00:00+01:00"
+        meta:
+          lorawan:
+            fPort: 6
+        thing:
+          model:
+            producerId: my-manufacturer
+            moduleId: my-device-model
+            version: "1"
+          application:
+            producerId: my-manufacturer
+            moduleId: my-applicative-stack
+            version: "2"
+        raw:
+          binary: "e59da2a443fa3e097cbb51068ca6f5e9"
+        DevEUI: "A81758FFFE04F27E"
+        ADRbit: 1
+        Frequency: 867.3
+        FCntUp: 69725
+      type: object
+      required:
+        - direction
+        - meta
+        - raw
+      properties:
+        direction:
+          $ref: '#/components/schemas/direction'
+        sourceTime:
+          type: string
+          format: date-time
+        meta:
+          $ref: '#/components/schemas/flowMessageMeta'
+        driver:
+          $ref: '#/components/schemas/codecDriver'
+        thing:
+          $ref: '#/components/schemas/thingSpec'
+        raw:
+          $ref: '#/components/schemas/flowMessageRaw'
+        DevEUI:
+          type: string
+        ADRbit:
+          type: integer
+        Frequency:
+          type: number
+        FCntUp:
+          type: number
+    encodeInput:
+      example:
+        direction: downlink
+        meta:
+          lorawan:
+            fPort: 15
+        thing:
+          model:
+            producerId: my-manufacturer
+            moduleId: my-device-model
+            version: "1"
+          application:
+            producerId: my-manufacturer
+            moduleId: my-applicative-stack
+            version: "2"
+        message:
+          temperatureCfg: 20
+          temparaturePeriod: 10
+        DevEUI: "A81758FFFE04F27E"
+        ADRbit: 1
+        Frequency: 867.3
+        FCntUp: 69725
+      type: object
+      required:
+        - direction
+        - meta
+        - message
+      properties:
+        direction:
+          $ref: '#/components/schemas/direction'
+        driver:
+          $ref: '#/components/schemas/codecDriver'
+        meta:
+          $ref: '#/components/schemas/flowMessageMeta'
+        thing:
+          $ref: '#/components/schemas/thingSpec'
+        message:
+          type: object
+          x-is-object-schema: true
+        DevEUI:
+          type: string
+        ADRbit:
+          type: integer
+        Frequency:
+          type: number
+        FCntUp:
+          type: number
+    codecOutput:
+      example:
+        direction: uplink
+        sourceTime: "2019-01-01T10:00:00+01:00"
+        meta:
+          lorawan:
+            fPort: 6
+          driverId: myprovider:mydriver:1
+        thing:
+          model:
+            producerId: my-manufacturer
+            moduleId: my-device-model
+            version: "1"
+          application:
+            producerId: my-manufacturer
+            moduleId: my-applicative-stack
+            version: "2"
+          points:
+            temperature:
+              unitId: "Cel"
+              type: "double"
+              record: 25.0
+            humidity:
+              unitId: "%RH"
+              type: "double"
+              record: 80.0
+            gps:
+              record: [ 2.33360, 48.87506 ]
+            volume:
+              unitId: "l"
+              type: "double"
+              records:
+                - eventTime: 2021-07-08T12:00:00.000Z
+                  value: 103445
+                - eventTime: 2021-07-08T13:00:00.000Z
+                  value: 103450
+        raw:
+          binary: "e59da2a443fa3e097cbb51068ca6f5e9"
+        message:
+          temperature: 25.0
+          humidity: 80.0
+          longitude: 2.33360
+          latitude: 48.87506
+          volumes:
+            - time: 2021-07-08T12:00:00.000Z
+              volume: 103445
+            - time: 2021-07-08T13:00:00.000Z
+              volume: 103450
+        DevEUI: "A81758FFFE04F27E"
+        ADRbit: 1
+        Frequency: 867.3
+        FCntUp: 69725
+      type: object
+      required:
+        - direction
+        - meta
+        - raw
+        - message
+        - thing
+      properties:
+        direction:
+          $ref: '#/components/schemas/direction'
+        sourceTime:
+          type: string
+          format: date-time
+        meta:
+          $ref: '#/components/schemas/flowMessageMeta'
+        raw:
+          $ref: '#/components/schemas/flowMessageRaw'
+        message:
+          type: object
+          x-is-object-schema: true
+        thing:
+          $ref: '#/components/schemas/thing'
+        DevEUI:
+          type: string
+        ADRbit:
+          type: integer
+        Frequency:
+          type: number
+        FCntUp:
+          type: number
+    testDecodeInput:
+      example:
+        direction: uplink
+        type: thingpark-x-js
+        sourceTime: "2019-01-01T10:00:00+01:00"
+        meta:
+          lorawan:
+            fPort: 6
+        raw:
+          binary: "e59da2a443fa3e097cbb51068ca6f5e9"
+        code: "wKprwDcpeYa1arvwfHrf1A=="
+        DevEUI: "A81758FFFE04F27E"
+        ADRbit: 1
+        Frequency: 867.3
+        FCntUp: 69725
+      type: object
+      required:
+        - direction
+        - meta
+        - raw
+        - code
+      properties:
+        direction:
+          $ref: '#/components/schemas/direction'
+        type:
+          $ref: '#/components/schemas/driverType'
+        sourceTime:
+          type: string
+          format: date-time
+        meta:
+          $ref: '#/components/schemas/flowMessageMeta'
+        raw:
+          $ref: '#/components/schemas/flowMessageRaw'
+        code:
+          type: string
+          format: base64
+          x-is-binary-schema: true
+        DevEUI:
+          type: string
+        ADRbit:
+          type: integer
+        Frequency:
+          type: number
+        FCntUp:
+          type: number
+    testEncodeInput:
+      example:
+        direction: downlink
+        type: thingpark-x-js
+        sourceTime: "2019-01-01T10:00:00+01:00"
+        meta:
+          lorawan:
+            fPort: 6
+        message:
+          temperatureCfg: 20
+          temparaturePeriod: 10
+        code: "wKprwDcpeYa1arvwfHrf1A=="
+        DevEUI: "A81758FFFE04F27E"
+        ADRbit: 1
+        Frequency: 867.3
+        FCntUp: 69725
+      type: object
+      required:
+        - direction
+        - meta
+        - message
+        - code
+      properties:
+        direction:
+          $ref: '#/components/schemas/direction'
+        type:
+          $ref: '#/components/schemas/driverType'
+        sourceTime:
+          type: string
+          format: date-time
+        meta:
+          $ref: '#/components/schemas/flowMessageMeta'
+        message:
+          type: object
+          x-is-object-schema: true
+        code:
+          type: string
+          format: base64
+          x-is-binary-schema: true
+        DevEUI:
+          type: string
+        ADRbit:
+          type: integer
+        Frequency:
+          type: number
+        FCntUp:
+          type: number
+    testCodecOutput:
+      example:
+        direction: uplink
+        type: thingpark-x-js
+        sourceTime: "2019-01-01T10:00:00+01:00"
+        meta:
+          lorawan:
+            fPort: 6
+        raw:
+          binary: "e59da2a443fa3e097cbb51068ca6f5e9"
+        message:
+          temperatureCfg: 20
+          temparaturePeriod: 10
+        DevEUI: "A81758FFFE04F27E"
+        ADRbit: 1
+        Frequency: 867.3
+        FCntUp: 69725
+      type: object
+      required:
+        - direction
+        - sourceTime
+        - meta
+        - raw
+        - message
+      properties:
+        direction:
+          $ref: '#/components/schemas/direction'
+        type:
+          $ref: '#/components/schemas/driverType'
+        sourceTime:
+          type: string
+          format: date-time
+        meta:
+          $ref: '#/components/schemas/flowMessageMeta'
+        raw:
+          $ref: '#/components/schemas/flowMessageRaw'
+        message:
+          type: object
+          x-is-object-schema: true
+        DevEUI:
+          type: string
+        ADRbit:
+          type: integer
+        Frequency:
+          type: number
+        FCntUp:
+          type: number
+    decodeBatchInput:
+      example:
+        - id: correlationId1
+          input:
+            direction: uplink
+            sourceTime: "2021-01-01T10:00:00+01:00"
+            meta:
+              lorawan:
+                fPort: 6
+            thing:
+              model:
+                producerId: my-manufacturer
+                moduleId: my-device-model
+                version: "1"
+              application:
+                producerId: my-manufacturer
+                moduleId: my-applicative-stack
+                version: "2"
+            raw:
+              binary: "e59da2a443fa3e097cbb51068ca6f5e9"
+        - id: correlationId2
+          input:
+            direction: downlink
+            sourceTime: "2021-01-01T11:00:00+01:00"
+            meta:
+              lorawan:
+                fPort: 15
+            thing:
+              model:
+                producerId: my-manufacturer
+                moduleId: my-device-model
+                version: "1"
+              application:
+                producerId: my-manufacturer
+                moduleId: my-applicative-stack
+                version: "2"
+            raw:
+              binary: "229355c151f1cf2e117c824f67997548"
+      type: array
+      items:
+        $ref: '#/components/schemas/decodeBatchInputItem'
+    decodeBatchInputItem:
+      type: object
+      required:
+        - input
+      properties:
+        id:
+          type: string
+        input:
+          $ref: '#/components/schemas/decodeInput'
+    decodeBatchOutput:
+      example:
+        - id: correlationId1
+          output:
+            direction: uplink
+            sourceTime: "2021-01-01T10:00:00+01:00"
+            meta:
+              lorawan:
+                fPort: 6
+              driverId: myprovider:mydriver:1
+            thing:
+              model:
+                producerId: my-manufacturer
+                moduleId: my-device-model
+                version: "1"
+              application:
+                producerId: my-manufacturer
+                moduleId: my-applicative-stack
+                version: "2"
+              points:
+                temperature:
+                  unitId: "Cel"
+                  type: "double"
+                  record: 25.0
+                humidity:
+                  unitId: "%RH"
+                  type: "double"
+                  record: 80.0
+                gps:
+                  record: [ 2.33360, 48.87506 ]
+            raw:
+              binary: "e59da2a443fa3e097cbb51068ca6f5e9"
+            message:
+              temperature: 25.0
+              humidity: 80.0
+              longitude: 2.33360
+              latitude: 48.87506
+        - id: correlationId2
+          error:
+            code: "error-code"
+            data:
+              driverId: myprovider:myotherdriver:1
+            message: "Cannot decode provided downlink"
+      type: array
+      items:
+        $ref: '#/components/schemas/decodeBatchOutputItem'
+    decodeBatchOutputItem:
+      type: object
+      properties:
+        id:
+          type: string
+        output:
+          $ref: '#/components/schemas/codecOutput'
+        error:
+          $ref: '#/components/schemas/errorInfo'
+    direction:
+      type: string
+      enum:
+        - uplink
+        - downlink
+    flowMessageRaw:
+      type: object
+      properties:
+        binary:
+          type: string
+          format: hexa
+          x-is-binary-schema: true
+        text:
+          type: string
+    flowMessageMeta:
+      type: object
+      properties:
+        lorawan:
+          $ref: '#/components/schemas/lorawan'
+        driverId:
+          type: string
+    lorawan:
+      type: object
+      properties:
+        fPort:
+          type: integer
+          format: int32
+    moduleSpec:
+      type: object
+      required:
+        - producerId
+        - moduleId
+        - version
+      properties:
+        producerId:
+          type: string
+        moduleId:
+          type: string
+        version:
+          type: string
+    thing:
+      type: object
+      properties:
+        model:
+          $ref: '#/components/schemas/moduleSpec'
+        application:
+          $ref: '#/components/schemas/moduleSpec'
+        points:
+          $ref: '#/components/schemas/points'
+    points:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/point'
+    point:
+      type: object
+      properties:
+        unitId:
+          $ref: '#/components/schemas/pointUnitId'
+        type:
+          $ref: '#/components/schemas/pointType'
+        standardNaming:
+          $ref: '#/components/schemas/standardNaming'
+        record:
+          type: object
+        records:
+          $ref: '#/components/schemas/records'
+    records:
+      type: array
+      items:
+        $ref: '#/components/schemas/record'
+    record:
+      type: object
+      properties:
+        eventTime:
+          type: string
+          format: date-time
+        value:
+          x-is-json-schema: true
+    pointUnitId:
+      type: string
+      description: The unitId of the point
+    pointType:
+      type: string
+      description: The type of the values of this point
+      enum:
+        - string
+        - int64
+        - double
+        - boolean
+        - object
+    units:
+      type: array
+      items:
+        $ref: '#/components/schemas/unit'
+    unit:
+      example:
+        id: Far
+        name: fahrenheit
+        symbol: "&#176;F"
+        type: double
+        set: "scalar-si"
+        domains:
+          - "temperature"
+        dimensions:
+          kelvin: 1
+        transformations:
+          - name: "subtract"
+            value: 32.0
+          - name: "multiply"
+            value: 5.0
+          - name: "divide"
+            value: 9.0
+          - name: "add"
+            value: 273.15
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - symbol
+        - set
+      properties:
+        id:
+          description: The unique unit identifier
+          type: string
+        parentId:
+          description: The parent unit identifier
+          type: string
+        name:
+          description: The name of the unit
+          type: string
+        type:
+          description: The type of the unit
+          type: string
+        symbol:
+          description: The symbol of the unit
+          type: string
+        set:
+          description: The set of the unit
+          type: string
+        domains:
+          description: The list of domains of the unit
+          type: array
+          items:
+            type: string
+        dimensions:
+          $ref: '#/components/schemas/unitDimensions'
+        transformations:
+          description: The list of transformations of the unit
+          type: array
+          items:
+            $ref: '#/components/schemas/unitTransformation'
+        sensors:
+          description: The list of possible sensors that use this unit
+          type: array
+          items:
+            type: string
+    sensors:
+      type: array
+      items:
+        $ref: '#/components/schemas/sensor'
+    sensor:
+      example:
+        id: current
+        units:
+          - unitId: A
+            type: double
+          - unitId: mA
+            type: double
+      type: object
+      required:
+        - id
+        - units
+      properties:
+        id:
+          description: The unique sensor identifier
+          type: string
+        units:
+          description: The list of units supported for this sensor
+          type: array
+          items:
+            $ref: '#/components/schemas/unitDescription'
+    fields:
+      deprecated: true
+      type: array
+      items:
+        $ref: '#/components/schemas/field'
+    field:
+      deprecated: true
+      example:
+        id: current
+        units:
+          - unitId: A
+            type: double
+          - unitId: mA
+            type: double
+      type: object
+      required:
+        - id
+        - units
+      properties:
+        id:
+          description: The unique field identifier
+          type: string
+        units:
+          description: The list of units supported for this field
+          type: array
+          items:
+            $ref: '#/components/schemas/unitDescription'
+    unitDescription:
+      type: object
+      required:
+        - unitId
+        - type
+      properties:
+        unitId:
+          description: The unique unit identifier
+          type: string
+        type:
+          description: The type of the point that uses this unit
+          type: string
+    unitDimensions:
+      description: The dimensions of the unit
+      type: object
+      properties:
+        m:
+          description: "meter SI dimension"
+          type: integer
+          format: int32
+        kg:
+          description: "kilogram SI dimension"
+          type: integer
+          format: int32
+        s:
+          description: "second SI dimension"
+          type: integer
+          format: int32
+        A:
+          description: "ampere SI dimension"
+          type: integer
+          format: int32
+        K:
+          description: "kelvin SI dimension"
+          type: integer
+          format: int32
+        mol:
+          description: "mol SI dimension"
+          type: integer
+          format: int32
+        cd:
+          description: "candela SI dimension"
+          type: integer
+          format: int32
+    unitTransformation:
+      description: Transformation(s) operation(s) that must be applied to convert the unit to the corresponding SI Unit (if there is one available)
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          x-is-discriminator: true
+          description: The type of the transformation
+        value:
+          type: number
+          format: double
+          description: The numeric value of the transformation
+      discriminator:
+        propertyName: name
+        mapping:
+          add: '#/components/schemas/addTransformation'
+          subtract: '#/components/schemas/subtractTransformation'
+          divide: '#/components/schemas/divideTransformation'
+          multiply: '#/components/schemas/multiplyTransformation'
+    addTransformation:
+      allOf:
+        - $ref: '#/components/schemas/unitTransformation'
+        - type: object
+    subtractTransformation:
+      allOf:
+        - $ref: '#/components/schemas/unitTransformation'
+        - type: object
+    divideTransformation:
+      allOf:
+        - $ref: '#/components/schemas/unitTransformation'
+        - type: object
+    multiplyTransformation:
+      allOf:
+        - $ref: '#/components/schemas/unitTransformation'
+        - type: object
+    thingSpec:
+      type: object
+      properties:
+        model:
+          $ref: '#/components/schemas/moduleSpec'
+        application:
+          $ref: '#/components/schemas/moduleSpec'
+        tags:
+          type: array
+          items:
+            type: string
+    connectors:
+      description: The list of connectors
+      type: array
+      items:
+        $ref: '#/components/schemas/connector'
+    connector:
+      type: object
+      required:
+        - id
+        - producerId
+        - moduleId
+        - version
+        - description
+        - logo
+        - beta
+        - urlDoc
+      properties:
+        id:
+          description: The connector identifier
+          type: string
+        producerId:
+          description: >
+            The connector producer identifier. It describes the entity providing
+            the connector
+          type: string
+        moduleId:
+          description: >
+            The connector module identifier. It is a module name uniquely
+            identifying the connector within the given producerId
+          type: string
+        version:
+          description: >
+            "The connection version. It must follow the
+            [Semantic Versioning](https://semver.org/) convention"
+          type: string
+        description:
+          description: A complete description of this connector
+          type: string
+        logo:
+          description: An internal or external URL of a connector logo
+          type: string
+          format: uri
+        beta:
+          description: True means connector is Beta
+          type: boolean
+        urlDoc:
+          description: A URL of an online documentation for this connector
+          type: string
+          format: uri
+        connection:
+          description: >
+            An object describing a connection on this connector
+          type: object
+          properties:
+            configurationSchema:
+              description: >
+                The JSON schema describing the configuration of the connector
+                connection
+              type: object
+              x-is-object-schema: true
+        flow:
+          description: >
+            An object describing the the connector inside a flow
+          type: object
+          properties:
+            configurationSchema:
+              description: >
+                The JSON schema describing the configuration of a connector
+                inside a flow
+              type: object
+              x-is-object-schema: true
+    connections:
+      description:  The list of connections to a connector
+      type: array
+      items:
+        $ref: '#/components/schemas/connection'
+    connection:
+      type: object
+      required:
+        - connectorId
+        - configuration
+      properties:
+        id:
+          description: The connection identifier
+          type: string
+        connectorId:
+          description: The connector identifier which creates this connection
+          type: string
+        brand:
+          type: string
+        name:
+          description: A user defined name describing this connection
+          type: string
+        alarms:
+          description: A list of alarms to be verified on this connection
+          type: array
+          items:
+            $ref: '#/components/schemas/connectionAlarm'
+        active:
+          description: >
+            The connection active state. Default value is true. You can deactivate a connection by setting active to false
+          type: boolean
+        debug:
+          description: >
+            The connection debug state. Default value is false. You can enable debug mode to trace more information on logs. Debug mode could automatically be switch to off.
+          type: boolean
+        startupTime:
+          description: >
+            The connection startup time. A connection can restart at any point
+            in time and therefore this value can change
+          type: string
+          format: date-time
+        state:
+          description: >
+            The connection state:
+             * OPENED: the connection is up and running
+             * OPENING: the connection is currently opening
+             * CLOSED: the connection is closed
+             * CLOSING: the connection is currently closing
+             * AUTHENTICATING: the connection is currently authenticating
+             * AUTHENTICATION_FAILED: does it mean the authentication failed
+             * UNREACHABLE: the remote server is unreachable and therefore the connection will be retried
+             * DEACTIVATED: the connection is deactivated
+          type: string
+          enum: [ OPENED, OPENING, CLOSED, CLOSING, AUTHENTICATING, AUTHENTICATION_FAILED, UNREACHABLE, DEACTIVATED ]
+        upOperations:
+            $ref: '#/components/schemas/upOperations'
+        dlOperations:
+            $ref: '#/components/schemas/dlOperations'
+        configuration:
+          description: >
+            The connection configuration following the configurationSchema as
+            described in the connector resource
+          x-is-object-schema: true
+          type: object
+    connectionAlarm:
+      type: object
+      properties:
+        startTime:
+          description: >
+            The (inclusive) start time from which the alarm will be
+            evaluated. For a recurring event, this is the start time of
+            the first instance
+          type: string
+          format: date-time
+        endTime:
+          description: >
+            The (exclusive) end time to which the alarm will be evaluated.
+            For a recurring event, this is the end time of the first
+            instance
+          type: string
+          format: date-time
+        timezone:
+          description: >
+            The timezone in which recurrent times will be expressed (eg Europe/Paris)
+          type: string
+        recurrence:
+          type: array
+          items:
+            $ref: '#/components/schemas/connectionAlarmRecurrence'
+        uplinkRateMinPerHour:
+          description: >
+            An alarm property verifying if the uplinkRate per hour does
+            not go below the provided value
+          type: integer
+          format: int32
+        message:
+          description: >
+            The message that is going to be displayed when this alarm
+            is raised in the /events endpoint
+          type: string
+    connectionAlarmRecurrence:
+      type: object
+      required:
+        - frequency
+      properties:
+        frequency:
+          description: The recurrence frequency
+          type: string
+          enum:
+            - secondly
+            - minutely
+            - hourly
+            - daily
+            - weekly
+            - monthly
+            - yearly
+        interval:
+          description: >
+            The interval between two occurrences in number of
+            frequency. For example, a frequency: hourly with
+            interval: 2 means every 2 hours
+          type: integer
+          format: int32
+        count:
+          description: >
+            Total number of occurrences of this recurrence including
+            the first one at startTime. This value cannot be used
+            in conjunction with "until"
+          type: integer
+          format: int32
+        until:
+          description: >
+            Until when this recurrence is valid (inclusive and
+            compared to startTime). This value cannot be used in
+            conjunction with "count"
+          type: string
+          format: date-time
+        byDays:
+          description: >
+            Allow to repeat the occurrence to the provided week days.
+            For example, a frequency: weekly with byDays: monday,
+            tuesday means every week on monday and tuesday.
+            The format for this property is:
+             * [[plus / minus] ordwk] weekday
+             * plus        = "+"
+             * minus       = "-"
+             * ordwk       = 1*2DIGIT       ;1 to 53
+             * weekday     = "sunday" / "monday" / "tuesday" / "wednesday" / "thursday" / "friday" / "saturday"
+          type: array
+          items:
+            type: string
+    connectionRequest:
+      required:
+        - connectorId
+        - configuration
+      type: object
+      properties:
+        connectorId:
+          description: The connector identifier which creates this connection
+          type: string
+        brand:
+          type: string
+        name:
+          description: A user defined name describing this connection
+          type: string
+        alarms:
+          description:  list of alarms to be verified on this connection
+          type: array
+          items:
+            $ref: '#/components/schemas/connectionAlarm'
+        active:
+          description: >
+            The connection active state. Default value is true. You can deactivate a connection by setting active to false
+          type: boolean
+        debug:
+          description: >
+            The connection debug state. Default value is false. You can enable debug mode to trace more information on logs. Debug mode could automatically be switch to off.
+          type: boolean
+        upOperations:
+            $ref: '#/components/schemas/upOperations'
+        dlOperations:
+            $ref: '#/components/schemas/dlOperations'
+        configuration:
+          description: The connection configuration following the configurationSchema as described in the connector resource
+          type: object
+          x-is-object-schema: true
+    connectionMetrics:
+      type: object
+      properties:
+        connectionId:
+          description: >
+            The connection id.
+          type: integer
+          format: int64
+        activeThingsLast1h:
+          description: >
+            The number of active things in the last hour for this connection.
+            An active thing is any thing sending an uplink
+          type: integer
+          format: int64
+        activeThingsLast24h:
+          description: >
+            The number of active things in the last 24 hours for this
+            connection. An active thing is any thing sending an uplink
+          type: integer
+          format: int64
+        uplinksLast1h:
+          description: >
+            The number of received uplinks in the last hour for this connection
+          type: integer
+          format: int64
+        uplinksLast24h:
+          description: >
+            The number of received uplinks in the last 24 hours for this
+            connection
+          type: integer
+          format: int64
+        uplinksLast1hFailed:
+          description: >
+            The number of uplinks that was not successfully sent in the last
+            hour for this connection
+          type: integer
+          format: int64
+        uplinksLast24hFailed:
+          description: >
+            The number of uplinks that was not successfully sent in the last
+            24 hours for this connection
+          type: integer
+          format: int64
+        uplinksLast1hLost:
+          description: >
+            The number of uplinks that was not successfully sent in the last
+            hour for this connection
+          type: integer
+          format: int64
+        uplinksLast24hLost:
+          description: >
+            The number of uplinks that was not successfully sent in the last
+            24 hours for this connection
+          type: integer
+          format: int64
+        downlinksLast1h:
+          description: >
+            The number of received downlinks in the last hour for this
+            connection
+          type: integer
+          format: int64
+        downlinksLast24h:
+          description: >
+            The number of received downlinks in the last 24 hours for this
+            connection
+          type: integer
+          format: int64
+        downlinksLast1hFailed:
+          description: >
+            The number of downlinks that was not successfully sent in the last
+            hour for this connection
+          type: integer
+          format: int64
+        downlinksLast24hFailed:
+          description: >
+            The number of downlinks that was not successfully sent in the last
+            24 hours for this connection
+          type: integer
+          format: int64
+        downlinksLast1hLost:
+          description: >
+            The number of downlinks that was not successfully sent in the last
+            hour for this connection
+          type: integer
+          format: int64
+        downlinksLast24hLost:
+          description: >
+            The number of downlinks that was not successfully sent in the last
+            24 hours for this connection
+          type: integer
+          format: int64
+        lag:
+          description: >
+            The lag on the kafka topic dedicated to a connection.
+          type: integer
+          format: int32
+    allConnectionMetrics:
+      type: array
+      items:
+        $ref: '#/components/schemas/connectionMetrics'
+    flows:
+      description: The list of IoT flows
+      type: array
+      items:
+        $ref: '#/components/schemas/flow'
+    flow:
+      type: object
+      required:
+        - id
+        - matchers
+        - connectors
+      properties:
+        id:
+          $ref: '#/components/schemas/flowId'
+        name:
+          $ref: '#/components/schemas/flowName'
+        description:
+          $ref: '#/components/schemas/flowDescription'
+        driver:
+          $ref: '#/components/schemas/flowDriver'
+        matchers:
+          $ref: '#/components/schemas/flowMatchers'
+        connectors:
+          $ref: '#/components/schemas/flowConnectors'
+        skipDecoding:
+          $ref: '#/components/schemas/flowSkipDecoding'
+        upOperations:
+          $ref: '#/components/schemas/upOperations'
+    flowId:
+      description: The unique flow identifier generated uppon creation
+      type: string
+    flowName:
+      description: A short name describing the flow
+      type: string
+    flowDescription:
+      description: A complete description of the flow
+      type: string
+    flowDriver:
+      description: The driver to be used in the flow
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          description: the id of the driver
+          type: string
+    flowSkipDecoding:
+      description: True means that decoding must be skipped for this flow
+      type: boolean
+    flowMatchers:
+      description: >
+        The list of matching criteria for things on this IoT flow. The
+        match process is performing a logical 'or' between list elements.
+        All criterias inside a single list element must match the incoming
+        thing so it is performing a logical 'and'.
+        Two different flows cannot declare the same thing definition. If
+        this parameter is not present or empty the flow applies to all
+        remaining things
+      type: array
+      items:
+        $ref: '#/components/schemas/flowMatcher'
+    flowMatcher:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+      discriminator:
+        propertyName: type
+        mapping:
+          key: '#/components/schemas/keyMatcher'
+          thing: '#/components/schemas/thingMatcher'
+    keyMatcher:
+      allOf:
+        - $ref: '#/components/schemas/flowMatcher'
+        - type: object
+          required:
+            - key
+          properties:
+            key:
+              description: the key matching with a DevEUI, eg pattern 'lora:{DevEUI}'
+              type: string
+    thingMatcher:
+      allOf:
+        - $ref: '#/components/schemas/flowMatcher'
+        - type: object
+          properties:
+            tags:
+              description: >
+                The list of tags that must all match the incoming things.
+              type: array
+              items:
+                type: string
+            model:
+              $ref: '#/components/schemas/flowThingModel'
+            application:
+              $ref: '#/components/schemas/flowThingApplication'
+    flowThingModel:
+      required:
+        - producerId
+        - moduleId
+        - version
+      type: object
+      description: >
+        The thing model which applies to this flow. The id cannot be
+        declared in the same than this property
+      properties:
+        producerId:
+          type: string
+        moduleId:
+          type: string
+        version:
+          type: string
+    flowThingApplication:
+      required:
+        - producerId
+        - moduleId
+        - version
+      type: object
+      description: >
+        The thing application which applies to this flow. The id cannot be
+        declared in the same than this property
+      properties:
+        producerId:
+          type: string
+        moduleId:
+          type: string
+        version:
+          type: string
+    flowConnectors:
+      description: >
+        The list of connectors participating in this IoT flow
+      type: array
+      items:
+        $ref: '#/components/schemas/flowConnector'
+    flowConnector:
+      type: object
+      required:
+        - id
+        - connectionId
+      properties:
+        id:
+          description: >
+            The unique connector identifier to use in this flow. This
+            connector must exists in the list of available connectors
+          type: string
+        connectionId:
+          description: >
+            The unique connection identifier to use in this flow. This
+            connections must exists in the list of available connections
+          type: string
+        configuration:
+          description: >
+            The connector configuration following the configurationSchema
+            as described in the connector resource
+          type: object
+          x-is-object-schema: true
+        uplinkTimeValidity:
+          description: >
+            The uplink ingestion time validity. If an uplink is older
+            than the validity time it will not be sent through connector
+            connections. If not present, it means that this check is
+            disabled. Possible values for time unit are:
+              * h: hour
+              * m: minute
+              * s: second
+          type: string
+    upOperations:
+      type: array
+      items:
+        $ref: '#/components/schemas/upOperation'
+      description: >
+        All operations that will be applied
+    upOperation:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: The type of the operation
+          x-is-discriminator: true
+        configuration:
+          description: Configuration of an operation 
+          x-is-object-schema: true
+          type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          filter: '#/components/schemas/filterOperation'
+          callProcessor: '#/components/schemas/callProcessorOperation'
+          customOutput: '#/components/schemas/customOutputOperation'
+    dlOperations:
+      type: array
+      items:
+        $ref: '#/components/schemas/upOperation'
+      description: >
+        All operations that will be applied
+    callProcessorOperation:
+      allOf:
+        - $ref: '#/components/schemas/upOperation'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              description: the id of the processor
+    customOutputOperation:
+      allOf:
+        - $ref: '#/components/schemas/upOperation'
+        - type: object
+          required:
+            - output
+          properties:
+            output:
+              type: object
+              description: The new output in the json format
+              x-is-object-schema: true
+    filterOperation:
+      allOf:
+        - $ref: '#/components/schemas/upOperation'
+        - type: object
+          properties:
+            keepDeviceUplink:
+              type: boolean
+              description: whether to keep device uplink
+            keepDeviceDownlinkSent:
+              type: boolean
+              description: whether to keep device downlink sent
+            keepDeviceLocation:
+              type: boolean
+              description: whether to keep device location
+            keepDeviceNotification:
+              type: boolean
+              description: whether to keep device notification
+            keepDeviceNotificationSubTypes:
+              type: array
+              items:
+                type: string
+              description: whether to keep device notification sub types
+    flowRequest:
+      type: object
+      required:
+        - matchers
+        - connectors
+      properties:
+        name:
+          $ref: '#/components/schemas/flowName'
+        description:
+          $ref: '#/components/schemas/flowDescription'
+        matchers:
+          $ref: '#/components/schemas/flowMatchers'
+        driver:
+          $ref: '#/components/schemas/flowDriver'
+        connectors:
+          $ref: '#/components/schemas/flowConnectors'
+        skipDecoding:
+          $ref: '#/components/schemas/flowSkipDecoding'
+        upOperations:
+          $ref: '#/components/schemas/upOperations'
+    events:
+      description: The list of events on the IoT Flow platform
+      type: array
+      items:
+        $ref: '#/components/schemas/event'
+    event:
+      type: object
+      required:
+        - eventTime
+        - level
+        - code
+        - message
+      properties:
+        eventTime:
+          description: The date at which this event occurred
+          type: string
+          format: date-time
+        level:
+          description: The event level
+          type: string
+          enum: [ debug, info, warn, error ]
+        code:
+          description: >
+            A code identifying the type of event that occurred on the IoT Flow
+            platform. The code has the following pattern '{module}-{number}'
+            where '{module}' is an identifier of an internal IoT Flow component
+            and '{number}' is a unique number on that module identifying the
+            current event
+          type: string
+        data:
+          description: >
+            Any data attached to this event. Each object is identified by its
+            key in the data JSON object
+          type: object
+        message:
+          description: >
+            A human readable message describing this event
+          type: string
+    source:
+      type: string
+      enum:
+        - binder
+        - driver
+        - connector
+        - processor
+    raw:
+      type: object
+      properties:
+        binary:
+          type: string
+          format: hexa
+          x-is-binary-schema: true
+        text:
+          type: string
+    meta:
+      type: object
+      x-is-object-schema: true
+    message:
+      type: object
+      x-is-json-schema: true
+    upMessagePush:
+      required:
+        - time
+        - type
+        - thing
+      type: object
+      properties:
+        time:
+          description: >
+            The time at which the message was generated. For example in a deviceUplink it would
+            be the antenna reception time, while for a deviceLocation it would be the time at
+            which the location was computed.
+          type: string
+          format: date-time
+        type:
+          $ref: '#/components/schemas/upMessageType'
+        thing:
+          $ref: '#/components/schemas/thingMessage'
+        points:
+          $ref: '#/components/schemas/points'
+        packet:
+          $ref: '#/components/schemas/messagePacket'
+    upMessageType:
+      description: The up message type
+      type: string
+      enum:
+        - deviceUplink
+        - deviceDownlinkSent
+        - deviceLocation
+        - deviceReset
+        - deviceJoin
+    downMessagePush:
+      type: object
+      required:
+        - time
+        - type
+        - thing
+      properties:
+        time:
+          description: >
+            The time at which the message was generated. For example in a downlink it would
+            be the time at which the user produced the message.
+          type: string
+          format: date-time
+        type:
+          $ref: '#/components/schemas/downMessageType'
+        target:
+          $ref: '#/components/schemas/target'
+        thing:
+          $ref: '#/components/schemas/thingMessage'
+        packet:
+          $ref: '#/components/schemas/messagePacket'
+    downMessageType:
+      description: The down message type
+      type: string
+      enum:
+        - deviceDownlink
+    target:
+      required:
+        - id
+      description: >
+        The binder which is the target of this message
+      type: object
+      properties:
+        id:
+          description: The identifier of the binder
+          type: string
+        content:
+          description: The content of the message in the target format (e.g DevEUI_downlink, ...)
+          type: object
+          x-is-object-schema: true
+    thingMessage:
+      type: object
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          description: A unique key identifying a thing within the protocol space
+        model:
+          $ref: '#/components/schemas/moduleSpec'
+        application:
+          $ref: '#/components/schemas/moduleSpec'
+        tags:
+          description: The list of tags associated to the thing
+          type: array
+          items:
+            type: string
+    messagePacket:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+        raw:
+          type: string
+          format: hexa
+          x-is-binary-schema: true
+        message:
+          type: object
+          x-is-object-schema: true
+      discriminator:
+        propertyName: type
+        mapping:
+          lorawan: '#/components/schemas/lorawanMessagePacket'
+    lorawanMessagePacket:
+      allOf:
+        - $ref: '#/components/schemas/messagePacket'
+        - type: object
+          required:
+            - meta
+          properties:
+            meta:
+              $ref: '#/components/schemas/lorawanPacketMeta'
+    lorawanPacketMeta:
+      required:
+        - fPort
+      type: object
+      properties:
+        fPort:
+          type: integer
+    connectorConnection:
+      type: object
+      properties:
+        configurationSchema:
+          type: object
+          description: The JSON schema describing the configuration of the connector connection
+    connectorFlow:
+      type: object
+      properties:
+        configurationSchema:
+          type: object
+          description: The JSON schema describing the configuration of the connector connection
+    errorInfo:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          description: Provides an internal error code if any
+          type: string
+        correlationId:
+          type: string
+        message:
+          description: Provides a message describing the error
+          type: string
+        data:
+          type: object
+  parameters:
+    driverId:
+      description: The driver ID
+      name: driverId
+      in: path
+      required: true
+      schema:
+        type: string
+    source:
+      name: source
+      in: query
+      description: The source of the driver
+      required: false
+      schema:
+        type: string
+        enum: [custom, system, imported]
+    q:
+      name: q
+      in: query
+      description: The text to search in drivers
+      required: false
+      schema:
+        type: string
+    provider:
+      name: provider
+      in: query
+      description: The producer/provider of the driver
+      required: false
+      schema:
+        type: string
+    manufacturer:
+      name: manufacturer
+      in: query
+      description: The manufacturer of the device
+      required: false
+      schema:
+        type: string
+    protocolId:
+      name: protocolId
+      in: query
+      description: The protocol ID of the driver
+      required: false
+      schema:
+        type: string
+    unitId:
+      description: The unit ID defined in ontology
+      name: unitId
+      in: path
+      required: true
+      schema:
+        type: string
+    sensorId:
+      description: The sensor ID defined in ontology
+      name: sensorId
+      in: path
+      required: true
+      schema:
+        type: string
+    fieldId:
+      deprecated: true
+      description: The field ID defined in ontology
+      name: fieldId
+      in: path
+      required: true
+      schema:
+        type: string
+    connectorId:
+      description: The connector ID
+      name: connectorId
+      in: path
+      required: true
+      schema:
+        type: string
+    connectionId:
+      description: The connection ID
+      name: connectionId
+      in: path
+      required: true
+      schema:
+        type: string
+    q_connectionId:
+      description: The connection ID
+      name: q_connectionId
+      in: query
+      required: false
+      schema:
+        type: string
+    flowId:
+      description: The flow ID
+      name: flowId
+      in: path
+      required: true
+      schema:
+        type: string
+    startTime:
+      description: The (inclusive) start time from which the events will be filtered
+      name: startTime
+      in: query
+      schema:
+        type: string
+        format: date-time
+    endTime:
+      description: The (exclusive) end time until which the events will be filtered
+      name: endTime
+      in: query
+      schema:
+        type: string
+        format: date-time
+    limit:
+      description: The maximum number of events to return in the response. The default value is 1000
+      name: limit
+      in: query
+      schema:
+        type: integer
+        format: int32
+    page:
+      in: query
+      name: page
+      schema:
+        type: integer
+        description: The page number
+        minimum: 1
+    perPage:
+      in: query
+      name: perPage
+      schema:
+        type: integer
+        description: the number of items per page, default is 5000
+        minimum: 1
+        maximum: 5000
+    force:
+      name: force
+      in: query
+      description: Whether or not replace driver even if the existing is more recent
+      required: false
+      schema:
+        type: boolean
+  responses:
+    badRequest:
+      description: The received request body is badly formatted or contains bad values
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorInfo'
+    unauthorized:
+      description: The user is not authorized to access the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorInfo'
+    forbidden:
+      description: The requested operation is forbidden on the targeted resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorInfo'
+    notActivated:
+      description: The service is not activated for the current user
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorInfo'
+    notFound:
+      description: The service is not activated for the current user or the resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorInfo'
+    conflict:
+      description: The resource already exists with the given id
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorInfo'
+    mediaUnsupported:
+      description: The received media type is not supported
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorInfo'
+    error:
+      description: Any error when processing the request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorInfo'
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: '/iot-flow/v1/oauth/tokenSwagger'
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Enter your access token here <b><u>without \"bearer\"</u></b> prefix,
+      bearerFormat: JWT
+security:
+  - oAuth2ClientCredentials: []
+  - bearerAuth: []

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewAddGatewayToCompany"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bc="clr-namespace:BaseApp.View.Xamarin.Controls;assembly=BaseApp.View.Xamarin"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:infrastructure="clr-namespace:BaseApp.ViewModel.Infrastructure;assembly=BaseApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    d:DataContext="{x:Static infrastructure:VmAddGatewayToCompany.DesignInstance}"
+    x:TypeArguments="infrastructure:VmAddGatewayToCompany"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <ScrollView Margin="16,0,0,0">
+            <StackLayout>
+
+                <!--#region Links-->
+
+                <bcc:BxCollapseView HeaderSubTitle="Freie Gateways" HeaderTitle="Gateway hinzufügen">
+                    <StackLayout>
+
+                        <!--#region Stammdaten-->
+                        <Grid IsVisible="{Binding ShowInputs}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="24" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                Style="{StaticResource LabelStyEditHeader}"
+                                Text="Gateway hinzufügen" />
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource LabelStyEditDescription}"
+                                Text="Freie Gateways" />
+                            <bcc:BxPicker
+                                Grid.Row="1"
+                                Grid.Column="3"
+                                Margin="0,0,0,8"
+                                ObservableCollectionSelectable="{Binding PickerGateways}" />
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Style="{StaticResource LabelStyEditDescription}"
+                                Text="{Binding EntryGatewaySecret.Title}" />
+                            <bcc:BxEntry
+                                Grid.Row="2"
+                                Grid.Column="3"
+                                Margin="0,0,0,8"
+                                EntryData="{Binding EntryGatewaySecret}"
+                                HasFrame="False" />
+
+                        </Grid>
+                        <!--#endregion-->
+
+                        <!--#region Infos-->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="24" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                Style="{StaticResource LabelStyEditHeader}"
+                                Text="Gateway hinzufügen Hilfe" />
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource LabelStyEditDescription}"
+                                Text="Schritt 1:" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="3"
+                                Margin="0,0,0,8"
+                                LineBreakMode="WordWrap"
+                                Style="{StaticResource LabelStyEditDescription}"
+                                Text="Laden Sie die Gateway-Software und starten sie diese. Sobald der Gateway mit BDA verbunden ist erscheint dieser hier automatisch." />
+                            <bcc:BxButton
+                                Grid.Row="2"
+                                Grid.Column="3"
+                                Margin="0,0,0,8"
+                                BissCommand="{Binding CmdDownloadGateway}"
+                                WidthRequest="160" />
+
+
+                        </Grid>
+                        <!--#endregion-->
+
+
+                    </StackLayout>
+                </bcc:BxCollapseView>
+
+                <!--#endregion-->
+
+                <!--#region Rechts - Infos-->
+
+                <StackLayout>
+
+                    <bc:BxDeviceInfos Margin="0,0,0,16"
+                                      ExCommonInfo="{Binding PickerGateways.SelectedItem.Key.Gateway.Data.DeviceCommon}">
+                        <bc:BxDeviceInfos.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding CmdDevHepler}"
+                                CommandParameter="{Binding .}"
+                                NumberOfTapsRequired="1" />
+
+                        </bc:BxDeviceInfos.GestureRecognizers>
+                    </bc:BxDeviceInfos>
+
+                    <bc:BxInformation
+                        Margin="0,0,0,16"
+                        DbId="{Binding PickerGateways.SelectedItem.Key.Gateway.Index}"
+                        ExInformation="{Binding PickerGateways.SelectedItem.Key.Gateway.Data.Information}" />
+
+                </StackLayout>
+
+
+                <!--#endregion-->
+            </StackLayout>
+        </ScrollView>
+
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

@@ -1,0 +1,164 @@
+﻿@inherits BissMainLayout
+
+@if (!FirstLoader)
+{
+    <div style="position: absolute;height: 100%;width: 100%;text-align: center;background-color: #163072;color:white;">
+        <CascadingValue Value="this">
+            <main>
+                <div>
+                    <div style="background-color: #163072;">
+                        @Body
+                    </div>
+                </div>
+            </main>
+        </CascadingValue>
+    </div>
+}
+else
+{
+    @if (ViewModel != null && ViewModel.View.ShowHeader)
+    {
+        <header class="navbar navbar-dark sticky-top bg-dark p-0 shadow">
+            <div class="d-flex flex-row">
+                @if (ViewModel != null && ViewModel.View.ShowBack)
+                {
+                    <div class="p-2">
+                        <button class="menu-icon p-2" @onclick="GoBack">
+                            <span class="oi sl-icon" aria-hidden="true">@Glyphs.Arrow_thick_left_2</span>
+                        </button>
+                    </div>
+                }
+                @if (ViewModel != null && ViewModel.View.ShowMenu)
+                {
+                    <div class="p-2">
+                        <button class="menu-icon p-2" @onclick="ToggleMenu">
+                            <span class="oi sl-icon" aria-hidden="true">@Glyphs.Navigation_menu_1</span>
+                        </button>
+                    </div>
+                }
+
+                @if (ViewModelProject != null && ViewModelProject.View.ShowUser)
+                {
+                    <div class="p-2">
+                        <button class="menu-icon p-2" @onclick="GoToUser">
+                            @if (!String.IsNullOrEmpty(ViewModelProject.Dc.DcExUser.Data.UserImageLink))
+                            {
+                                <BxImage style="max-height: 25px; max-width: 25px;" Round="true" ImageSource="@ViewModelProject.Dc.DcExUser.Data.UserImageLink"></BxImage>
+                            }
+                            else
+                            {
+                                <BxImage style="max-height: 25px; max-width: 25px;" Round="true" ImageSource="@ConverterImage.Convert(EnumEmbeddedImage.DefaultUserImage_png)"></BxImage>
+                            }
+                        </button>
+                    </div>
+                }
+
+                @if (ViewModel != null)
+                {
+                    @if (ViewModel.View.ShowTitle)
+                    {
+                        @if (ViewModel.View.ShowSubTitle)
+                        {
+                            <p class="mt-1">
+                                <span class="pt-2 pb-0 pe-2 pr-2 app-title">@ViewModel.PageTitle</span>
+                                <br/>
+                                <span class="pt-0 pb-2 pe-2 pr-2 app-title app-title-little">@ViewModel.PageSubTitle</span>
+                            </p>
+                        }
+                        else
+                        {
+                            <div class="p-2">
+                                <span class="p-2 app-title app-title-big">@ViewModel.PageTitle</span>
+                            </div>
+                        }
+                    }
+
+                    @*@if (ViewModel.View.ShowSubTitle)
+        {
+        <div class="p-2">
+        <span class="p-2 app-title">@ViewModel.PageSubTitle</span>
+        </div>
+        }*@
+                }
+
+
+            </div>
+
+            @if (ViewModel != null && ViewModel.View.ShowOffline)
+            {
+                <div>
+                    <div class="p-2 align-content-end" style="color: #FF851B">
+                        <span>@ViewModel.View.MessageOffline</span>
+                        <span class="oi sl-icon" aria-hidden="true">@Glyphs.Link_broken</span>
+                    </div>
+                </div>
+            }
+
+            @if (ViewModel != null && ViewModel.View.CmdSaveHeader != null && ViewModel.View.CmdSaveHeader.IsVisible)
+            {
+                <div>
+                    <div class="p-2 align-content-end">
+                        <button class="menu-icon p-2" @onclick="ViewModel.View.CmdSaveHeader.Execute">
+                            <span class="oi sl-icon" aria-hidden="true">@ViewModel.View.CmdSaveHeader.Glyph</span>
+                        </button>
+                    </div>
+                </div>
+            }
+
+
+            @* ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract *@
+            @if (ViewModel != null && ViewModel.View.CmdHeaderCommon != null && ViewModel.View.CmdHeaderCommon.IsVisible)
+            {
+                <div>
+                    <div class="p-2 align-content-end">
+                        <button class="menu-icon p-2" @onclick="ViewModel.View.CmdHeaderCommon.Execute">
+                            <span class="oi sl-icon" aria-hidden="true">@ViewModel.View.CmdHeaderCommon.Glyph</span>
+                        </button>
+                    </div>
+                </div>
+            }
+
+
+        </header>
+    }
+
+    <div class="container-fluid px-0">
+        <CascadingValue Value="this">
+            <main>
+
+                @if (FirstLoader)
+                {
+                    <BissNavControl @ref="NavControl"></BissNavControl>
+                }
+
+                <div class="row g-0">
+
+                    @if (FirstLoader)
+                    {
+                        @if (!MenuCollapsed && (ViewModel != null && ViewModel.View.ShowMenu))
+                        {
+                            <NavMenu Item="@ViewModel" @ref="MenuProject"/>
+                        }
+                    }
+
+                    <div class="@GetCssClassForBody() p-3">
+                        @Body
+                    </div>
+                </div>
+
+                <BusyIndicatorControl IsBusy="@ViewModel?.View.IsBusy" BusyContent="@ViewModel?.View.BusyContent"></BusyIndicatorControl>
+
+                <MessageBoxControl Item="@MsgBox"></MessageBoxControl>
+
+                <!-- max 50 MB -->
+                @*<FileUploadControl MaxAllowedSize="52428800"></FileUploadControl>*@
+                <FileUploadControl></FileUploadControl>
+            </main>
+
+            @if (FirstLoader)
+            {
+                <ToastControl Item="@Toast"></ToastControl>
+            }
+        </CascadingValue>
+    </div>
+}

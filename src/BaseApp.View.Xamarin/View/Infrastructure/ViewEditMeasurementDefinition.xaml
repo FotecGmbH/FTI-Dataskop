@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewEditMeasurementDefinition"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bc="clr-namespace:BaseApp.View.Xamarin.Controls;assembly=BaseApp.View.Xamarin"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:bcm="http://biss.schemas.com/markupextensions"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:infrastructure="clr-namespace:BaseApp.ViewModel.Infrastructure;assembly=BaseApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    d:DataContext="{x:Static infrastructure:VmEditMeasurementDefinition.DesignInstance}"
+    x:TypeArguments="infrastructure:VmEditMeasurementDefinition"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+        <ScrollView Margin="16,0,0,0">
+            <StackLayout>
+
+                <!--#region Stammdaten-->
+                <bcc:BxCollapseView HeaderTitle="Stammdaten">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Stammdaten" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryName.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryName}"
+                            HasFrame="False" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryDescription.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryDescription}"
+                            HasFrame="False" />
+
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Margin="0,4,0,0"
+                            IsVisible="{Binding ShowThresholds}"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="Messintervall von Iot-Device:" />
+                        <Switch
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            Margin="0,0,0,12"
+                            HorizontalOptions="Start"
+                            IsToggled="{Binding IotMeasurementInterval}"
+                            IsVisible="{Binding ShowThresholds}" />
+
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            IsVisible="{Binding ShowThresholds}"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryMeasurmentInterval.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="4"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryMeasurmentInterval}"
+                            HasFrame="False"
+                            IsEnabled="{Binding IotMeasurementInterval, Converter={bcm:Sty ConverterBoolInverted}}"
+                            IsVisible="{Binding ShowThresholds}" />
+
+                        <Label
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescriptionPicker}"
+                            Text="Sensoranbindung:" />
+                        <bcc:BxPicker
+                            Grid.Row="5"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            ObservableCollectionSelectable="{Binding PickerDownstreamType}" />
+
+                        <Label
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescriptionPicker}"
+                            Text="Verfügbare Typen:" />
+                        <bcc:BxPicker
+                            Grid.Row="6"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            ObservableCollectionSelectable="{Binding PickerPredefinedMeasurements}" />
+
+                    </Grid>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Virtueller (Float)-->
+                <bcc:BxCollapseView HeaderTitle="Zufällige Zahl" IsVisible="{Binding ShowVirtualFloat}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Zufällige Zahl" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            IsVisible="{Binding IotDevice.Data.IsIotDotnetSensor}"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryVirtPosLat.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryVirtPosLat}"
+                            HasFrame="False"
+                            IsVisible="{Binding IotDevice.Data.IsIotDotnetSensor}" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            IsVisible="{Binding IotDevice.Data.IsIotDotnetSensor}"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryVirtPosLon.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryVirtPosLon}"
+                            HasFrame="False"
+                            IsVisible="{Binding IotDevice.Data.IsIotDotnetSensor}" />
+
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            IsVisible="{Binding IotDevice.Data.IsIotDotnetSensor}"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryVirtPosRadius.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="4"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryVirtPosRadius}"
+                            HasFrame="False"
+                            IsVisible="{Binding IotDevice.Data.IsIotDotnetSensor}" />
+
+                        <Label
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryVirtFloatMin.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="5"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryVirtFloatMin}"
+                            HasFrame="False" />
+
+                        <Label
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryVirtFloatMax.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="6"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryVirtFloatMax}"
+                            HasFrame="False" />
+
+                    </Grid>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region EntryCustomOpCode Value-->
+                <bcc:BxCollapseView HeaderTitle="Eigener OP - Code für State-Machine"
+                                    IsVisible="{Binding ShowCustomOpCode}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Eigener OP - Code für State-Machine" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryCustomOpCode.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryCustomOpCode}"
+                            HasFrame="False" />
+                    </Grid>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Rückgabewert / "Raw" Value-->
+                <bcc:BxCollapseView HeaderSubTitle="" HeaderTitle="Rückgabewert des Messwerts">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Rückgabewert des Messwerts" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescriptionPicker}"
+                            Text="BDA Typ:" />
+                        <bcc:BxPicker
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            IsVisible="{Binding CanValuePickerChanged}"
+                            ObservableCollectionSelectable="{Binding PickerValueType}" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            IsVisible="{Binding CanValuePickerChanged, Converter={bcm:Sty ConverterBoolInverted}}"
+                            Text="{Binding PickerValueType.SelectedItem.Description}" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            IsVisible="{Binding ShowEditPickerRawValueTypes}"
+                            Style="{StaticResource LabelStyEditDescriptionPicker}"
+                            Text="Datentyp Sensor:" />
+                        <Grid
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            IsVisible="{Binding ShowEditPickerRawValueTypes}">
+                            <bcc:BxPicker
+                                Margin="0,0,0,8"
+                                IsVisible="{Binding CanEditPickerRawValueTypes}"
+                                ObservableCollectionSelectable="{Binding PickerRawValueTypes}" />
+                            <Label
+                                IsVisible="{Binding CanEditPickerRawValueTypes, Converter={bcm:Sty ConverterBoolInverted}}"
+                                Text="{Binding PickerRawValueTypes.SelectedItem.Description}" />
+                        </Grid>
+
+
+                        <Grid
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            IsVisible="{Binding ShowCanEditRawValueByteCount}">
+
+                            <Label
+                                Margin="0,0,0,0"
+                                IsVisible="{Binding CanEditRawValueByteCount, Converter={bcm:Sty ConverterBoolInverted}}"
+                                Style="{StaticResource LabelStyEditDescription}"
+                                Text="Byte Anzahl:" />
+                            <Label
+                                IsVisible="{Binding CanEditRawValueByteCount}"
+                                Style="{StaticResource LabelStyEditDescription}"
+                                Text="Byte Anzahl:" />
+                        </Grid>
+
+
+                        <Grid
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            IsVisible="{Binding ShowCanEditRawValueByteCount}">
+
+                            <bcc:BxEntry
+                                Margin="0,0,0,8"
+                                EntryData="{Binding EntryRawValueByteCount}"
+                                HasFrame="False"
+                                IsVisible="{Binding CanEditRawValueByteCount}" />
+                            <Label
+                                IsVisible="{Binding CanEditRawValueByteCount, Converter={bcm:Sty ConverterBoolInverted}}"
+                                Text="{Binding ConfigBase.Base.RawValueDefinition.ByteCount}" />
+                        </Grid>
+
+
+                    </Grid>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Zusätzliches-->
+                <bcc:BxCollapseView HeaderSubTitle="" HeaderTitle="Zusätzliche (dynamische) Daten">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Zusätzliche (dynamische) Daten" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryAdditionalProperties.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryAdditionalProperties}"
+                            HasFrame="False"
+                            Mulitiline="True" />
+                    </Grid>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Infos-->
+                <bcc:BxCollapseView HeaderSubTitle="" HeaderTitle="Infos">
+                    <StackLayout>
+                        <bc:BxInformation
+                            Margin="0,0,0,16"
+                            DbId="{Binding DcListDataPoint.Index}"
+                            ExInformation="{Binding Data.Information}" />
+
+                        <Label Style="{StaticResource LabelStyEditHeader}" Text="Dynamische Konfiguration" />
+                        <Label
+                            Padding="0,0,16,16"
+                            LineBreakMode="CharacterWrap"
+                            Text="{Binding Data.AdditionalConfiguration}" />
+
+                        <Label Style="{StaticResource LabelStyEditHeader}" Text="State Machine Bytes" />
+                        <Label
+                            Padding="0,0,16,0"
+                            LineBreakMode="CharacterWrap"
+                            Text="{Binding StateMachineBytes}" />
+
+                    </StackLayout>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+            </StackLayout>
+        </ScrollView>
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

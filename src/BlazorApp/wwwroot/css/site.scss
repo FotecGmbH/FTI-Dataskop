@@ -1,0 +1,109 @@
+﻿$validation-message-col: red;
+
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+@font-face {
+    font-family: 'StreamLineIconsLight';
+    src: url('streamline/fonts/StreamLineIconsLight.ttf') format('truetype'), url('streamline/fonts/StreamLineIconsLight.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid $validation-message-col;
+}
+
+.validation-message {
+    color: red;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+.gridContainer {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: grid;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+
+body {
+    font-size: .875rem;
+}
+
+.feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+}
+
+
+.form-control-dark {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .1);
+}
+
+.form-control-dark:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
+
+.view-card {
+    border-radius: 50px;
+    margin: 10px;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: none;
+    transform: none;
+    font-family: 'StreamLineIconsLight';
+    content: "\e93e";
+}
+
+.accordion-button::after {
+    background-image: none;
+    transform: none;
+    font-family: 'StreamLineIconsLight';
+    content: "\e94a";
+}
+
+.rz-sortable-column .rzi-sort {
+    color: #767676 !important;
+    margin-left: 10px;
+}

@@ -1,0 +1,235 @@
+﻿@page "/"
+@using BDA.Common.Exchange.Enum
+@using Database
+@using Exchange
+@using Microsoft.EntityFrameworkCore
+@layout HomeLayout
+
+<!-- HEADER -->
+<div style="background:#36517E; color: white;">
+    <div class="container pt-5 pb-5">
+        <div class="row">
+            <div class="col-6">
+                <h1 style="color: #39CCCC;">BDA Backend</h1>
+                <h1 style="color: #39CCCC;">@AppSettings.Current().AppVersion</h1>
+            </div>
+            <div class="col-6" style="height: 150px;">
+                <img class="img-fluid mh-100 mx-auto d-block" src="/Content/DataskopWhite.png"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Logos -->
+<div style="background-color:#fafafa; color: darkgray;">
+
+    <div class="row p-2">
+        <div class="col-md-3 col-sm-12 p-3 mh-100" style="height: 150px;">
+            <a href="https://www.fhstp.ac.at/" target="_blank">
+                <img class="img-fluid mh-100 mx-auto d-block align-middle" src="/Content/Fhsp.png"/>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-12 p-3 mh-100" style="height: 150px;">
+            <a href="https://www.fotec.at/" target="_blank">
+                <img class="img-fluid mh-100 mx-auto d-block align-middle" src="/Content/Fotec.png"/>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-12 p-3 mh-100 align-middle my-auto align-items-center" style="height: 150px;">
+            <a href="https://www.fh-krems.ac.at/" target="_blank">
+                <img class="img-fluid mx-auto mh-100 d-block align-middle" src="/Content/Imc.png"/>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-12 p-3 mh-100" style="height: 150px;">
+            <a href="https://www.donau-uni.ac.at/" target="_blank">
+                <img class="img-fluid mh-100 mx-auto d-block align-middle" src="/Content/Duk.png"/>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Text -->
+<div style="background:white;">
+    <div class="container pt-5 pb-5">
+        <div class="row">
+            <h1 style="color: #39CCCC;">BDA Backend</h1>
+            <h4>Sensor-Based Data Economy in Niederösterreich</h4>
+            <br/>
+            <p>Leitprojekt NÖ im FTI Themenfeld "Daten"</p>
+            <p>Alpha Version! Nur für Testzwecke innerhalb des Konsortiums nutzbar.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Tabelle -->
+<div style="background-color: #fafafa; color: darkgray;">
+    <div class="container pt-5 pb-5">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center">Links</h2>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-6">
+                <table class="table table-striped">
+                    @foreach (var link in _lstLinks)
+                    {
+                        <tr>
+                            <td align="center">
+                                @if (link.OpenAlert)
+                                {
+                                    <a class="link-info" href="" @onclick="(() => OpenAlert(link))" @onclick:preventDefault>@link.Info</a>
+                                }
+                                else
+                                {
+                                    <a class="link-info" target="_blank" href="@link.Url">@link.Info</a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="col-6">
+                <table class="table table-striped">
+                    @foreach (var link in _lstRechts)
+                    {
+                        <tr>
+                            <td align="center">
+                                @if (link.OpenAlert)
+                                {
+                                    <a class="link-info" href="" @onclick="(() => OpenAlert(link))" @onclick:preventDefault>@link.Info</a>
+                                }
+                                else
+                                {
+                                    <a class="link-info" target="_blank" href="@link.Url">@link.Info</a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div style="background:#36517E; color: white;">
+    <div class="container">
+        <div class="row p-2">
+            <div class="col-12">
+                Copyright @DateTime.Now.Year FOTEC Forschungs- und Technologietransfer GmbH
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ALERT -->
+@if (_showModal)
+{
+    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Information</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <p>@_modalContent</p>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" @onclick="@ModalCancel">Ok</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    /// <summary>
+    ///     Einstellungen für den Alert (modaler Dialog)
+    /// </summary>
+    bool _showModal;
+
+    string _modalContent = "";
+    void ModalShow() => _showModal = true;
+    void ModalCancel() => _showModal = false;
+
+    // ReSharper disable once UnusedMember.Local
+    void ModalOk()
+    {
+        _showModal = false;
+    }
+
+
+    /// <summary>
+    ///     Method invoked when the component is ready to start, having received its
+    ///     initial parameters from its parent in the render tree.
+    ///     Override this method if you will perform an asynchronous operation and
+    ///     want the component to refresh when that operation is completed.
+    /// </summary>
+    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing any asynchronous operation.</returns>
+    protected override async Task OnInitializedAsync()
+    {
+#pragma warning disable CA2007 // Consider calling ConfigureAwait on the awaited task
+        await using var db = new Db();
+#pragma warning restore CA2007 // Consider calling ConfigureAwait on the awaited task
+
+        var setting = await db.TblSettings.ToListAsync().ConfigureAwait(true);
+
+        _lstLinks.Add(new LinkListItem("BDA Konfig APP - Windows", setting.First(f => f.Key == EnumDbSettings.ConfigAppWindows).Value));
+        _lstLinks.Add(new LinkListItem("BDA Konfig APP - Ios", AppSettings.Current().IosLink));
+        _lstLinks.Add(new LinkListItem("BDA Konfig APP - Android", AppSettings.Current().DroidLink));
+        _lstLinks.Add(new LinkListItem("BDA Konfig APP - Web", setting.First(f => f.Key == EnumDbSettings.ConfigAppWeb).Value));
+        _lstLinks.Add(new LinkListItem("BDA Gateway - Windows", setting.First(f => f.Key == EnumDbSettings.GatewayAppWindows).Value));
+        _lstLinks.Add(new LinkListItem("BDA Gateway - Linux", setting.First(f => f.Key == EnumDbSettings.GatewayAppLinux).Value));
+        _lstLinks.Add(new LinkListItem("BDA Iot Firmware - fipy TTN", setting.First(f => f.Key == EnumDbSettings.SensorTemplateFipiTtn).Value));
+
+
+        _lstRechts.Add(new LinkListItem("Interface REST", "/swagger"));
+        _lstRechts.Add(new LinkListItem("Interface MQTT", OpenAlert: true));
+        _lstRechts.Add(new LinkListItem("Interface gRPC", setting.First(f => f.Key == EnumDbSettings.InterfaceGrpc).Value));
+        _lstRechts.Add(new LinkListItem("Admin", "/admin"));
+
+        await base.OnInitializedAsync().ConfigureAwait(true);
+    }
+
+    /// <summary>
+    ///     Link Liste für die linke Spalte
+    /// </summary>
+    readonly List<LinkListItem> _lstLinks = new();
+
+    /// <summary>
+    ///     Link Liste für die rechte Spalte
+    /// </summary>
+    readonly List<LinkListItem> _lstRechts = new();
+
+    /// <summary>
+    ///     Fenster anzeigen
+    /// </summary>
+    /// <param name="item">Item</param>
+    // ReSharper disable once UnusedParameter.Local
+    void OpenAlert(LinkListItem item)
+    {
+        _modalContent = "Nicht verfügbar in der aktuellen Release.";
+        ModalShow();
+    }
+
+    /// <summary>
+    ///     Link Item
+    /// </summary>
+    /// <param name="Info">Nachricht oder Link Text</param>
+    /// <param name="Url">URL</param>
+    /// <param name="OpenAlert">Nachrichtenbox anzeigen</param>
+    record LinkListItem(string Info = "", string Url = "", bool OpenAlert = false);
+
+
+}

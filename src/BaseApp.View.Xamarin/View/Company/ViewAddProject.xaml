@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewAddProject"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:bcm="http://biss.schemas.com/markupextensions"
+    xmlns:company="clr-namespace:BaseApp.ViewModel.Company;assembly=BaseApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=netstandard"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    x:Name="MyViewAddProject"
+    d:DataContext="{x:Static company:VmAddOrEditProject.DesignInstance}"
+    x:TypeArguments="company:VmAddOrEditProject"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+        <ScrollView>
+            <StackLayout
+                Margin="8,0,8,4"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand">
+
+
+                <!--#region Erste Spalte - Stammdaten-->
+
+                <bcc:BxCollapseView HeaderTitle="Stammdaten">
+
+                    <StackLayout>
+                        <bcc:BxEntry
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryName}"
+                            HasFrame="False" />
+
+                        <bcc:BxEntry
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryDescription}"
+                            HasFrame="False" />
+
+                        <bcc:BxEntry
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryAdditionalProperties}"
+                            HasFrame="False"
+                            Mulitiline="True" />
+                    </StackLayout>
+                </bcc:BxCollapseView>
+
+
+                <!--#endregion-->
+
+                <!--#region Zweite Spalte - Filter und mögliche Messwerte-->
+
+                <bcc:BxCollapseView HeaderTitle="Mögliche Messwerte">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <StackLayout Grid.Row="0" Grid.Column="0">
+                            <bcc:BxPicker Margin="0,-4,0,0" ObservableCollectionSelectable="{Binding PickerGateways}" />
+                            <bcc:BxPicker Margin="0,0,0,8" ObservableCollectionSelectable="{Binding PickerIotDevices}" />
+                        </StackLayout>
+
+
+                        <!--  ReSharper disable once ObsoleteElement  -->
+                        <bcc:BxListView
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            ItemsSource="{Binding ItemsForAdd}">
+                            <!--  ReSharper disable once ObsoleteElement  -->
+                            <bcc:BxListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="2*" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="8" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.RowSpan="2"
+                                                    Grid.Column="1"
+                                                    Text="{Binding Name}"
+                                                    VerticalOptions="Center" />
+                                                <Label
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Margin="0,-8,0,0"
+                                                    HorizontalOptions="Start"
+                                                    Style="{bcm:Sty LabelStyDetail}"
+                                                    Text="{Binding Details}"
+                                                    VerticalOptions="Center" />
+
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.RowSpan="2"
+                                                    Grid.Column="2"
+                                                    Style="{bcm:Sty LabelStyDetail}"
+                                                    Text="{Binding Id}"
+                                                    VerticalOptions="Center" />
+
+                                                <bcc:BxGlyphButton
+                                                    Grid.Row="0"
+                                                    Grid.RowSpan="3"
+                                                    Grid.Column="4"
+                                                    BackgroundColor="Transparent"
+                                                    Command="{Binding ViewModel.CmdAddItem, Source={x:Reference MyViewAddProject}}"
+                                                    CommandParameter="{Binding .}"
+                                                    Glyph="{Binding ViewModel.CmdAddItem.Glyph, Source={x:Reference MyViewAddProject}}" />
+
+                                                <BoxView
+                                                    Grid.Row="3"
+                                                    Grid.Column="0"
+                                                    Grid.ColumnSpan="5"
+                                                    Style="{bcm:Sty BoxViewStySeperator}">
+                                                    <BoxView.IsVisible>
+                                                        <OnPlatform x:TypeArguments="system:Boolean">
+                                                            <On Platform="iOS, Android, macOS">false</On>
+                                                            <On Platform="WPF">true</On>
+                                                        </OnPlatform>
+                                                    </BoxView.IsVisible>
+                                                </BoxView>
+
+                                            </Grid>
+
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+
+                            </bcc:BxListView.ItemTemplate>
+
+                        </bcc:BxListView>
+
+                    </Grid>
+                </bcc:BxCollapseView>
+
+
+                <!--#endregion-->
+
+                <!--#region Dritte Spalte - Infos zu einem Messwert-->
+
+                <bcc:BxCollapseView HeaderTitle="Aktuelle Messwerte">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+
+                        <!--  ReSharper disable once ObsoleteElement  -->
+                        <bcc:BxListView
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            ItemsSource="{Binding ItemsCurrent}">
+                            <!--  ReSharper disable once ObsoleteElement  -->
+                            <bcc:BxListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="2*" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="8" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.RowSpan="2"
+                                                    Grid.Column="1"
+                                                    Text="{Binding Name}"
+                                                    VerticalOptions="Center" />
+                                                <Label
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Margin="0,-8,0,0"
+                                                    HorizontalOptions="Start"
+                                                    Style="{bcm:Sty LabelStyDetail}"
+                                                    Text="{Binding Details}"
+                                                    VerticalOptions="Center" />
+
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.RowSpan="2"
+                                                    Grid.Column="2"
+                                                    Style="{bcm:Sty LabelStyDetail}"
+                                                    Text="{Binding Id}"
+                                                    VerticalOptions="Center" />
+
+                                                <bcc:BxGlyphButton
+                                                    Grid.Row="0"
+                                                    Grid.RowSpan="3"
+                                                    Grid.Column="3"
+                                                    BackgroundColor="Transparent"
+                                                    Command="{Binding ViewModel.CmdDeleteItem, Source={x:Reference MyViewAddProject}}"
+                                                    CommandParameter="{Binding .}"
+                                                    Glyph="{Binding ViewModel.CmdDeleteItem.Glyph, Source={x:Reference MyViewAddProject}}"
+                                                    GlyphColor="DarkRed" />
+
+                                                <BoxView
+                                                    Grid.Row="3"
+                                                    Grid.Column="0"
+                                                    Grid.ColumnSpan="5"
+                                                    Style="{bcm:Sty BoxViewStySeperator}">
+                                                    <BoxView.IsVisible>
+                                                        <OnPlatform x:TypeArguments="system:Boolean">
+                                                            <On Platform="iOS, Android, macOS">false</On>
+                                                            <On Platform="WPF">true</On>
+                                                        </OnPlatform>
+                                                    </BoxView.IsVisible>
+                                                </BoxView>
+                                            </Grid>
+
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+
+                            </bcc:BxListView.ItemTemplate>
+
+                        </bcc:BxListView>
+                    </Grid>
+                </bcc:BxCollapseView>
+
+
+                <!--#endregion-->
+
+
+            </StackLayout>
+            <!--#endregion-->
+        </ScrollView>
+
+
+    </bcc:PageControl>
+</view:BissContentPage>

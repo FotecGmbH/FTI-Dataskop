@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "Protos/common.proto";
+import "Protos/enums.proto";
+import "Protos/measurementdefinitions.proto";
+import "Protos/measurementresults.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BDA.Service.Com.GRPC.Protos";
+
+
+
+
+service Project{
+	rpc UpdateProjectByID (ProtoFilterRequestByID) returns (ProtoResult); // Update project with an additional property
+	rpc GetProjectByID (ProtoRequestByID) returns (ProtoProjectReply); // Get project by ID
+	rpc GetProjectsByCompanyID (ProtoFilterRequestByID) returns (ProtoProjectsReply); // Gets the all the projects of a company and filters with the additional properties.
+	rpc GetMeasurementDefinitionsOfProject (ProtoRequestByID) returns (ProtoMeasurementDefinitionsReply); // Gets the measurement definitions of a project
+	rpc GetLatestMeasurementResultsOfProject (ProtoRequestByID) returns (ProtoMeasurementResultQueryReply); // Gets the latest results of each measurement definition.
+}
+
+
+// Project
+message ProtoProjectModel{
+	string AdditionalProperties = 1;
+	int64 CompanyID = 2;
+	int64 Id = 3;
+	bool IsPublic = 4;
+	bool IsPublished = 5;
+	ProtoInformation Information = 6;
+	google.protobuf.Timestamp PublishedDate = 7;
+	repeated ProtoMeasurementDefinitionModel MeasurementDefinitions = 8;
+}
+
+// Represents a project with basic information.
+message ProtoBasicProjectModel{
+	ProtoBasicInformation Information = 1;
+	repeated ProtoBasicMeasurementDefinitionModel MeasurementDefinitions = 2;
+	
+}
+
+// Reply of a single project plus a generic result.
+message ProtoProjectReply{
+	ProtoResult Result = 1;
+	ProtoProjectModel Project = 2;
+}
+
+// Reply of a list of projects plus a generic result.
+message ProtoProjectsReply{
+	ProtoResult Result = 1;
+	repeated ProtoProjectModel Projects = 2;
+}
+
+
+
+
+

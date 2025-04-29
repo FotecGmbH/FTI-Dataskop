@@ -1,0 +1,106 @@
+﻿.sl-icon {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: "StreamLineIconsLight" !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    font-size: 18px;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.nav-link span {
+    margin-right: 10px;
+}
+
+/*
+ * Sidebar
+ */
+.sidebar {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    /* Behind the navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    border-left: 0.5px solid darkgrey;
+}
+
+.sidebar-pt {
+    padding: 56px 0 0;
+    /* Height of navbar */
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 260px);
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-left: 20px;
+    /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+.sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: var(--rz-primary);
+}
+
+.sidebar .nav-link.active {
+    border-right: 5px solid var(--rz-primary);
+    background: #F0F0F0;
+    color: var(--rz-primary);
+}
+
+.sidebar .nav-link:focus,
+.sidebar .nav-link:hover {
+    color: var(--rz-primary);
+    cursor: pointer;
+    background: #F0F0F0;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+    color: inherit;
+}
+
+.sidebar-heading {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.nav-item-active {
+    color: white !important;
+    background-color: #61a4d7 !important;
+}
+
+.nav-item-active:hover {
+    color: white !important;
+    background-color: #61a4d7 !important;
+}
+
+.nav-item-inactive {
+    background-color: white !important;
+    color: #61a4d7 !important;
+}
+
+.nav-item-inactive:hover {
+    color: white !important;
+    background-color: #61a4d7 !important;
+}
+
+.nav-link:hover {
+    color: white;
+}

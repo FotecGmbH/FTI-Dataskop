@@ -1,0 +1,53 @@
+﻿@using Exchange
+@model BDA.Service.EMail.Services.EMailNotificationUser
+
+@{
+    Layout = "/Views/EMail/_EMailBase.cshtml";
+}
+
+@section HeaderContent
+{
+    <title>Notification Test!</title>
+}
+
+<!-- body -->
+@* ReSharper disable once Html.Obsolete *@
+<table class="body-wrap" bgcolor=#f6f6f6>
+    <tr>
+        <td></td>
+        @* ReSharper disable once Html.Obsolete *@
+        <td class="container" bgcolor="#f6f6f6">
+            <img src="@(AppSettings.Current().DcSignalHost)/Content/fotec.png" width="200" height=90/>
+            <br/>
+            <br/>
+            <br/>
+            <h3> Dies ist ein Notification Test! </h3>
+            <!-- content -->
+            <div class="content">
+                <table>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td style="text-align: left" font-family:Arial>
+                                        <p>
+                                            @* ReSharper disable once RedundantSuppressNullableWarningExpression *@
+                                            Sehr geehrte(r) Frau/Herr @Model!.Firstname @Model.Lastname,<br/> hiermit wird ihnen folgender Text übermittelt:<br/>
+                                            @Model.Text
+                                        </p>
+                                        <p>Mit freundlichen Gr&uuml;&szlig;en,<br/>ihr Team der Fotec!</p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/><br/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- /content -->
+
+        </td>
+        <td></td>
+    </tr>
+
+</table>

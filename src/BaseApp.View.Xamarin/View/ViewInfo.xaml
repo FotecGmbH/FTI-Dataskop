@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewInfo"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    d:DataContext="{x:Static viewmodels:VmInfo.DesignInstance}"
+    x:TypeArguments="viewmodels:VmInfo"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                Margin="0,0,0,24"
+                FontSize="32"
+                HorizontalOptions="CenterAndExpand"
+                Text="BDA Tool" />
+
+            <bcc:BxImage
+                Grid.Row="1"
+                Grid.Column="0"
+                CornerRadius="0"
+                HeightRequest="125"
+                HorizontalOptions="Center"
+                ImageSource="{Binding Converter={StaticResource ConverterImage}, ConverterParameter={x:Static resources:EnumEmbeddedImage.Fhsp_png}}"
+                IsCircleMode="False"
+                WidthRequest="125" />
+
+            <bcc:BxImage
+                Grid.Row="1"
+                Grid.Column="1"
+                CornerRadius="0"
+                HeightRequest="125"
+                HorizontalOptions="Center"
+                ImageSource="{Binding Converter={StaticResource ConverterImage}, ConverterParameter={x:Static resources:EnumEmbeddedImage.Fotec_png}}"
+                IsCircleMode="False"
+                WidthRequest="125" />
+
+            <bcc:BxImage
+                Grid.Row="1"
+                Grid.Column="2"
+                CornerRadius="0"
+                HeightRequest="125"
+                HorizontalOptions="Center"
+                ImageSource="{Binding Converter={StaticResource ConverterImage}, ConverterParameter={x:Static resources:EnumEmbeddedImage.Imc_png}}"
+                IsCircleMode="False"
+                WidthRequest="125" />
+
+            <bcc:BxImage
+                Grid.Row="1"
+                Grid.Column="3"
+                CornerRadius="0"
+                HeightRequest="125"
+                HorizontalOptions="Center"
+                ImageSource="{Binding Converter={StaticResource ConverterImage}, ConverterParameter={x:Static resources:EnumEmbeddedImage.Duk_png}}"
+                IsCircleMode="False"
+                WidthRequest="125" />
+
+            <bcc:BxImage
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                Margin="0,0,24,0"
+                CornerRadius="0"
+                HeightRequest="125"
+                HorizontalOptions="Center"
+                ImageSource="{Binding Converter={StaticResource ConverterImage}, ConverterParameter={x:Static resources:EnumEmbeddedImage.Dataskop_png}}"
+                IsCircleMode="False"
+                WidthRequest="125" />
+
+            <Label
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                HorizontalOptions="CenterAndExpand"
+                Text="Version" />
+            <Label
+                Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                HorizontalOptions="CenterAndExpand"
+                Text="{Binding CurrentSettings.AppVersion}" />
+
+        </Grid>
+
+
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

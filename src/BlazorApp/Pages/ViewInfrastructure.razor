@@ -1,0 +1,189 @@
+﻿@page "/ViewInfrastructure"
+@page "/ViewInfrastructure/{Id:int}"
+@using System.Drawing
+@using BaseApp.Connectivity
+@using BDA.Common.Exchange.Enum
+@inherits ProjectRazorPage<VmInfrastructure>
+
+@if (ViewModel != null!)
+{
+    <RadzenRow class="mb-3">
+        <RadzenColumn>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="20px">
+                <RadzenLabel>Firma:</RadzenLabel>
+                <RadzenDropDown Data="@ViewModel.Dc.DcExCompanies" Placeholder="Wähle Firma aus" TValue="DcListTypeCompany" @bind-Value="@ViewModel.Dc.DcExCompanies.SelectedItem">
+                    <Template>
+                        @((context as DcListTypeCompany)!.Data.Information.Name)
+                    </Template>
+                    <ValueTemplate>
+                        @((context as DcListTypeCompany)!.Data.Information.Name)
+                    </ValueTemplate>
+                </RadzenDropDown>
+                <BxButton BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdEditCompanies" ExecutionParameter="@ViewModel.Dc.DcExCompanies.SelectedItem"></BxButton>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenStack Orientation="Orientation.Vertical">
+                <BxCollectionView Collection="ViewModel.Dc.DcExGateways" TItem="DcListTypeGateway">
+                    <HeaderTemplate>
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenStack>
+                                <RadzenLabel>Gateways</RadzenLabel>
+                                @if (ViewModel.Dc.DcExCompanies.SelectedItem != null!)
+                                {
+                                    <RadzenLabel>@ViewModel.Dc.DcExCompanies.SelectedItem.Data.Information.Name</RadzenLabel>
+                                }
+                            </RadzenStack>
+                            <RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                                <BxButton Variant="Variant.Text" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="ViewModel.Dc.DcExGateways.CmdAddItem"></BxButton>
+                            </RadzenStack>
+                        </RadzenStack>
+                    </HeaderTemplate>
+                    <Columns>
+                        <RadzenDataGridColumn Width="30px" TItem="DcListTypeGateway">
+                            <Template Context="data">
+                                <div style="border-radius: 50%; background-color: @GetColorFromStatus(data.Data.DeviceCommon.State); width: 10px; height: 10px">
+                                </div>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="DcListTypeGateway">
+                            <Template Context="data">
+                                <RadzenStack>
+                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                        <RadzenLabel>@data.Data.Information.UiNameShort</RadzenLabel>
+                                        <RadzenLabel>@data.Index</RadzenLabel>
+                                    </RadzenStack>
+                                    <RadzenLabel>@data.Data.DeviceCommon.Info</RadzenLabel>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="DcListTypeGateway" Width="120px">
+                            <Template Context="data">
+                                <RadzenStack Orientation="Orientation.Horizontal" Gap="10px">
+                                    <BxButton Variant="Variant.Text" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="ViewModel.Dc.DcExGateways.CmdEditItem" ExecutionParameter="data"></BxButton>
+                                    <BxButton Variant="Variant.Text" ButtonStyle="ButtonStyle.Danger" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="ViewModel.Dc.DcExGateways.CmdRemoveItem" ExecutionParameter="data"></BxButton>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </BxCollectionView>
+            </RadzenStack>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenStack Orientation="Orientation.Vertical">
+                <BxCollectionView Collection="ViewModel.Dc.DcExIotDevices" TItem="DcListTypeIotDevice">
+                    <HeaderTemplate>
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenStack>
+                                <RadzenLabel>Iot - Geräte</RadzenLabel>
+                                @if (ViewModel.Dc.DcExGateways.SelectedItem != null!)
+                                {
+                                    <RadzenLabel>@ViewModel.Dc.DcExGateways.SelectedItem.Data.Information.Name</RadzenLabel>
+                                }
+                            </RadzenStack>
+                            <RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                                <BxButton Variant="Variant.Text" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="ViewModel.Dc.DcExIotDevices.CmdAddItem"></BxButton>
+                            </RadzenStack>
+                        </RadzenStack>
+                    </HeaderTemplate>
+                    <Columns>
+                        <RadzenDataGridColumn Width="30px" TItem="DcListTypeIotDevice">
+                            <Template Context="data">
+                                <div style="border-radius: 50%; background-color: @GetColorFromStatus(data.Data.DeviceCommon.State); width: 10px; height: 10px">
+                                </div>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="DcListTypeIotDevice">
+                            <Template Context="data">
+                                <RadzenStack>
+                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                        <RadzenLabel>@data.Data.Information.UiNameShort</RadzenLabel>
+                                        <RadzenLabel>@data.Index</RadzenLabel>
+                                    </RadzenStack>
+                                    <RadzenLabel>@data.Data.DeviceCommon.Info</RadzenLabel>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="DcListTypeIotDevice" Width="120px">
+                            <Template Context="data">
+                                <RadzenStack Orientation="Orientation.Horizontal" Gap="10px">
+                                    <BxButton Variant="Variant.Text" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="ViewModel.Dc.DcExIotDevices.CmdEditItem" ExecutionParameter="data"></BxButton>
+                                    <BxButton Variant="Variant.Text" ButtonStyle="ButtonStyle.Danger" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="ViewModel.Dc.DcExIotDevices.CmdRemoveItem" ExecutionParameter="data"></BxButton>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </BxCollectionView>
+            </RadzenStack>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenStack Orientation="Orientation.Vertical">
+                <BxCollectionView Collection="ViewModel.Dc.DcExMeasurementDefinition" TItem="DcListTypeMeasurementDefinition">
+                    <HeaderTemplate>
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenStack>
+                                <RadzenLabel>Messwertdefinitionen</RadzenLabel>
+                                @if (ViewModel.Dc.DcExIotDevices.SelectedItem != null!)
+                                {
+                                    <RadzenLabel>@ViewModel.Dc.DcExIotDevices.SelectedItem.Data.Information.Name</RadzenLabel>
+                                }
+                            </RadzenStack>
+                            <RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                                <BxButton Variant="Variant.Text" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="ViewModel.Dc.DcExMeasurementDefinition.CmdAddItem"></BxButton>
+                            </RadzenStack>
+                        </RadzenStack>
+                    </HeaderTemplate>
+                    <Columns>
+                        <RadzenDataGridColumn TItem="DcListTypeMeasurementDefinition">
+                            <Template Context="data">
+                                <RadzenStack>
+                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                        <RadzenLabel>@data.Data.Information.UiNameShort</RadzenLabel>
+                                        <RadzenLabel>@data.Index</RadzenLabel>
+                                    </RadzenStack>
+                                    <RadzenLabel>@data.Data.CurrentValue.Value</RadzenLabel>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="DcListTypeMeasurementDefinition" Width="120px">
+                            <Template Context="data">
+                                <RadzenStack Orientation="Orientation.Horizontal" Gap="10px">
+                                    <BxButton Variant="Variant.Text" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="ViewModel.Dc.DcExMeasurementDefinition.CmdEditItem" ExecutionParameter="data"></BxButton>
+                                    <BxButton Variant="Variant.Text" ButtonStyle="ButtonStyle.Danger" BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="ViewModel.Dc.DcExMeasurementDefinition.CmdRemoveItem" ExecutionParameter="data"></BxButton>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </BxCollectionView>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+}
+
+@code {
+
+    private string GetColorFromStatus(EnumDeviceOnlineState state)
+    {
+        // ReSharper disable once RedundantAssignment
+        var color = Color.White;
+        switch (state)
+        {
+            case EnumDeviceOnlineState.Unknown:
+                color = Color.Yellow;
+                break;
+            case EnumDeviceOnlineState.Online:
+                color = Color.Green;
+                break;
+            case EnumDeviceOnlineState.Offline:
+                color = Color.Red;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        return ColorTranslator.ToHtml(color);
+    }
+
+}

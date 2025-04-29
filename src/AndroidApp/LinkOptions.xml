@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<linker>
+	<assembly fullname="Exchange">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="BaseApp">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Updater">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Dc.Client">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Dc.Core">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Dc.Transport.Client.SignalR">
+		<type fullname="*" />
+	</assembly>
+
+	<assembly fullname="Biss.Apps">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.Droid">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.Components.AppCenter">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.Components.Background">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.Components.Background.Droid">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.Components.Map">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.Components.Map.Droid">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.Components.AzurePush">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.Components.RestAccess">
+		<type fullname="*" />
+	</assembly>
+
+	<assembly fullname="Biss.Controls.Image">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Controls.BissGlyphButton">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Controls.BissButton">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Controls.BissEntry">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Controls.BissBusyIndicator">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Controls.BissListview">
+		<type fullname="*" />
+	</assembly>
+
+	<assembly fullname="Microsoft.AspNetCore.SignalR.Client">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Microsoft.AspNetCore.SignalR.Client.Core">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Microsoft.AspNetCore.SignalR.Common">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Microsoft.AspNetCore.SignalR.Protocols.Json">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Microsoft.Extensions.Logging">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Microsoft.Extensions.Logging.Debug">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Microsoft.Extensions.Options">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Plugin.Media">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="System.Text.Json">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="System.Net.Http">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="System.Net.Http">
+		<type fullname="System.Net.Http.HttpClientHandler">
+			<method name="set_ServerCertificateCustomValidationCallback" />
+		</type>
+		<type fullname="System.Net.Http.HttpMessageHandler" />
+	</assembly>
+
+	<assembly fullname="System.Runtime">
+		<type fullname="*" />
+	</assembly>
+
+	<assembly fullname="Telerik.XamarinForms.Common">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Telerik.XamarinForms.Input">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Telerik.XamarinForms.Primitives">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Telerik.XamarinForms.DataControls">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Telerik.XamarinForms.ImageEditor">
+		<type fullname="*" />
+	</assembly>
+
+	<assembly fullname="Telerik.Xamarin.Android.Common">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Telerik.Xamarin.Android.Primitives">
+		<type fullname="*" />
+	</assembly>
+</linker>

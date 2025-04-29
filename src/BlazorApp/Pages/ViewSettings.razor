@@ -1,0 +1,16 @@
+@page "/ViewSettings"
+@page "/ViewSettings/{Id:int}"
+
+@inherits ProjectRazorPage<VmSettings>
+
+@if (ViewModel != null!)
+{
+    <RadzenStack>
+        <RadzenLabel>Es sind keine Einstellungen im Web verfügbar.</RadzenLabel>
+    </RadzenStack>
+}
+
+@code
+{
+
+}

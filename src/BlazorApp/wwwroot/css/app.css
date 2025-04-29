@@ -1,0 +1,46 @@
+﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+@import url(styles/StyHeader.css);
+@import url(styles/StyMenu.css);
+@import url(styles/StyLabel.css);
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.div-pagetitle {
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: #61a4d7;
+    border-radius: 5px;
+}
+
+.h-pagetitle {
+    color: white;
+    margin: 20px;
+}
+
+.btn-primary {
+    background: #61a4d7;
+}
+
+.btn-primary:hover {
+    background: #5184d7;
+}
+
+body {
+    background: white !important;
+}
+
+.config-text {
+    overflow-wrap: anywhere;
+    text-align: end;
+}
+
+.rz-custom-header {
+    width: 100%;
+}

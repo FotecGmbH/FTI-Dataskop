@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ResourceDictionary
+    x:Class="BaseApp.View.Xamarin.Styles.StyProject"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:styles="clr-namespace:BaseApp.View.Xamarin.Styles;assembly=BaseApp.View.Xamarin">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary>
+            <styles:StyFonts />
+        </ResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+
+
+    <Style x:Key="LabelStyEditDescription" TargetType="{x:Type Label}">
+        <Setter Property="HorizontalOptions" Value="End" />
+        <Setter Property="Margin">
+            <OnPlatform x:TypeArguments="Thickness">
+                <On Platform="iOS, Android, macOS" Value="0,6,0,0" />
+                <On Platform="WPF" Value="0,4,0,0" />
+            </OnPlatform>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LabelStyEditDescriptionPicker" TargetType="{x:Type Label}">
+        <Setter Property="HorizontalOptions" Value="End" />
+        <Setter Property="Margin">
+            <OnPlatform x:TypeArguments="Thickness">
+                <On Platform="iOS, Android, macOS" Value="0,6,0,0" />
+                <On Platform="WPF" Value="0,0,0,0" />
+            </OnPlatform>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LabelStyEditHeader" TargetType="{x:Type Label}">
+        <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
+        <Setter Property="Margin" Value="0,0,0,16" />
+    </Style>
+
+</ResourceDictionary>

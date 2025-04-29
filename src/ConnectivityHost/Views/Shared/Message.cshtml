@@ -1,0 +1,9 @@
+﻿@using Exchange
+@model string
+
+<div style="margin:50px">
+    <img src="@(AppSettings.Current().DcSignalHost)/Content/fotec.png" width="200" height="90"/>
+    <h2>
+        @Html.Raw(Model)
+    </h2>
+</div>

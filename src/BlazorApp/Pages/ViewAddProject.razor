@@ -1,0 +1,76 @@
+@page "/ViewAddProject"
+@page "/ViewAddProject/{Id:int}"
+
+@inherits ProjectRazorPage<VmAddOrEditProject>
+
+@if (ViewModel != null!)
+{
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenCard>
+                <RadzenStack Orientation="Orientation.Vertical">
+                    <RadzenLabel class="labelstyeditheader">Stammdaten</RadzenLabel>
+                    <BxEntry ShowFrame="false" Entry="@ViewModel.EntryName"></BxEntry>
+                    <BxEntry ShowFrame="false" Entry="@ViewModel.EntryDescription"></BxEntry>
+                    <BxEntry ShowFrame="false" Entry="@ViewModel.EntryAdditionalProperties"></BxEntry>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenCard>
+                <RadzenStack>
+                    <RadzenLabel class="labelstyeditheader">Mögliche Messwerte</RadzenLabel>
+                    <BxPicker PickerInstance="@ViewModel.PickerGateways" @bind-SelectedItem="@ViewModel.PickerGateways.SelectedItem"></BxPicker>
+                    <BxPicker PickerInstance="@ViewModel.PickerIotDevices" @bind-SelectedItem="@ViewModel.PickerIotDevices.SelectedItem"></BxPicker>
+                    <BxCollectionView AllowPaging="true" PageSize="8" Collection="@ViewModel.ItemsForAdd" TItem="UiMeasurements">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="UiMeasurements">
+                                <Template Context="data">
+                                    <RadzenStack>
+                                        <RadzenLabel>@data.Name</RadzenLabel>
+                                        <RadzenLabel>@data.Details</RadzenLabel>
+                                    </RadzenStack>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="UiMeasurements" Width="70px">
+                                <Template Context="data">
+                                    <BxButton BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdAddItem" ExecutionParameter="data"></BxButton>
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </BxCollectionView>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenCard>
+                <RadzenStack>
+                    <RadzenLabel class="labelstyeditheader">Aktuelle Messwerte</RadzenLabel>
+                    <BxCollectionView AllowPaging="true" PageSize="8" Collection="@ViewModel.ItemsCurrent" TItem="UiMeasurements">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="UiMeasurements">
+                                <Template Context="data">
+                                    <RadzenStack>
+                                        <RadzenLabel>@data.Name</RadzenLabel>
+                                        <RadzenLabel>@data.Details</RadzenLabel>
+                                    </RadzenStack>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="UiMeasurements" Width="70px">
+                                <Template Context="data">
+                                    <BxButton BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdDeleteItem" ExecutionParameter="data"></BxButton>
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </BxCollectionView>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+}
+
+
+@code
+{
+
+}

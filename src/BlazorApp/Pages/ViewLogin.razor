@@ -1,0 +1,35 @@
+@page "/ViewLogin"
+@page "/ViewLogin/{Id:int}"
+
+@inherits ProjectRazorPage<VmLogin>
+
+@if (ViewModel != null!)
+{
+    <div style="margin: 0 auto; max-width: 600px;">
+        <RadzenCard>
+            <RadzenStack Orientation="Orientation.Vertical" Gap="15px">
+                <div>
+                    <BxEntry ShowFrame="false" Identifier="@nameof(ViewModel.EntryLoginName)" Entry="@ViewModel.EntryLoginName"></BxEntry>
+                </div>
+                @if (ViewModel.IsPasswordEntryVisible)
+                {
+                    <div>
+                        <BxEntry ShowFrame="false" Entry="@ViewModel.EntryPassword" IsPassword="true"></BxEntry>
+                    </div>
+                }
+
+                @if (ViewModel.IsForgotPasswordVisible)
+                {
+                    <BxButton BissCommand="ViewModel.CmdForgotPassword"></BxButton>
+                }
+                @if (ViewModel.IsResendAccessLinkVisible)
+                {
+                    <BxButton BissCommand="ViewModel.CmdResendAccessLink"></BxButton>
+                }
+
+
+                <BxButton class="w-100" BissCommand="@ViewModel.CmdLogin"></BxButton>
+            </RadzenStack>
+        </RadzenCard>
+    </div>
+}

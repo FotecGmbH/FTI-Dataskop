@@ -1,0 +1,262 @@
+﻿@page "/ViewUsers"
+@page "/ViewUsers/{Id:int}"
+@attribute [Authorize]
+@using Biss.Apps.Blazor.BissRadzenControls
+@using Biss.Apps.Blazor.Enum
+@inherits ProjectRazorPage<VmUsers>
+
+<RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H2">Benutzer</RadzenText>
+
+@if (ViewModel != null!)
+{
+    @if (!ViewModel.Users.Any())
+    {
+        <p>Keine Einträge vorhanden</p>
+    }
+    else
+    {
+        <RadzenDataGrid PageSize="10"
+                        AllowPaging="true"
+                        AllowSorting="true"
+                        AllowColumnResize="true"
+                        AllowAlternatingRows="true"
+                        AllowVirtualization="true"
+                        AllowFiltering="true"
+                        FilterMode="FilterMode.Simple"
+                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                        LogicalFilterOperator="LogicalFilterOperator.Or"
+                        PagerHorizontalAlign="HorizontalAlign.Left"
+                        Data="@ViewModel.Users"
+                        ExpandMode="DataGridExpandMode.Single"
+                        TItem="ExUserModel"
+                        Count="@ViewModel.Users.Count">
+            <Template Context="user">
+                @if (user.TblDevices.Count == 0)
+                {
+                    <RadzenCard class="text-center">
+                        <h1>Keine Geräte vorhanden</h1>
+                    </RadzenCard>
+                }
+                else
+                {
+                    <RadzenDataGrid Data="@user.TblDevices"
+                                    TItem="TableDevice"
+                                    AllowFiltering="true"
+                                    FilterMode="FilterMode.Simple"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                                    PagerHorizontalAlign="HorizontalAlign.Left"
+                                    Count="@user.TblDevices.Count">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="TableDevice"
+                                                  Property="@nameof(TableDevice.Id)"
+                                                  Title="Id"
+                                                  Width="50px"
+                                                  Filterable="true"
+                                                  TextAlign="TextAlign.Center"/>
+
+                            <RadzenDataGridColumn TItem="TableDevice"
+                                                  Property="@nameof(TableDevice.IsAppRunning)"
+                                                  Title="Aktiv"
+                                                  Width="50px"
+                                                  TextAlign="TextAlign.Center">
+                                <Template Context="device">
+                                    @if (ViewModel.DcConnection == null!)
+                                    {
+                                        <CheckComponent Value="false"></CheckComponent>
+                                    }
+                                    else
+                                    {
+                                        <CheckComponent Value="@(ViewModel.DcConnection.GetClients().Any(t => t.DeviceId == device.Id))"></CheckComponent>
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+
+                            <RadzenDataGridColumn TItem="TableDevice"
+                                                  Property="@nameof(TableDevice.AppVersion)"
+                                                  Title="Version"
+                                                  Width="50px"
+                                                  TextAlign="TextAlign.Center"/>
+
+                            <RadzenDataGridColumn TItem="TableDevice"
+                                                  Property="@nameof(TableDevice.DeviceName)"
+                                                  Title="Gerätename"
+                                                  TextAlign="TextAlign.Center"/>
+
+                            <RadzenDataGridColumn TItem="TableDevice"
+                                                  Property="@nameof(TableDevice.LastLogin)"
+                                                  Title="Wann eingeloggt:"
+                                                  TextAlign="TextAlign.Center">
+                                <Template Context="device">
+                                    @if (device.LastLogin == DateTime.MinValue)
+                                    {
+                                        <p>Noch nie</p>
+                                    }
+                                    else
+                                    {
+                                        @device.LastLogin
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+
+                            <RadzenDataGridColumn TItem="TableDevice"
+                                                  Property="@nameof(TableDevice.Plattform)"
+                                                  Title="Platform"
+                                                  TextAlign="TextAlign.Center"/>
+
+                            <RadzenDataGridColumn TItem="TableDevice"
+                                                  Property="@nameof(TableDevice.DeviceType)"
+                                                  Title="Typ"
+                                                  TextAlign="TextAlign.Center"/>
+
+                            <RadzenDataGridColumn TItem="TableDevice"
+                                                  Property=""
+                                                  Title="Aktionen"
+                                                  Width="125px"
+                                                  TextAlign="TextAlign.Center">
+                                <Template Context="device">
+                                    <RadzenRow JustifyContent="JustifyContent.End" AlignItems="AlignItems.Center" Gap="5px">
+                                        @if (ViewModel.IsRunning(device))
+                                        {
+                                            <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdDcNotifyDevice" ExecuteParameter="device" ButtonStyle="ButtonStyle.Warning"></BxButton>
+                                        }
+                                        @if (ViewModel.IsPushAvailable(device))
+                                        {
+                                            <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdPushNotifyDevice" ExecuteParameter="device" ButtonStyle="ButtonStyle.Primary"></BxButton>
+                                        }
+                                        <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdDeleteDevice" ExecuteParameter="device" ButtonStyle="ButtonStyle.Danger"></BxButton>
+                                    </RadzenRow>
+                                </Template>
+
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                }
+            </Template>
+            <Columns>
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.Id)"
+                                      Title="Id"
+                                      Width="50px"
+                                      Sortable="true"
+                                      TextAlign="TextAlign.Center"/>
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.LoginName)"
+                                      Title="Login-Name"
+                                      Width="115px"
+                                      Sortable="true"
+                                      TextAlign="TextAlign.Center"/>
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.DisplayName)"
+                                      Title="Name"
+                                      Sortable="true"
+                                      TextAlign="TextAlign.Center"/>
+
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.CreatedAtUtc)"
+                                      Title="Erstellt am"
+                                      Width="141px"
+                                      Sortable="true"
+                                      TextAlign="TextAlign.Center"/>
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.LastLogin)"
+                                      Title="zuletzt Online"
+                                      Sortable="true"
+                                      Width="141px"
+                                      TextAlign="TextAlign.Center"/>
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.AgbVersion)"
+                                      Title="AGB"
+                                      Sortable="true"
+                                      Width="70px"
+                                      TextAlign="TextAlign.Center"/>
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.DefaultLanguage)"
+                                      Title="Sprache"
+                                      Sortable="true"
+                                      TextAlign="TextAlign.Center"/>
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.IsAdmin)"
+                                      Title="Admin"
+                                      Sortable="true"
+                                      Width="80px"
+                                      TextAlign="TextAlign.Center">
+                    <Template Context="user">
+                        <CheckComponent Command="@ViewModel.CmdChangeAdmin" Parameter="user" Value="@user.IsAdmin"></CheckComponent>
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.LoginConfirmed)"
+                                      Title="Login bestätigt"
+                                      Sortable="true"
+                                      Width="130px"
+                                      TextAlign="TextAlign.Center">
+                    <Template Context="user">
+                        <CheckComponent Command="@ViewModel.CmdChangeLoginConfirmed" Parameter="user" Value="@user.LoginConfirmed"></CheckComponent>
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property="@nameof(ExUserModel.Locked)"
+                                      Title="Gesperrt"
+                                      Sortable="true"
+                                      Width="90px"
+                                      TextAlign="TextAlign.Center">
+                    <Template Context="user">
+                        <CheckComponent Command="@ViewModel.CmdChangeLocking" Parameter="user" Value="@user.Locked"></CheckComponent>
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="ExUserModel"
+                                      Property=""
+                                      TextAlign="TextAlign.Center"
+                                      Width="231px"
+                                      Title="Aktionen">
+                    <Template Context="user">
+                        <RadzenRow JustifyContent="JustifyContent.End" AlignItems="AlignItems.Center" Gap="5px">
+                            @if (user.TblDevices.Any(x => ViewModel.IsRunning(x)))
+                            {
+                                <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdDcNotifyUser" ExecuteParameter="user" ButtonStyle="ButtonStyle.Warning"></BxButton>
+                            }
+                            @if (user.TblDevices.Any(x => ViewModel.IsPushAvailable(x)))
+                            {
+                                <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdPushNotifyUser" ExecuteParameter="user" ButtonStyle="ButtonStyle.Primary"></BxButton>
+                            }
+                            <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdSendMail" ExecuteParameter="user" ButtonStyle="ButtonStyle.Success"></BxButton>
+                            <BxButton BxButtonType="@EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdDeleteUser" ExecuteParameter="user" ButtonStyle="ButtonStyle.Danger"></BxButton>
+                        </RadzenRow>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    }
+}
+
+@code{
+
+    /// <summary>
+    ///     Entspricht VM OnLoaded, wird einmal pro View aufgerufen
+    /// </summary>
+    /// <returns></returns>
+    protected override Task OnViewLoaded()
+    {
+        if (ViewModel != null)
+        {
+            ViewModel.DcConnection = DcConnections;
+            ViewModel.RazorEngine = Razorengine;
+            ViewModel.ServerRemoteCalls = ServerRemoteCalls;
+            ViewModel.ServerRemoteCalls.SetClientConnection(ViewModel.DcConnection);
+        }
+
+        return base.OnViewLoaded();
+    }
+
+}

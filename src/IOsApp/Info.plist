@@ -1,0 +1,90 @@
+﻿<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"[]>
+<plist version="1.0">
+	<dict>
+		<key>UIAppFonts</key>
+		<array>
+			<string>Fonts/GLYPHICONS.ttf</string>
+			<string>Fonts/Montserrat-Bold.ttf</string>
+			<string>Fonts/Montserrat-Regular.ttf</string>
+			<string>Fonts/SourceSansPro-Regular.ttf</string>
+			<string>Fonts/Montserrat-SemiBold.ttf</string>
+			<string>Fonts/tw-cen-mt.ttf</string>
+			<string>Fonts/StreamLineIcons.ttf</string>
+			<string>Fonts/StreamLineIconsBold.ttf</string>
+			<string>Fonts/StreamLineIconsLight.ttf</string>
+		</array>
+		<key>CFBundleLocalizations</key>
+		<array>
+			<string>en</string>
+			<string>de</string>
+		</array>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>de</string>
+		<key>UIDeviceFamily</key>
+		<array>
+			<integer>1</integer>
+			<integer>2</integer>
+		</array>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UISupportedInterfaceOrientations~ipad</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>MinimumOSVersion</key>
+		<string>11.0</string>
+		<key>CFBundleVersion</key>
+		<string>1.2.8</string>
+		<key>CFBundleIconFiles</key>
+		<array />
+		<key>CFBundleShortVersionString</key>
+		<string>1.2.8</string>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>fetch</string>
+			<string>remote-notification</string>
+		</array>
+		<key>MobileCenterAppDelegateForwarderEnabled</key>
+		<integer>1</integer>
+		<key>NSCameraUsageDescription</key>
+		<string>This app needs access to the camera to take photos.</string>
+		<key>NSCalendarsUsageDescription</key>
+		<string>This app needs access to the calender.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>This app needs access to photos.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>This app needs access to microphone.</string>
+		<key>XSAppIconAssets</key>
+		<string>Media.xcassets/AppIcons.appiconset</string>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>Can we use your location</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>We are using your location</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>We are using your location</string>
+		<key>UIRequiresFullScreen</key>
+		<true />
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false />
+		<key>UIStatusBarStyle</key>
+		<string>UIStatusBarStyleLightContent</string>
+		<key>UIMainStoryboardFile</key>
+		<string>LaunchScreen</string>
+		<key>CFBundleDisplayName</key>
+		<string>BDA Dev</string>
+		<key>CFBundleIdentifier</key>
+		<string>at.fotec.biss.dataskop.dev</string>
+		<key>FirebaseAppDelegateProxyEnabled</key>
+		<false />
+	</dict>
+</plist>

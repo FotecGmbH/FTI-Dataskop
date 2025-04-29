@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.{{ViewName}}"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    d:DataContext="{x:Static viewmodels:{{ViewModelName}}.DesignInstance}"
+    x:TypeArguments="viewmodels:{{ViewModelName}}"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+	<bcc:PageControl>
+
+		<!--#region View Content-->
+
+		<StackLayout
+			HorizontalOptions="CenterAndExpand"
+			VerticalOptions="CenterAndExpand">
+			<Label Text="{{ViewName}}" />
+			<Label Text="{{ViewModelName}}" />
+			<bcc:BxButton BissCommand="{Binding CmdTest}" />
+		</StackLayout>
+
+		<!--#endregion-->
+
+	</bcc:PageControl>
+  </view:BissContentPage>

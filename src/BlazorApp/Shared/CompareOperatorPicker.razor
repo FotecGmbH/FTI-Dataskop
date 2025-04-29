@@ -1,0 +1,32 @@
+﻿@using BDA.Common.Exchange.Enum
+<div style="@($"width: {GetPickerWidth()}")">
+    <BxPicker PickerInstance="VmPicker" @bind-SelectedItem="VmPicker.SelectedItem"/>
+</div>
+
+@code {
+
+    /// <summary>
+    ///     VmPicker
+    /// </summary>
+    [Parameter]
+    [EditorRequired]
+    public VmPicker<EnumCompareOperator> VmPicker { get; set; } = new(nameof(VmPicker));
+
+    private string GetPickerWidth()
+    {
+        var keys = VmPicker.AllItems.Select(x => x.Key).ToArray();
+
+        if (keys.Contains(EnumCompareOperator.NotContains))
+        {
+            return "120px";
+        }
+
+        if (keys.Contains(EnumCompareOperator.Contains))
+        {
+            return "100px";
+        }
+
+        return "70px";
+    }
+
+}

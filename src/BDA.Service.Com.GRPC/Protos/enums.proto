@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option csharp_namespace = "BDA.Service.Com.GRPC.Protos";
+
+
+// Enum to define the types of the companies.
+enum ProtoEnumCompanyTypes{
+	COMPANY_TYPE_NOCOMPANY = 0;
+	COMPANY_TYPE_PUBLIC = 1;
+	COMPANY_TYPE_PRIVATE = 2;
+}
+
+// Enum to define user rights.
+enum ProtoEnumUserRights{
+	USER_RIGHT_READ = 0;
+	USER_RIGHT_READWRITE = 1;
+}
+
+// Position source of a measurment result.
+enum ProtoEnumPositionSource{
+	POSITION_SOURCE_PC = 0;
+	POSITION_SOURCE_INTERNET = 1;
+	POSITION_SOURCE_MODUL = 2;
+	POSITION_SOURCE_LBS = 3;
+}
+
+// Value types of a measurment result.
+enum ProtoEnumValueTypes{
+	VALUE_TYPE_NUMBER = 0;
+	VALUE_TYPE_DATA = 1; // For byte arrays.
+	VALUE_TYPE_TEXT = 2; // For strings.
+	VALUE_TYPE_IMAGE = 3; // In a form of byte array.
+	VALUE_TYPE_BIT = 4;
+}
+
+
+// Value types of a measurment result.
+enum ProtoEnumDownstreamTypes{
+	DOWNSTREAM_TYPE_NONE = 0;
+	DOWNSTREAM_TYPE_VIRTUAL = 1;
+	DOWNSTREAM_TYPE_I2C = 2;
+	DOWNSTREAM_TYPE_SPI = 3;
+	DOWNSTREAM_TYPE_MODBUS = 4;
+	DOWNSTREAM_TYPE_PI = 5;
+	DOWNSTREAM_TYPE_ARDUINO = 6;
+	DOWNSTREAM_TYPE_ESP32 = 7;
+	DOWNSTREAM_TYPE_DOTNET = 8;
+	DOWNSTREAM_TYPE_CUSTOM = 9;
+}
+

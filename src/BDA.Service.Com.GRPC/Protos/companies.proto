@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+import "Protos/common.proto";
+import "Protos/enums.proto";
+import "Protos/projects.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BDA.Service.Com.GRPC.Protos";
+
+
+
+
+service Company{
+	rpc GetCompanyByID (ProtoRequestByID) returns (ProtoCompanyResult);
+	rpc GetAllCompanies (Empty) returns (ProtoCompaniesResult);
+	rpc GetProjectsOfCompanyByID (ProtoRequestByID) returns (ProtoProjectsResult);
+	rpc GetTreeview (Empty) returns (ProtoTreeViewResult);
+}
+
+// Company
+message ProtoCompanyModel{
+	int64 CompanyID = 1;
+	ProtoInformation Information = 2;
+	ProtoEnumCompanyTypes CompanyType = 3;
+	repeated ProtoProjectModel Projects = 4;
+}
+
+// Basic company  model
+message ProtoBasicCompanyModel{
+	ProtoBasicInformation Information = 1;
+	repeated ProtoBasicProjectModel Projects = 2;
+}
+
+// Result of one company plus a general result
+message ProtoCompanyResult{
+	ProtoResult Result = 1;
+	ProtoCompanyModel Company = 2;
+}
+
+// Result of multiple company plus a general result
+message ProtoCompaniesResult{
+	ProtoResult Result = 1;
+	repeated ProtoCompanyModel Companies = 2;
+}
+
+// Response of the tree view request.
+message ProtoTreeViewResult{
+	ProtoResult Result = 1;
+	repeated ProtoBasicCompanyModel Companies = 2;
+}
+
+// Result of multiple projects plus a general result
+message ProtoProjectsResult{
+	ProtoResult Result = 1;
+	repeated ProtoProjectModel Projects = 2;
+}
+
+
+
+

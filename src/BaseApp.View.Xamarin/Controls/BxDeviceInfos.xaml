@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ContentView
+    x:Class="BaseApp.View.Xamarin.Controls.BxDeviceInfos"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="BxDeviceInfosBase">
+    <ContentView.Content>
+
+        <StackLayout BindingContext="{x:Reference BxDeviceInfosBase}">
+
+            <!--#region Status Informationen-->
+
+            <Label Style="{StaticResource LabelStyEditHeader}" Text="Statusinformationen" />
+            <Frame Margin="8,0,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="8" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Status:" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Text="{Binding ExCommonInfo.Info}" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="Firmware Gerät:" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Text="{Binding ExCommonInfo.FirmwareversionDevice}" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="Firmware aktuell:" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Text="{Binding ExCommonInfo.FirmwareversionService}" />
+
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Text="Config Version Gerät:" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Text="{Binding ExCommonInfo.ConfigversionDevice}" />
+
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Text="Config Version aktuell:" />
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        Text="{Binding ExCommonInfo.ConfigversionServer}" />
+
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Text="Device Secret:" />
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="2"
+                        Text="{Binding ExCommonInfo.Secret}" />
+
+                </Grid>
+            </Frame>
+
+            <!--#endregion-->
+
+        </StackLayout>
+
+
+    </ContentView.Content>
+</ContentView>

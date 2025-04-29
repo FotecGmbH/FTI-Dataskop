@@ -1,0 +1,168 @@
+﻿@page "/ViewMain"
+@page "/ViewMain/{Id:int}"
+@using BaseApp.Connectivity
+@inherits ProjectRazorPage<VmMain>
+
+@if (ViewModel != null)
+{
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" class="mb-3">
+        <RadzenLabel>Firma:</RadzenLabel>
+        <RadzenDropDown Data="@ViewModel.Dc.DcExCompanies" Placeholder="Wähle Firma aus" TValue="DcListTypeCompany" @bind-Value="@ViewModel.Dc.DcExCompanies.SelectedItem">
+            <Template>
+                @((context as DcListTypeCompany)!.Data.Information.Name)
+            </Template>
+            <ValueTemplate>
+                @((context as DcListTypeCompany)!.Data.Information.Name)
+            </ValueTemplate>
+        </RadzenDropDown>
+        <BxButton BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="@ViewModel.CmdEditCompanies" ExecutionParameter="@ViewModel.Dc.DcExCompanies.SelectedItem"></BxButton>
+    </RadzenStack>
+
+    <RadzenRow>
+        <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+            <RadzenCard class="p-3 h-100">
+                <RadzenDataGrid RowSelect="ProjectCallback" SelectionMode="DataGridSelectionMode.Single" TItem="DcListTypeProject" @ref="_radGridProjects" Data="@ViewModel.UiProjects" AllowPaging="true" PageSize="10">
+                    <HeaderTemplate>
+                        <RadzenStack Orientation="Orientation.Vertical" Gap="5px">
+                            <b>Projekte</b>
+                            @* ReSharper disable ConditionalAccessQualifierIsNonNullableAccordingToAPIContract *@
+                            @if (ViewModel?.Dc?.DcExCompanies?.SelectedItem != null!)
+                            {
+                                <small>@ViewModel.Dc.DcExCompanies.SelectedItem?.Data.Information.Name</small>
+                            }
+                            @* ReSharper restore ConditionalAccessQualifierIsNonNullableAccordingToAPIContract *@
+                        </RadzenStack>
+
+                    </HeaderTemplate>
+                    <Columns>
+                        <RadzenDataGridColumn TItem="DcListTypeProject">
+                            <Template Context="context">
+                                <RadzenStack Orientation="Orientation.Vertical">
+                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                        <RadzenLabel>
+                                            <b>@context.Data.Information.Name</b>
+                                        </RadzenLabel>
+                                        <RadzenLabel>@context.Index</RadzenLabel>
+                                    </RadzenStack>
+                                    <RadzenLabel>@context.Data.Information.Description</RadzenLabel>
+                                </RadzenStack>
+
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+            <RadzenCard class="p-3">
+                <RadzenDataGrid RowSelect="MeasurementCallback" SelectionMode="DataGridSelectionMode.Single" TItem="DcListTypeMeasurementDefinition" @ref="_radGridMeasurements" Data="@ViewModel.UiMeasurement" AllowPaging="true" PageSize="10">
+                    <HeaderTemplate>
+                        <RadzenStack Orientation="Orientation.Vertical" Gap="5px">
+                            <b>Messwerte</b>
+                            <small>@ViewModel?.InfoSelectedMeasurements</small>
+                        </RadzenStack>
+                    </HeaderTemplate>
+                    <Columns>
+                        <RadzenDataGridColumn TItem="DcListTypeMeasurementDefinition">
+                            <Template Context="context">
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenStack Orientation="Orientation.Vertical">
+                                        <RadzenLabel>@context.Data.Information.UiNameShort</RadzenLabel>
+                                        <RadzenLabel>@context.Data.CurrentValue.SourceInfo</RadzenLabel>
+                                    </RadzenStack>
+                                    <RadzenStack Orientation="Orientation.Vertical">
+                                        <RadzenLabel>@context.Index</RadzenLabel>
+                                        <RadzenLabel>@context.Data.CurrentValue.ValueCounter</RadzenLabel>
+                                    </RadzenStack>
+                                    <RadzenLabel>
+                                        <b>@context.Data.CurrentValue.Value</b>
+                                    </RadzenLabel>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenCard>
+        </RadzenColumn>
+        @if (ViewModel.ShowDetails)
+        {
+            <RadzenColumn>
+                <RadzenCard class="p-3">
+                    <RadzenStack Orientation="Orientation.Vertical" Gap="10px">
+                        <RadzenStack Orientation="Orientation.Vertical" Gap="5px">
+                            @{
+                                var item = ViewModel.SelectedMeasurementDefinition;
+                            }
+                            @if (item != null!)
+                            {
+                                <b>Details zum Messwert</b>
+                                @item.Data.CurrentValue.SourceInfo
+                                <hr/>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Id</RadzenLabel>
+                                    <RadzenLabel>@item.Index</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Name</RadzenLabel>
+                                    <RadzenLabel>@item.Data.Information.Name</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Beschreibung</RadzenLabel>
+                                    <RadzenLabel>@item.Data.Information.Description</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Value Type</RadzenLabel>
+                                    <RadzenLabel>@item.Data.ValueType</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Sensor Type</RadzenLabel>
+                                    <RadzenLabel>@item.Data.DownstreamType</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Messintervall</RadzenLabel>
+                                    <RadzenLabel>@item.Data.MeasurementInterval</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Config</RadzenLabel>
+                                    <RadzenLabel class="config-text">@item.Data.AdditionalConfiguration</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Attribute</RadzenLabel>
+                                    <RadzenLabel>@item.Data.AdditionalProperties</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Messung Id</RadzenLabel>
+                                    <RadzenLabel>@item.Data.CurrentValue.Id</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Messungen Gesamt</RadzenLabel>
+                                    <RadzenLabel>@item.Data.CurrentValue.ValueCounter</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Messungen Zeitpunkt</RadzenLabel>
+                                    <RadzenLabel>@item.Data.CurrentValue.TimeStamp.ToString("dd.MM.yyyy hh:mm")</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Messungen Ort</RadzenLabel>
+                                    <RadzenLabel>@item.Data.CurrentValue.Location.GoogleString</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Messungen Höhe</RadzenLabel>
+                                    <RadzenLabel>@item.Data.CurrentValue.Location.Altitude</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Quelle Info</RadzenLabel>
+                                    <RadzenLabel>@item.Data.CurrentValue.SourceInfo</RadzenLabel>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel>Wert</RadzenLabel>
+                                    <RadzenLabel>@item.Data.CurrentValue.Value</RadzenLabel>
+                                </RadzenStack>
+                            }
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenColumn>
+        }
+    </RadzenRow>
+}

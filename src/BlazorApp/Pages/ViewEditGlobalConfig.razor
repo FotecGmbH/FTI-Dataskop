@@ -1,0 +1,114 @@
+﻿@page "/ViewEditGlobalConfig"
+@page "/ViewEditGlobalConfig/{Id:int}"
+
+@inherits ProjectRazorPage<VmEditGlobalConfig>
+
+@if (ViewModel != null!)
+{
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenStack>
+                <RadzenCard>
+                    <RadzenStack>
+                        <RadzenLabel class="labelstyeditheader">Stammdaten</RadzenLabel>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenLabel class="labelstyeditdescription adjustlabel">Art der Konfiguration:</RadzenLabel>
+                            <BxPicker PickerInstance="@ViewModel.PickerConfigType" @bind-SelectedItem="@ViewModel.PickerConfigType.SelectedItem"></BxPicker>
+                        </RadzenStack>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel!.EntryName!.Title</RadzenLabel>
+                            <BxEntry ShowFrame="false" Entry="ViewModel.EntryName"></BxEntry>
+                        </RadzenStack>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryDescription.Title</RadzenLabel>
+                            <BxEntry ShowFrame="false" Entry="ViewModel.EntryDescription"></BxEntry>
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenCard>
+                @if (ViewModel.PickerConfigType.SelectedItem != null!)
+                {
+                    @if (ViewModel.TtnVisible && ViewModel.EntryTtnZone != null && ViewModel.EntryTtnApiKey != null && ViewModel.EntryTtnAppId != null && ViewModel.EntryTtnUserId != null)
+                    {
+                        <RadzenCard>
+                            <RadzenStack>
+                                <RadzenLabel class="labelstyeditheader">@ViewModel.PickerConfigType.SelectedItem.Description</RadzenLabel>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryTtnZone.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="ViewModel.EntryTtnZone"></BxEntry>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryTtnApiKey.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="ViewModel.EntryTtnApiKey"></BxEntry>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryTtnAppId.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="ViewModel.EntryTtnAppId"></BxEntry>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryTtnUserId.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="ViewModel.EntryTtnUserId"></BxEntry>
+                                </RadzenStack>
+                            </RadzenStack>
+                        </RadzenCard>
+                    }
+
+                    @if (ViewModel.DreiVisible && ViewModel.EntryDreiLoginName != null && ViewModel.EntryDreiPassword != null)
+                    {
+                        <RadzenCard>
+                            <RadzenStack>
+                                <RadzenLabel class="labelstyeditheader">@ViewModel.PickerConfigType.SelectedItem.Description</RadzenLabel>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryDreiLoginName.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="ViewModel.EntryDreiLoginName"></BxEntry>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryDreiPassword.Title</RadzenLabel>
+                                    <BxEntry IsPassword="true" ShowFrame="false" Entry="ViewModel.EntryDreiPassword"></BxEntry>
+                                </RadzenStack>
+                            </RadzenStack>
+                        </RadzenCard>
+                    }
+
+                    @if (ViewModel.MicrotronicsVisible && ViewModel.EntryMicrotronicsUserName != null && ViewModel.EntryMicrotronicsPassword != null && ViewModel.EntryMicrotronicsBackendDomain != null)
+                    {
+                        <RadzenCard>
+                            <RadzenStack>
+                                <RadzenLabel class="labelstyeditheader">@ViewModel.PickerConfigType.SelectedItem.Description</RadzenLabel>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryMicrotronicsUserName.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="ViewModel.EntryMicrotronicsUserName"></BxEntry>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryMicrotronicsPassword.Title</RadzenLabel>
+                                    <BxEntry IsPassword="true" ShowFrame="false" Entry="ViewModel.EntryMicrotronicsPassword"></BxEntry>
+                                </RadzenStack>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryMicrotronicsBackendDomain.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="ViewModel.EntryMicrotronicsBackendDomain"></BxEntry>
+                                </RadzenStack>
+                            </RadzenStack>
+                        </RadzenCard>
+                    }
+                }
+                <!--<RadzenCard>
+                    <RadzenStack>
+                        <RadzenLabel class="labelstyeditheader">Zusätzliche (dynamische) Daten</RadzenLabel>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenLabel class="labelstyeditdescription">Dynamische Konfiguration:</RadzenLabel>
+                            <RadzenLabel class="config-text">@ViewModel.Data.AdditionalConfiguration</RadzenLabel>
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenCard>-->
+            </RadzenStack>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenStack>
+                <BxInformation DbId="@ViewModel.Data.Id" ExInformation="@ViewModel.Data.Information"></BxInformation>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+}
+
+@code {
+
+}

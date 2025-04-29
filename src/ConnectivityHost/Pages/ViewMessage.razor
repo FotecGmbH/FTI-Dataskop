@@ -1,0 +1,37 @@
+﻿@page "/ViewMessage"
+@page "/ViewMessage/{Id:int}"
+
+@attribute [Authorize]
+
+@inherits ProjectRazorPage<VmMessage>
+
+@* ReSharper disable CSharpWarnings::CS0618 *@
+@* ReSharper disable once Razor.UnresolvedComponent *@
+@if (ViewModel != null!)
+{
+    <EntryControl Entry="@ViewModel.TitleEntry"></EntryControl>
+    <EntryControl Entry="@ViewModel.MessageEntry"></EntryControl>
+    <BxButton Item="ViewModel.CmdSend"/>
+}
+@* ReSharper restore CSharpWarnings::CS0618 *@
+
+@code {
+
+    /// <summary>
+    ///     Entspricht VM OnLoaded, wird einmal pro View aufgerufen
+    /// </summary>
+    /// <returns></returns>
+    protected override Task OnViewLoaded()
+    {
+        if (ViewModel != null)
+        {
+            ViewModel.DcConnections = DcConnections;
+            ViewModel.ServerRemoteCalls = ServerRemoteCalls;
+            ViewModel.ServerRemoteCalls.SetClientConnection(ViewModel.DcConnections);
+            ViewModel.RazorEngine = Razorengine;
+        }
+
+        return base.OnViewLoaded();
+    }
+
+}

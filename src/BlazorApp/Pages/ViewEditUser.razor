@@ -1,0 +1,30 @@
+@page "/ViewEditUser"
+@page "/ViewEditUser/{Id:int}"
+@inherits ProjectRazorPage<VmEditUser>
+
+@if (ViewModel != null)
+{
+    <RadzenRow>
+        <RadzenColumn Size="12" SizeLG="3" class="text-center">
+            @if (ViewModel.CurrentImage != null!)
+            {
+                <BxImage style="max-width: 300px;" Round="true" ImageSource="@ConverterImage.Convert(ViewModel.CurrentImage)"></BxImage>
+            }
+            else
+            {
+                <BxImage Style="max-width: 300px;" Round="true" ImageSource="@ConverterImage.Convert(EnumEmbeddedImage.DefaultUserImage_png)"></BxImage>
+            }
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeLG="9">
+            <h2>@ViewModel.Dc.DcExUser.Data.LoginName</h2>
+
+
+            <div class="mb-3">
+                <BxEntry Identifier="txtFirstName" ShowFrame="false" Entry="ViewModel.EntryFirstName"></BxEntry>
+            </div>
+            <div class="mb-3">
+                <BxEntry Identifier="txtLastName" ShowFrame="false" Entry="ViewModel.EntryLastName"></BxEntry>
+            </div>
+        </RadzenColumn>
+    </RadzenRow>
+}

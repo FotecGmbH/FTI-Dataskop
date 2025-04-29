@@ -1,0 +1,245 @@
+﻿@page "/ViewEditMeasurementDefinition"
+@page "/ViewEditMeasurementDefinition/{Id:int}"
+@using BDA.Common.Exchange.Configs.NewValueNotifications
+@using BDA.Common.Exchange.Enum
+@using Biss.Dc.Client
+@inherits ProjectRazorPage<VmEditMeasurementDefinition>
+
+@if (ViewModel != null!)
+{
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenStack>
+                <RadzenCard>
+                    <RadzenStack>
+                        <RadzenLabel class="labelstyeditheader">Stammdaten</RadzenLabel>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                            @if (ViewModel.EntryName != null!)
+                            {
+                                <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryName.Title</RadzenLabel>
+                                <BxEntry ShowFrame="false" Entry="@ViewModel.EntryName"></BxEntry>
+                            }
+                        </RadzenStack>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                            @if (ViewModel.EntryDescription != null!)
+                            {
+                                <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryDescription.Title</RadzenLabel>
+                                <BxEntry ShowFrame="false" Entry="@ViewModel.EntryDescription"></BxEntry>
+                            }
+                        </RadzenStack>
+
+                        @if (ViewModel.IotDevice.Data.IsIotDotnetSensor)
+                        {
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                <RadzenLabel class="labelstyeditdescription adjustlabel">Messintervall von Iot-Device:</RadzenLabel>
+                                <RadzenSwitch @bind-Value="ViewModel.IotMeasurementInterval"></RadzenSwitch>
+                            </RadzenStack>
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                @if (ViewModel.EntryMeasurmentInterval != null!)
+                                {
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryMeasurmentInterval.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="@ViewModel.EntryMeasurmentInterval"></BxEntry>
+                                }
+                            </RadzenStack>
+                        }
+
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenLabel class="labelstyeditdescription adjustlabel">Sensorenanbindung:</RadzenLabel>
+                            <BxPicker PickerInstance="@ViewModel.PickerDownstreamType" @bind-SelectedItem="@ViewModel.PickerDownstreamType.SelectedItem"></BxPicker>
+                        </RadzenStack>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenLabel class="labelstyeditdescription adjustlabel">Verfügbare Typen:</RadzenLabel>
+                            <BxPicker PickerInstance="@ViewModel.PickerPredefinedMeasurements" @bind-SelectedItem="@ViewModel.PickerPredefinedMeasurements.SelectedItem"></BxPicker>
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenCard>
+
+                @if (ViewModel.ShowVirtualFloat)
+                {
+                    <RadzenCard>
+                        <RadzenStack>
+                            <RadzenLabel class="labelstyeditheader">Zufällige Zahl</RadzenLabel>
+                            @if (ViewModel.IotDevice.Data.IsIotDotnetSensor)
+                            {
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    @if (ViewModel.EntryVirtPosLat != null!)
+                                    {
+                                        <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryVirtPosLat.Title</RadzenLabel>
+                                        <BxEntry ShowFrame="false" Entry="@ViewModel.EntryVirtPosLat"></BxEntry>
+                                    }
+                                </RadzenStack>
+
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    @if (ViewModel.EntryVirtPosLon != null!)
+                                    {
+                                        <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryVirtPosLon.Title</RadzenLabel>
+                                        <BxEntry ShowFrame="false" Entry="@ViewModel.EntryVirtPosLon"></BxEntry>
+                                    }
+                                </RadzenStack>
+
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                    @if (ViewModel.EntryVirtPosRadius != null!)
+                                    {
+                                        <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryVirtPosRadius.Title</RadzenLabel>
+                                        <BxEntry ShowFrame="false" Entry="@ViewModel.EntryVirtPosRadius"></BxEntry>
+                                    }
+                                </RadzenStack>
+                            }
+
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                @if (ViewModel.EntryVirtFloatMin != null!)
+                                {
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryVirtFloatMin.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="@ViewModel.EntryVirtFloatMin"></BxEntry>
+                                }
+                            </RadzenStack>
+
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                @if (ViewModel.EntryVirtFloatMin != null!)
+                                {
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryVirtFloatMax.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="@ViewModel.EntryVirtFloatMax"></BxEntry>
+                                }
+                            </RadzenStack>
+                        </RadzenStack>
+                    </RadzenCard>
+                }
+
+                @if (ViewModel.ShowCustomOpCode)
+                {
+                    <RadzenCard>
+                        <RadzenStack>
+                            <RadzenLabel class="labelstyeditheader">Eigener OP - Code für State-Machine</RadzenLabel>
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                @if (ViewModel.EntryCustomOpCode != null!)
+                                {
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryCustomOpCode.Title</RadzenLabel>
+                                    <BxEntry ShowFrame="false" Entry="@ViewModel.EntryCustomOpCode"></BxEntry>
+                                }
+                            </RadzenStack>
+                        </RadzenStack>
+                    </RadzenCard>
+                }
+
+                <RadzenCard>
+                    <RadzenStack>
+                        <RadzenLabel class="labelstyeditheader">Rückgabewert des Messwerts</RadzenLabel>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenLabel class="labelstyeditdescription adjustlabel">BDA Typ:</RadzenLabel>
+                            @if (ViewModel.CanValuePickerChanged)
+                            {
+                                <BxPicker PickerInstance="@ViewModel.PickerValueType" @bind-SelectedItem="@ViewModel.PickerValueType.SelectedItem"></BxPicker>
+                            }
+                            else
+                            {
+                                @if (ViewModel.PickerValueType.SelectedItem != null!)
+                                {
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.PickerValueType.SelectedItem.Description</RadzenLabel>
+                                }
+                            }
+                        </RadzenStack>
+
+                        @if (ViewModel.ShowEditPickerRawValueTypes)
+                        {
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                <RadzenLabel class="labelstyeditdescription adjustlabel">Datentyp Sensor:</RadzenLabel>
+                                @if (ViewModel.CanEditPickerRawValueTypes)
+                                {
+                                    <BxPicker PickerInstance="@ViewModel.PickerRawValueTypes" @bind-SelectedItem="@ViewModel.PickerRawValueTypes.SelectedItem"></BxPicker>
+                                }
+                                else
+                                {
+                                    @if (ViewModel.PickerRawValueTypes.SelectedItem != null!)
+                                    {
+                                        <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.PickerRawValueTypes.SelectedItem.Description</RadzenLabel>
+                                    }
+                                }
+                            </RadzenStack>
+                        }
+
+                        @if (ViewModel.ShowCanEditRawValueByteCount)
+                        {
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                <RadzenLabel class="labelstyeditdescription adjustlabel">Byte Anzahl:</RadzenLabel>
+                                @if (ViewModel.CanEditPickerRawValueTypes)
+                                {
+                                    <BxEntry Entry="ViewModel.EntryRawValueByteCount" ShowFrame="false"></BxEntry>
+                                }
+                                else
+                                {
+                                    <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.ConfigBase.Base.RawValueDefinition.ByteCount</RadzenLabel>
+                                }
+                            </RadzenStack>
+                        }
+                    </RadzenStack>
+                </RadzenCard>
+
+                <RadzenCard>
+                    <RadzenStack>
+                        <RadzenLabel class="labelstyeditheader">Zusätzliche (dynamische) Daten</RadzenLabel>
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                            @if (ViewModel.EntryName != null!)
+                            {
+                                <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryAdditionalProperties.Title</RadzenLabel>
+                                <BxEntry ShowFrame="false" Entry="@ViewModel.EntryAdditionalProperties"></BxEntry>
+                            }
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenStack>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenStack>
+                <BxInformation DbId="ViewModel.DcListDataPoint.Index" ExInformation="ViewModel.Data.Information"></BxInformation>
+                <RadzenCard>
+                    <RadzenStack>
+                        <RadzenLabel class="labelstyeditheader">Dynamische Konfiguration</RadzenLabel>
+                        <RadzenLabel>@ViewModel.Data.AdditionalConfiguration</RadzenLabel>
+                        <RadzenLabel class="labelstyeditheader">State Machine Bytes</RadzenLabel>
+                        <RadzenLabel>@ViewModel.StateMachineBytes</RadzenLabel>
+                    </RadzenStack>
+                </RadzenCard>
+
+                <RadzenCard>
+                    <RadzenStack>
+                        <RadzenLabel class="labelstyeditheader">Benachrichtigungen</RadzenLabel>
+                        <BxButton Variant="Variant.Text"
+                                  BxButtonType="EnumBxButtonType.JustGlyph"
+                                  BissCommand="@ViewModel.Dc.DcExNewValueNotifications.CmdAddItem"/>
+                        <BxCollectionView Collection="ViewModel.Dc.DcExNewValueNotifications" TItem="DcListDataPoint<ExNewValueNotification>">
+                            <Columns>
+                                <RadzenDataGridColumn Title="Typ"
+                                                      TItem="DcListDataPoint<ExNewValueNotification>"
+                                                      Property='@($"{nameof(DcListDataPoint<ExNewValueNotification>.Data)}.{nameof(DcListDataPoint<ExNewValueNotification>.Data.NewValueNotificationType)}")'>
+                                    <Template Context="data">
+                                        <RadzenText Text="@data.Data.NewValueNotificationType.GetDisplayName()"/>
+                                    </Template>
+                                </RadzenDataGridColumn>
+
+                                <RadzenDataGridColumn TItem="DcListDataPoint<ExNewValueNotification>" Width="120px">
+                                    <Template Context="data">
+                                        <RadzenStack Orientation="Orientation.Horizontal" Gap="10px">
+                                            <BxButton Variant="Variant.Text"
+                                                      BxButtonType="EnumBxButtonType.JustGlyph"
+                                                      BissCommand="ViewModel.Dc.DcExNewValueNotifications.CmdEditItem"
+                                                      ExecutionParameter="data"/>
+                                            <BxButton Variant="Variant.Text"
+                                                      ButtonStyle="ButtonStyle.Danger"
+                                                      BxButtonType="EnumBxButtonType.JustGlyph"
+                                                      BissCommand="ViewModel.Dc.DcExNewValueNotifications.CmdRemoveItem"
+                                                      ExecutionParameter="data"/>
+                                        </RadzenStack>
+                                    </Template>
+                                </RadzenDataGridColumn>
+                            </Columns>
+                        </BxCollectionView>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+}
+
+@code {
+
+}

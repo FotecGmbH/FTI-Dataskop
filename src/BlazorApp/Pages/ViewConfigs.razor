@@ -1,0 +1,111 @@
+@page "/ViewConfigs"
+@page "/ViewConfigs/{Id:int}"
+
+@inherits ProjectRazorPage<VmConfigs>
+
+@if (ViewModel != null!)
+{
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenStack>
+                <RadzenLabel>TTN Iot-Gerät Konfiguration</RadzenLabel>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                    <RadzenLabel>TTN Firmen-Account:</RadzenLabel>
+                    <BxPicker PickerInstance="@ViewModel.PickerCopanyConfigs" @bind-SelectedItem="@ViewModel.PickerCopanyConfigs.SelectedItem"></BxPicker>
+                </RadzenStack>
+
+                @if (ViewModel.TtnVisible)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>@ViewModel.EntryTtnDeviceId.Title</RadzenLabel>
+                        <BxEntry Entry="ViewModel.EntryTtnDeviceId"></BxEntry>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>@ViewModel.EntryTtnDescription.Title</RadzenLabel>
+                        <BxEntry Entry="@ViewModel.EntryTtnDescription"></BxEntry>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>DevEUI automatisch generieren</RadzenLabel>
+                        <RadzenSwitch @bind-Value="@ViewModel.GenerateDevEui"></RadzenSwitch>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>@ViewModel.EntryTtnDevEui.Title</RadzenLabel>
+                        <BxEntry Entry="ViewModel.EntryTtnDevEui" Disabled="@ViewModel.GenerateDevEui"></BxEntry>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>AppEUI automatisch generieren</RadzenLabel>
+                        <RadzenSwitch @bind-Value="@ViewModel.GenerateAppEui"></RadzenSwitch>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>@ViewModel.EntryTtnAppEui.Title</RadzenLabel>
+                        <BxEntry Entry="ViewModel.EntryTtnAppEui" Disabled="@ViewModel.GenerateAppEui"></BxEntry>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>AppKey automatisch generieren</RadzenLabel>
+                        <RadzenSwitch @bind-Value="@ViewModel.GenerateAppKey"></RadzenSwitch>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>@ViewModel.EntryTtnAppKey.Title</RadzenLabel>
+                        <BxEntry Entry="ViewModel.EntryTtnAppKey" Disabled="@ViewModel.GenerateAppKey"></BxEntry>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>Join über OTAA:</RadzenLabel>
+                        <RadzenSwitch @bind-Value="@ViewModel.Ttn.SupportsJoin"></RadzenSwitch>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>Device automatisch auf TTN anlegen:</RadzenLabel>
+                        <RadzenSwitch @bind-Value="@ViewModel.Ttn.CreateDeviceOnTtn"></RadzenSwitch>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>Lorawanversion:</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerEnumLorawanVersion" @bind-SelectedItem="@ViewModel.PickerEnumLorawanVersion.SelectedItem"></BxPicker>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>Physikalische Lora Version:</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerEnumLorawanPhysicalVersion" @bind-SelectedItem="@ViewModel.PickerEnumLorawanPhysicalVersion.SelectedItem"></BxPicker>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>Lora Frequency-Plan:</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerEnumLorawanFrequencyPlanId" @bind-SelectedItem="@ViewModel.PickerEnumLorawanFrequencyPlanId.SelectedItem"></BxPicker>
+                    </RadzenStack>
+                }
+                @if (ViewModel.DreiVisible)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>@ViewModel.EntryDreiDeviceId.Title</RadzenLabel>
+                        <BxEntry Entry="ViewModel.EntryDreiDeviceId"></BxEntry>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>@ViewModel.EntryDreiDevEui.Title</RadzenLabel>
+                        <BxEntry Entry="ViewModel.EntryDreiDevEui"></BxEntry>
+                    </RadzenStack>
+                }
+                @if (ViewModel.MicrotronicsVisible)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>Microtronics Customer Id:</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerMicrotronicsCustomers" @bind-SelectedItem="@ViewModel.PickerMicrotronicsCustomers.SelectedItem"></BxPicker>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>Microtronics Site Id:</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerMicrotronicsSites" @bind-SelectedItem="@ViewModel.PickerMicrotronicsSites.SelectedItem"></BxPicker>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>Site Configuration (default config0):</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerMicrotronicsConfigs" @bind-SelectedItem="@ViewModel.PickerMicrotronicsConfigs.SelectedItem"></BxPicker>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenLabel>Site HistDataConfiguration (default histdata0)</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerMicrotronicsHistDataConfigs" @bind-SelectedItem="@ViewModel.PickerMicrotronicsHistDataConfigs.SelectedItem"></BxPicker>
+                    </RadzenStack>
+                }
+            </RadzenStack>
+        </RadzenColumn>
+        <!--<RadzenColumn>
+            <RadzenStack>
+                <RadzenLabel>Dynamische Konfiguration</RadzenLabel>
+                <RadzenLabel>@ViewModel.AdditionalConfiguration</RadzenLabel>
+            </RadzenStack>
+        </RadzenColumn>-->
+    </RadzenRow>
+}

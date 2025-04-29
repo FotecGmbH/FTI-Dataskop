@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ReSharper disable once Xaml.RedundantNamespaceAlias -->
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewSettings"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bc="clr-namespace:BaseApp.View.Xamarin.Controls;assembly=BaseApp.View.Xamarin"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:bcm="http://biss.schemas.com/markupextensions"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    d:DataContext="{x:Static viewmodels:VmSettings.DesignInstance}"
+    x:TypeArguments="viewmodels:VmSettings"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+        <ScrollView Margin="8,0">
+            <StackLayout>
+                <Frame>
+                    <StackLayout>
+
+                        <!--#region Theme-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="24" />
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                FontSize="28"
+                                Style="{bcm:Sty LabelStyGlyph}"
+                                Text="{x:Static resources:Glyphs.Monitor_exchange_arrow}" />
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Text="{bcm:Translate ResViewSettings.LblTheme}"
+                                VerticalOptions="End" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{bcm:Sty LabelStyDetail}"
+                                Text="{bcm:Translate ResViewSettings.LblChooseTheme}"
+                                VerticalOptions="Start" />
+
+                            <bcc:BxPicker
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="3"
+                                ObservableCollectionSelectable="{Binding ThemePicker}" />
+
+                            <BoxView
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                Style="{bcm:Sty BoxViewStySeperator}" />
+
+                        </Grid>
+
+                        <!--#endregion-->
+
+                        <!--#region Push-->
+                        <Grid IsVisible="{Binding ShowPushSettings}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="24" />
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                FontSize="28"
+                                Style="{bcm:Sty LabelStyGlyph}"
+                                Text="{x:Static resources:Glyphs.Send_email_1}" />
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Text="{bcm:Translate ResViewSettings.LblPush}"
+                                VerticalOptions="End" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{bcm:Sty LabelStyDetail}"
+                                Text="{bcm:Translate ResViewSettings.LblPushSettings}"
+                                VerticalOptions="Start" />
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="3"
+                                FontSize="28"
+                                Style="{bcm:Sty LabelStyGlyph}"
+                                Text="{x:Static resources:Glyphs.Arrow_thick_right_3}" />
+
+                            <BoxView
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                BackgroundColor="Transparent">
+                                <BoxView.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CmdSettingsPush}" />
+                                </BoxView.GestureRecognizers>
+                            </BoxView>
+
+                            <BoxView
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                Style="{bcm:Sty BoxViewStySeperator}" />
+
+                        </Grid>
+
+                        <!--#endregion-->
+
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

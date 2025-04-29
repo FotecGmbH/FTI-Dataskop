@@ -1,0 +1,173 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<!-- Package Infos -->
+		<Product>BDA</Product>
+		<Description>BDA Forschungsprojekt</Description>
+		<Company>FOTEC Forschungs- und Technologietransfer GmbH</Company>
+		<Copyright>(C) 2009-2022 FOTEC Forschungs- und Technologietransfer GmbH</Copyright>
+		<Authors>FOTEC BISS Developers</Authors>
+		<PackageProjectUrl>https://www.fotec.at</PackageProjectUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>BISS</PackageTags>
+		<Version>1.2.8</Version>
+		<PackageIcon>nugetImage.png</PackageIcon>
+		<NeutralLanguage>en</NeutralLanguage>
+		<PackageReleaseNotes>In Readme.md</PackageReleaseNotes>
+		<!-- Projekt Einstellungen -->
+		<Nullable>Enable</Nullable>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+		<EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+		<RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+		<RunAnalyzers>true</RunAnalyzers>
+		<!-- Build Einstellungen -->
+		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+		<SignAssembly>false</SignAssembly>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageCopyToOutput>true</PackageCopyToOutput>
+		<NoWarn>NU1701;NU1702;NU5104;AD0001</NoWarn>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<RepositoryUrl>https://dev.azure.com/fotec/FTI-Dataskop/_git/Dataskop-Dsp</RepositoryUrl>
+		<!-- Code Generator -->
+		<BissAppsSourceGeneratorEnableDebug>false</BissAppsSourceGeneratorEnableDebug>
+		<BissAppsViewGeneratorDisable>true</BissAppsViewGeneratorDisable>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="Controllers\**" />
+		<Content Remove="Controllers\**" />
+		<EmbeddedResource Remove="Controllers\**" />
+		<None Remove="Controllers\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
+		<PackageReference Include="Biss" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps.Blazor" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps.Generator" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps.Service.Connectivity" Version="8.3.2" />
+		<PackageReference Include="Biss.Apps.Service.Push" Version="8.3.2" />
+		<PackageReference Include="Biss.Core.Logging.Events" Version="8.3.2" />
+		<PackageReference Include="Biss.Dc.Transport.Server.SignalR" Version="8.3.2" />
+		<PackageReference Include="ChartJs.Blazor.Fork" Version="2.0.2" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.45.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.23.0" />
+		<PackageReference Include="Microsoft.AspNetCore" Version="2.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.23.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.23.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.1" />
+		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.8.0" />
+		<PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="8.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="MQTTnet" Version="4.3.3.952" />
+		<PackageReference Include="starkbank-ecdsa" Version="1.3.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="System.Formats.Asn1" Version="9.0.4" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.0.2" />
+		<PackageReference Include="System.Text.Json" Version="9.0.4" />
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+		<PackageReference Include="Xam.Plugin.Media" Version="6.0.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\BDA.Service.Com.MQTT\BDA.Service.Com.MQTT.csproj" />
+		<ProjectReference Include="..\BDA.Service.Com.NewValueNotification\BDA.Service.Com.NewValueNotification.csproj" />
+		<ProjectReference Include="..\BDA.Service.Encryption\BDA.Service.Encryption.csproj" />
+		<ProjectReference Include="..\Database.Postgres.Migration\Database.Postgres.Migration.csproj" />
+		<ProjectReference Include="..\Database\Database.csproj" />
+		<ProjectReference Include="..\BDA.Service.AppConnectivity\BDA.Service.AppConnectivity.csproj" />
+		<ProjectReference Include="..\BDA.Service.Com.GRPC\BDA.Service.Com.GRPC.csproj" />
+		<ProjectReference Include="..\BDA.Service.Com.Rest\BDA.Service.Com.Rest.csproj" />
+		<ProjectReference Include="..\BDA.Service.TriggerAgent\BDA.Service.TriggerAgent.csproj" />
+		<ProjectReference Include="..\BDA.Common.Exchange\BDA.Common.Exchange.csproj" />
+		<ProjectReference Include="..\Exchange\Exchange.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Remove="compilerconfig.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="compilerconfig.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<AdditionalFiles Include="BaseApp\Templates\RazorView.sbntxt" BissAppsTemplateDestinationPath="Pages\"
+		                 BissAppsTemplateType="Razor" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Properties\" />
+		<Folder Include="wwwroot\bib\" />
+		<Folder Include="BaseApp\Templates\" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="wwwroot\css\streamline\demo-files\demo.js" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Update="Views\EMail\EmailPasswordChanged.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="Views\EMail\EmailPasswordReset.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="Views\EMail\EmailVerification.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="Views\EMail\_EMailBase.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="Views\Shared\EMail.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="Views\Shared\Message.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\favicon.ico">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\EMail\_EMailBase.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+		<_ContentIncludedByDefault Remove="Views\EMail\EmailNotificationTest.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\EMail\EmailPasswordChanged.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\EMail\EmailPasswordReset.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\EMail\EmailVerification.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\EMail\_EMailBase.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Shared\EMail.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\EMail\EmailNotificationTest.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\EMail\EmailPasswordChanged.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\EMail\EmailPasswordReset.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\EMail\EmailVerification.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Shared\EMail.cshtml" />
+	</ItemGroup>
+</Project>

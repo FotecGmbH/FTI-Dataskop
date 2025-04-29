@@ -1,0 +1,21 @@
+@page "/ViewInfo"
+@page "/ViewInfo/{Id:int}"
+@inherits ProjectRazorPage<VmInfo>
+
+@if (ViewModel != null!)
+{
+    <RadzenStack JustifyContent="JustifyContent.Center">
+        <RadzenLabel class="labelstyeditheader">BDA - Tool</RadzenLabel>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+            <BxImage style="height: 150px;" ImageSource="@ConverterImage.Convert(EnumEmbeddedImage.Fhsp_png)"></BxImage>
+            <BxImage style="height: 150px;" ImageSource="@ConverterImage.Convert(EnumEmbeddedImage.Fotec_png)"></BxImage>
+            <BxImage style="height: 150px;" ImageSource="@ConverterImage.Convert(EnumEmbeddedImage.Imc_png)"></BxImage>
+            <BxImage style="height: 150px;" ImageSource="@ConverterImage.Convert(EnumEmbeddedImage.Duk_png)"></BxImage>
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
+            <BxImage style="height: 150px; width:150px;" ImageSource="@ConverterImage.Convert(EnumEmbeddedImage.Dataskop_png)"></BxImage>
+        </RadzenStack>
+        <RadzenLabel class="labelstyeditheader">Version:</RadzenLabel>
+        <RadzenLabel class="labelstyeditheader">@ViewModel.CurrentSettings.AppVersion</RadzenLabel>
+    </RadzenStack>
+}

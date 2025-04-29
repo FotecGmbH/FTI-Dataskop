@@ -1,0 +1,40 @@
+﻿## Comments are lines which start with '#'
+## Blank lines are ignored.
+
+## Build Settings für Textdatei: "AndroidEnvironment"
+
+## LOGCAT Settings
+## Controls which additional information Xamarin.Android will log to adb logcat. It is a comma-separated string (,), containing one of the following values:
+## all: Print out all messages. This is seldom a good idea, as it includes lref messages. -> Das ist der default wert.
+## assembly: Print out .apk and assembly parsing messages.
+## gc: Print out GC-related messages.
+## gref: Print out JNI Global Reference messages.
+## lref: Print out JNI Local Reference messages
+debug.mono.log=gc
+
+## MONO Settings
+## Clear out a Mono environment variable to decrease logging
+## MONO_LOG_LEVEL:
+## debug
+## info
+## message
+## warning
+## critical
+## error
+MONO_LOG_LEVEL=error
+
+## FILTER Settings
+## Ohne diese Option ändert sich nichts an der Ausgabe
+## Filters:
+## “asm” - The assembly loader
+## “dll” - The native library (pinvoke) loader
+## “cfg” - The configuration file loader
+## “all” - Display all messages regardless of type -> Das ist der default Wert
+## “type” - Type load information
+## “gc” - Garbage collector information
+MONO_LOG_MASK=gc
+
+## Weitere Informationen:
+## https://www.mono-project.com/docs/advanced/runtime/logging-runtime-events/
+## https://labs.f-secure.com/blog/debugging-released-xamarin-android-applications/
+## https://stackoverflow.com/a/26768870

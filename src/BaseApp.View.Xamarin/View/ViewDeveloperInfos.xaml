@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewDeveloperInfos"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="http://biss.schemas.com/corecontrols"
+    xmlns:bcm="http://biss.schemas.com/markupextensions"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    d:DataContext="{x:Static viewmodels:VmDeveloperInfos.DesignInstance}"
+    x:TypeArguments="viewmodels:VmDeveloperInfos"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+        <ScrollView>
+            <StackLayout>
+                <StackLayout.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="0" />
+                        <On Platform="Android" Value="0" />
+                        <On Platform="WPF" Value="0,0,36,0" />
+                    </OnPlatform>
+                </StackLayout.Margin>
+
+                <!--#region Allgemein-->
+                <bcc:BxCollapseView HeaderSubTitle="Allgemeine Infos zur App" HeaderTitle="Allgemein">
+                    <StackLayout Margin="12,0,0,0">
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="App Version" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding CurrentSettings.AppVersion}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="Branch" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding CurrentSettings.BranchName}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="App Identifier" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding CurrentSettings.PackageName}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="User Push Tags" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding Dc.DcExUser.Data.PushTags}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="Device Push Token" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding Dc.DcExDeviceInfo.Data.DeviceToken}"
+                            TextColor="DodgerBlue" />
+
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+
+                    </StackLayout>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Connectivity-->
+                <bcc:BxCollapseView HeaderSubTitle="Infos zur Connectivity und DC" HeaderTitle="Connectivity">
+                    <StackLayout Margin="12,0,0,0">
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="Verbindungsstatus" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding Dc.ConnectionState}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="DC Endpunkt" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding CurrentSettings.DcSignalHost}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="SA Endpunkt" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding CurrentSettings.SaApiHost}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="Device Id" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding Dc.CoreConnectionInfos.DeviceId}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="User Id" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding Dc.CoreConnectionInfos.UserId}"
+                            TextColor="DodgerBlue" />
+
+                    </StackLayout>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Links-->
+                <bcc:BxCollapseView HeaderSubTitle="Links zum Projekt" HeaderTitle="Links">
+                    <StackLayout>
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="Android APP" />
+                                <Label
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding CurrentSettings.DroidLink}"
+                                    TextColor="DodgerBlue" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
+                                <TapGestureRecognizer Command="{Binding CmdOpenLink}" CommandParameter="{Binding CurrentSettings.DroidLink}" />
+
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="iOS APP" />
+                                <Label
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding CurrentSettings.IosLink}"
+                                    TextColor="DodgerBlue" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CmdOpenLink}" CommandParameter="{Binding CurrentSettings.IosLink}" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="Windows APP" />
+                                <Label
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding CurrentSettings.WindowsLink}"
+                                    TextColor="DodgerBlue" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CmdOpenLink}" CommandParameter="{Binding CurrentSettings.WindowsLink}" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="Blazor APP" />
+                                <Label
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding CurrentSettings.BlazorLink}"
+                                    TextColor="DodgerBlue" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CmdOpenLink}" CommandParameter="{Binding CurrentSettings.BlazorLink}" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="iOS Telemtrie" />
+                                <Label
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding CurrentSettings.IosTelemetryLink}"
+                                    TextColor="DodgerBlue" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CmdOpenLink}" CommandParameter="{Binding CurrentSettings.IosTelemetryLink}" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="Android Telemtrie" />
+                                <Label
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding CurrentSettings.DroidTelemetryLink}"
+                                    TextColor="DodgerBlue" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CmdOpenLink}" CommandParameter="{Binding CurrentSettings.DroidTelemetryLink}" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="Blazor Telemtrie" />
+                                <Label
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding CurrentSettings.BlazorTelemetryLink}"
+                                    TextColor="DodgerBlue" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CmdOpenLink}" CommandParameter="{Binding CurrentSettings.BlazorTelemetryLink}" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="Azure Resourcen Gruppe" />
+                                <Label
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding CurrentSettings.AzureResourceLink}"
+                                    TextColor="DodgerBlue" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CmdOpenLink}" CommandParameter="{Binding CurrentSettings.AzureResourceLink}" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="Projekt in DevOps" />
+                                <Label
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding CurrentSettings.DevOpsLink}"
+                                    TextColor="DodgerBlue" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CmdOpenLink}" CommandParameter="{Binding CurrentSettings.DevOpsLink}" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+
+                    </StackLayout>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region DbSetting-->
+                <bcc:BxCollapseView
+                    HeaderSubTitle="Allgemeine Einstellungen in der DB"
+                    HeaderTitle="DbSettings"
+                    IsVisible="{Binding DbSettingsLoaded}">
+                    <StackLayout Margin="12,0,0,0">
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="App Version" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding Dc.DcExSettingsInDb.Data.CurrentAppVersionString}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="Min App Version" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding Dc.DcExSettingsInDb.Data.MinAppVersion}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="AGB Version" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding Dc.DcExSettingsInDb.Data.AgbString}"
+                            TextColor="DodgerBlue" />
+
+                        <BoxView Style="{bcm:Sty BoxViewStySeperator}" />
+                        <Label Text="Allgemeine Meldung" />
+                        <Label
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding Dc.DcExSettingsInDb.Data.CommonMessage}"
+                            TextColor="DodgerBlue" />
+
+                    </StackLayout>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+                <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
+                <!--#region CManager-->
+                <bcc:BxCollapseView HeaderSubTitle="CManager aktuelle Dev Infos" HeaderTitle="Component Manager">
+
+                    <StackLayout BindableLayout.ItemsSource="{Binding ComponentsDevInfos}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid d:DataContext="{x:Static viewmodels:VmDeveloperInfos.DesignInstanceComponentDevInfo}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <BoxView
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Style="{bcm:Sty BoxViewStySeperator}" />
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding ComponentName}" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding Description}"
+                                        TextColor="DodgerBlue" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding Info}"
+                                        TextColor="DodgerBlue" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Log-->
+                <Label
+                    Margin="0,8,0,4"
+                    HorizontalOptions="Center"
+                    Text="Log" />
+                <StackLayout BindableLayout.ItemsSource="{Binding Log}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Grid d:DataContext="{x:Static viewmodels:VmDeveloperInfos.DesignInstanceBissEventsLoggerEventArgs}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <BoxView
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Style="{bcm:Sty BoxViewStySeperator}" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    HorizontalOptions="End"
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding LogLevel}"
+                                    TextColor="{Binding LogLevel, Converter={StaticResource ConverterLogLevel}}" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding TimeStamp.TimeOfDay}" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Style="{bcm:Sty LabelStyDetail}"
+                                    Text="{Binding Message}"
+                                    TextColor="{Binding LogLevel, Converter={StaticResource ConverterLogLevel}}" />
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+                <!--#endregion-->
+
+            </StackLayout>
+
+        </ScrollView>
+
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

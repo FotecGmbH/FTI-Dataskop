@@ -1,0 +1,15 @@
+﻿<RadzenStack Orientation="@Orientation.Horizontal" JustifyContent="JustifyContent.SpaceAround" AlignItems="AlignItems.Center">
+    <CompareOperatorPicker VmPicker="VmPickerCompareNumberOperatorValue1"/>
+    <RadzenNumeric @bind-Value="@NewValueNotificationRule.ComparedValue1.CompareValue"/>
+    @if (NewValueNotificationRule.ComparedValue2 != null)
+    {
+        <RadzenText Text="und"/>
+        <CompareOperatorPicker VmPicker="VmPickerCompareNumberOperatorValue2"/>
+        <RadzenNumeric @bind-Value="@NewValueNotificationRule.ComparedValue2.CompareValue"/>
+        <BxButton BxButtonType="EnumBxButtonType.JustGlyph" ButtonStyle="ButtonStyle.Danger" BissCommand="CmdDeleteComparedValue"/>
+    }
+    else
+    {
+        <BxButton BxButtonType="EnumBxButtonType.JustGlyph" ButtonStyle="ButtonStyle.Success" BissCommand="CmdAddComparedValue"/>
+    }
+</RadzenStack>

@@ -1,0 +1,15 @@
+﻿<RadzenStack Orientation="@Orientation.Horizontal" JustifyContent="JustifyContent.SpaceAround" AlignItems="AlignItems.Center">
+
+    @foreach (var compareValue in NewValueNotificationRule.ComparedValues)
+    {
+        if (compareValue != NewValueNotificationRule.ComparedValues.First())
+        {
+            <RadzenText Text="und"/>
+        }
+
+        <CompareStringComponent CompareStringValue="compareValue"/>
+    }
+
+    <BxButton BxButtonType="EnumBxButtonType.JustGlyph" BissCommand="CmdAddCompareValue"/>
+
+</RadzenStack>

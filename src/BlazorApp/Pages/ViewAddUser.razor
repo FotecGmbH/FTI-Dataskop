@@ -1,0 +1,42 @@
+@page "/ViewAddUser"
+@page "/ViewAddUser/{Id:int}"
+
+@inherits ProjectRazorPage<VmAddUser>
+
+@if (ViewModel != null!)
+{
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenCard>
+                <RadzenStack>
+                    <RadzenLabel class="labelstyeditheader">Stammdaten</RadzenLabel>
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenLabel class="labelstyeditdescription adjustlabel">@ViewModel.EntryLoginName.Title</RadzenLabel>
+                        <BxEntry ShowFrame="false" Entry="@ViewModel.EntryLoginName" Disabled="@(!ViewModel.Data.CanEditLoginEMail)"></BxEntry>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenLabel class="labelstyeditdescription adjustlabel">Rolle des Benutzers:</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerUserRole" @bind-SelectedItem="@ViewModel.PickerUserRole.SelectedItem"></BxPicker>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenLabel class="labelstyeditdescription adjustlabel">Rechte des Benutzers:</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerUserRight" @bind-SelectedItem="@ViewModel.PickerUserRight.SelectedItem"></BxPicker>
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenCard>
+                <RadzenStack>
+                    <RadzenLabel class="labelstyeditheader">Info</RadzenLabel>
+                    <RadzenLabel>Falls der User bereits im System (andere Firma) bekannt ist wird dieser verwendet. Ein neuer User bekommt eine E-Mail mit seinen Zugangsdaten. Admins können alle Firmeneinstellungen und die gesamte Infrastuktur bearbeiten. User mit Bearbeitungsrecht können die gesamte Infrastruktur bearbeiten. User mit Leserecht können die Infrastuktur nur ansehen.</RadzenLabel>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+}
+
+@code
+{
+
+}

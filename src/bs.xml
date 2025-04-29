@@ -1,0 +1,372 @@
+<SetRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="bs.xsd">
+	<TargetDirectories>
+		<!--BDA.Common-->
+		<SetProject RootFolder="Exchange" CsSettings="Exchange" />
+		<SetProject RootFolder="BDA.Common.Exchange" />
+		<SetProject RootFolder="WebExchange" CsSettings="WebExchange"/>
+		<SetProject RootFolder="BDA.CliApp" />
+		<SetProject RootFolder="BDA.Common.ConfigMaker" />
+		<!--BDA.Service App-->
+		<SetProject RootFolder="BlazorApp" />
+		<SetProject RootFolder="AndroidApp" />
+		<SetProject RootFolder="IOsApp" />
+		<SetProject RootFolder="WpfApp" />
+		<SetProject RootFolder="BaseApp" />
+		<SetProject RootFolder="BaseApp.View.Xamarin" />
+		<!--BDA.Service Core -->
+		<SetProject RootFolder="ConnectivityHost" CommonFile="LaunchConnectivityHost"/>
+		<SetProject RootFolder="Database" />
+		<SetProject RootFolder="BDA.GatewayService" />
+		<SetProject RootFolder="BDA.Service.AppConnectivity" />
+		<SetProject RootFolder="BDA.Service.TriggerAgent" />
+		<SetProject RootFolder="BDA.Service.Com.Base" />
+		<SetProject RootFolder="BDA.Service.Com.Rest" />
+		<!--### BDA.Gateway-->
+		<SetProject RootFolder="BDA.Gateway.App" />
+		<SetProject RootFolder="BDA.Gateway.Core" />
+		<SetProject RootFolder="BDA.Gateway.Com.Base" />
+		<SetProject RootFolder="BDA.Gateway.Com.Serial" />
+		<SetProject RootFolder="BDA.Gateway.Com.Tcp" />
+		<SetProject RootFolder="BDA.Gateway.Com.Ttn" />
+		<SetProject RootFolder="BDA.Gateway.Com.IotInGateway" />
+		<!--### BDA.IotDevice-->
+		<SetProject RootFolder="BDA.IotDevice.App" />
+		<SetProject RootFolder="BDA.IotDevice.AppPi" />
+		<SetProject RootFolder="BDA.IotDevice.Core" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Downstream.Base" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Downstream.Modbus" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Downstream.I2C" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Downstream.DotNet" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Downstream.Pi" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Downstream.Virtual" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Upstream.Base" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Upstream.IotInGateway" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Upstream.Serial" />
+		<SetProject RootFolder="BDA.IotDevice.Com.Upstream.Tcp" />
+	</TargetDirectories>
+	<CsSettings>
+		<SetCsSetting FileName="AppSettings.cs" ForCsSettings="Exchange" Usings="Exchange.Interfaces Biss.Apps.Components Biss.Apps.Connectivity.Interfaces Biss.Apps.Connectivity.Sa Biss.Apps.Enum Biss.Apps.Interfaces Biss.Apps.Model Biss.Dc.Client Biss.Apps.Push.Interfaces" Interfaces="IAppSettings IAppSettingsNavigation IAppSettingsFiles IAppSettingConnectivity IAppSettingsPush IAppSettingsLinks" />
+		<SetCsSetting FileName="WebSettings.cs" ForCsSettings="WebExchange" Usings="Biss.Apps.Service.Push WebExchange.Interfaces" Interfaces="IWebSettingsAzureFiles IAppServiceSettingPush IAppSettingsDataBase IAppSettingsEMail IAppSettingsEncryption" />
+	</CsSettings>
+	<Properties>
+		<SetProp Description="Produktversion" DefaultValue="1.2.8">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/Version" />
+				<SetTarget TargetType="AssemblyInfo" Destinations="AssemblyVersion AssemblyFileVersion" />
+				<SetTarget TargetType="AndroidManifest" Destinations="manifest#android:versionName" />
+				<SetTarget TargetType="InfoPlist" Destinations="CFBundleVersion CFBundleShortVersionString" />
+				<SetTarget TargetType="CsSetting" Destinations="AppVersion" CsSettings="Exchange" />
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="beta" Value="1.2.8" />
+				<SetBranchValue BranchName="dev" Value="1.2.8" />
+			</BranchValues>
+		</SetProp>
+		<SetProp Description="BISS SDK Lizenz" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="License" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="SignalR für DC und Gateways" DefaultValue="https://localhost:5001">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="DcSignalHost" CsSettings="Exchange" />
+				<SetTarget TargetType="CommonFile" Destinations="Host"/>
+				<SetTarget TargetType="LaunchSettings" Destinations="iisSettings/iisExpress#applicationUrl profiles/ServerApp#applicationUrl" OnlyForProject="ConnectivityHost"/>
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="devforpublish" Value="https://localhost:5001">
+					<LocalOverrides>
+					</LocalOverrides>
+				</SetBranchValue>
+				<SetBranchValue BranchName="beta" Value="https://localhost:5001">
+					<LocalOverrides>
+					</LocalOverrides>
+				</SetBranchValue>
+				<SetBranchValue BranchName="dev" Value="https://localhost:5001">
+					<LocalOverrides>
+					</LocalOverrides>
+				</SetBranchValue>
+			</BranchValues>
+		</SetProp>
+		<SetProp Description="SA Host - REST" DefaultValue="https://localhost:5001">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="SaApiHost" CsSettings="Exchange" />
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="devforpublish" Value="https://localhost:5001">
+					<LocalOverrides>
+					</LocalOverrides>
+				</SetBranchValue>
+				<SetBranchValue BranchName="beta" Value="https://localhost:5001">
+					<LocalOverrides>
+					</LocalOverrides>
+				</SetBranchValue>
+				<SetBranchValue BranchName="dev" Value="https://localhost:5001">
+					<LocalOverrides>
+					</LocalOverrides>
+				</SetBranchValue>
+			</BranchValues>
+		</SetProp>
+		<SetProp Description="App mit User" DefaultValue="true">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="DcUseUser" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="App Name" DefaultValue="BDA">
+			<Targets>
+				<SetTarget TargetType="AndroidManifest" Destinations="manifest/application#android:label" />
+				<SetTarget TargetType="InfoPlist" Destinations="CFBundleDisplayName" />
+				<SetTarget TargetType="CsSetting" Destinations="AppName" CsSettings="Exchange" />
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="beta" Value="BDA Beta" />
+				<SetBranchValue BranchName="dev" Value="BDA Dev" />
+			</BranchValues>
+		</SetProp>
+		<SetProp Description="App Identifier" DefaultValue="at.fotec.biss.dataskop">
+			<Targets>
+				<SetTarget TargetType="AndroidManifest" Destinations="manifest#package" />
+				<SetTarget TargetType="InfoPlist" Destinations="CFBundleIdentifier" />
+				<SetTarget TargetType="CsSetting" Destinations="PackageName" CsSettings="Exchange" />
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="beta" Value="at.fotec.biss.dataskop.beta" />
+				<SetBranchValue BranchName="dev" Value="at.fotec.biss.dataskop.dev" />
+			</BranchValues>
+		</SetProp>
+		<SetProp Description="App Ordner auf Plattform" DefaultValue="DataskopFolder">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="ProjectWorkUserFolder" CsSettings="Exchange" />
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="beta" Value="DataskopFolderBeta" />
+				<SetBranchValue BranchName="dev" Value="DataskopFolderDev" />
+			</BranchValues>
+		</SetProp>
+		<SetProp Description="Push - Firebase Project Id - &lt;inheritdoc cref=&quot;IAppServiceSettingPush.PushProjectId&quot;/&gt;" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="PushProjectId" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Push - Firebase Service Account Id - &lt;inheritdoc cref=&quot;IAppServiceSettingPush.PushServiceAccountId&quot;/&gt;" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="PushServiceAccountId" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Push - Firebase Private Key Id - &lt;inheritdoc cref=&quot;IAppServiceSettingPush.PushPrivateKeyId&quot;/&gt;" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="PushPrivateKeyId " CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Push - Firebase Private Key - &lt;inheritdoc cref=&quot;IAppServiceSettingPush.PushPrivateKey&quot;/&gt;" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="PushPrivateKey " CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Id des Notification-Channels" DefaultValue="DefaultId">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="NotificationChannelId" CsSettings="Exchange"/>
+			</Targets>
+		</SetProp>
+		<SetProp Description="Name des Notification-Channels" DefaultValue="PushBenachrichtigungen">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="NotificationChannelName" CsSettings="Exchange"/>
+			</Targets>
+		</SetProp>
+		<SetProp Description="Standard Topic" DefaultValue="DEFAULT">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="DefaultTopic" CsSettings="Exchange"/>
+			</Targets>
+		</SetProp>
+		<SetProp Description="Datenbank" DefaultValue="dbdataskop">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="ConnectionStringDb" CsSettings="WebExchange" />
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="beta" Value="dbdataskopbeta" />
+				<SetBranchValue BranchName="dev" Value="dbdataskopdev" />
+			</BranchValues>
+		</SetProp>
+		<SetProp Description="Datenbank-Server" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="ConnectionStringDbServer" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Datenbank User" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="ConnectionStringUser" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Datenbank User Passwort" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="ConnectionStringUserPwd" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="PrivateKey f. Verschlüsselung" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="SymmetricEncryptionPrivateKey" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Connection string für den Blob" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="BlobConnectionString" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Container Name im Blob" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="BlobContainerName" CsSettings="WebExchange" />
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="dev" Value="TOENTER"/>
+				<SetBranchValue BranchName="beta" Value="TOENTER"/>
+			</BranchValues>		
+		</SetProp>
+		<SetProp Description="Cdn link oder public Bloblink für Filelink" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="CdnLink" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Als wer (E-Mail Adresse) wird gesendet (für Antworten)" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="SendEMailAs" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Welcher Name des Senders wird angezeigt" DefaultValue="BDA">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="SendEMailAsDisplayName" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Sendgrid Key (falls Sendgrid verwendet wird)" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="SendGridApiKey" CsSettings="WebExchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="In welchen Assembly befinden sich die Xamarin.Forms Views" DefaultValue="BaseApp.View.Xamarin">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="DefaultViewAssembly" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="In welchen Namespace befinden sich die Xamarin.Forms Views" DefaultValue="BaseApp.View.Xamarin.View.">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="DefaultViewNamespace" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="App Orientation" DefaultValue="EnumAppOrientation.Auto">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="AppOrientationOverride" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Produktinformationen" DefaultValue="BDA">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/Product" />
+				<SetTarget TargetType="AssemblyInfo" Destinations="AssemblyTitle AssemblyProduct" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Produktbeschreibung" DefaultValue="BDA Forschungsprojekt">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/Description" />
+				<SetTarget TargetType="AssemblyInfo" Destinations="AssemblyDescription" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Firmeninformationen" DefaultValue="FOTEC Forschungs- und Technologietransfer GmbH">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/Company" />
+				<SetTarget TargetType="AssemblyInfo" Destinations="AssemblyCompany" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Copyright Infos" DefaultValue="(C) 2009-2022 FOTEC Forschungs- und Technologietransfer GmbH">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/Copyright" />
+				<SetTarget TargetType="AssemblyInfo" Destinations="AssemblyCopyright AssemblyTrademark" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Author(en)" DefaultValue="FOTEC BISS Developers">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/Authors" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Öffentlicher Link zum Projekt" DefaultValue="https://www.fotec.at">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/PackageProjectUrl" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Typ des Repo" DefaultValue="git">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/RepositoryType" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Repository Url" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/RepositoryUrl" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Tags für das Repro/Projekt" DefaultValue="BISS">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/PackageTags" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Nuget Icon" DefaultValue="nugetImage.png">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/PackageIcon" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Changelog / Release Notes" DefaultValue="In Readme.md">
+			<Targets>
+				<SetTarget TargetType="CsProj" Destinations="Project/PropertyGroup/PackageReleaseNotes" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="App im Playstore" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="DroidLink" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="App im Appstore" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="IosLink" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="App im Windows Store" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="WindowsLink" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Deployte BlazorApp" DefaultValue="https://app.dataskop.at/">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="BlazorLink" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Link zum Appcenter iOS" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="IosTelemetryLink" CsSettings="Exchange" />
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="beta" Value="TOENTER" />
+				<SetBranchValue BranchName="dev" Value="TOENTER" />
+			</BranchValues>
+		</SetProp>
+		<SetProp Description="Link zum Appcenter Android" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="DroidTelemetryLink" CsSettings="Exchange" />
+			</Targets>
+			<BranchValues>
+				<SetBranchValue BranchName="beta" Value="TOENTER" />
+				<SetBranchValue BranchName="dev" Value="TOENTER" />
+			</BranchValues>
+		</SetProp>
+		<SetProp Description="Link zu Application Insights" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="BlazorTelemetryLink" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Link zu Portal.azure" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="AzureResourceLink" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+		<SetProp Description="Link zu Fotec DevOps" DefaultValue="TOENTER">
+			<Targets>
+				<SetTarget TargetType="CsSetting" Destinations="DevOpsLink" CsSettings="Exchange" />
+			</Targets>
+		</SetProp>
+	</Properties>
+</SetRoot>

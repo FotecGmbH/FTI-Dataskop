@@ -1,0 +1,245 @@
+@page "/ViewDeveloperInfos"
+@page "/ViewDeveloperInfos/{Id:int}"
+
+@inherits ProjectRazorPage<VmDeveloperInfos>
+
+<style type="text/css">
+    .console {
+        background: black;
+    }
+
+    .prompt {
+        display: inline-block;
+        width: 100px;
+    }
+
+    .prompt-t {
+        color: #d4c8c8;
+    }
+
+    .prompt-i {
+        color: green;
+    }
+
+    .prompt-w {
+        color: orange;
+    }
+
+    .date {
+        color: azure;
+    }
+
+    .prompt-e {
+        color: red;
+    }
+
+    .cmd {
+        color: white;
+        display: inline;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+</style>
+
+
+<RadzenCard>
+    <RadzenPanel AllowCollapse="true" Collapsed="true">
+        <HeaderTemplate>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="15px">
+                <h6 class="m-0">
+                    <b>Allgemein</b>
+                </h6>
+                <label>Allgemeine Infos zu App</label>
+            </RadzenStack>
+        </HeaderTemplate>
+        <ChildContent>
+            <div class="p-1 mt-2">
+                @* ReSharper disable once CSharpWarnings::CS8602 *@
+                <p>AppVersion: <RadzenBadge class="p-1">@ViewModel.CurrentSettings.AppVersion</RadzenBadge></p>
+                @* ReSharper disable once CSharpWarnings::CS8602 *@
+                <p>Branch: <RadzenBadge class="p-1">@ViewModel.CurrentSettings.BranchName</RadzenBadge></p>
+                @* ReSharper disable once CSharpWarnings::CS8602 *@
+                <p>App Identifier: <RadzenBadge class="p-1">@ViewModel.CurrentSettings.PackageName</RadzenBadge></p>
+            </div>
+        </ChildContent>
+    </RadzenPanel>
+</RadzenCard>
+<RadzenCard>
+    <RadzenPanel AllowCollapse="true" Collapsed="true">
+        <HeaderTemplate>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="15px">
+                <h6 class="m-0">
+                    <b>Connectivity</b>
+                </h6>
+                <label>Infos zur Connectivity und DC</label>
+            </RadzenStack>
+        </HeaderTemplate>
+        <ChildContent>
+            @* ReSharper disable once CSharpWarnings::CS8602 *@
+            <p>Verbindungsstatus: <RadzenBadge class="p-1">@ViewModel.Dc.ConnectionState</RadzenBadge></p>
+            <p>
+                DC Endpunkt:
+                @* ReSharper disable once CSharpWarnings::CS8602 *@
+                <a target="_blank" href="@ViewModel.CurrentSettings.DcSignalHost">
+                    <RadzenBadge class="p-1">@ViewModel.CurrentSettings.DcSignalHost</RadzenBadge>
+                </a>
+            </p>
+            <p>
+                SA Endpunkt:
+                <a target="_blank" href="@ViewModel.CurrentSettings.SaApiHost">
+                    <RadzenBadge class="p-1">@ViewModel.CurrentSettings.SaApiHost</RadzenBadge>
+                </a>
+            </p>
+            <p>Device Id: <RadzenBadge class="p-1">@ViewModel.Dc.CoreConnectionInfos.DeviceId</RadzenBadge></p>
+            <p>UserId: <RadzenBadge class="p-1">@ViewModel.Dc.CoreConnectionInfos.UserId</RadzenBadge></p>
+        </ChildContent>
+    </RadzenPanel>
+</RadzenCard>
+<RadzenCard>
+    <RadzenPanel AllowCollapse="true" Collapsed="true">
+        <HeaderTemplate>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="15px">
+                <h6 class="m-0">
+                    <b>Links</b>
+                </h6>
+                <label>Links zum Projekt</label>
+            </RadzenStack>
+        </HeaderTemplate>
+        <ChildContent>
+            <div class="p-1 mt-2">
+                <p>
+                    Android App:
+                    @* ReSharper disable once CSharpWarnings::CS8602 *@
+                    <a target="_blank" href="@ViewModel.CurrentSettings.DroidLink">
+                        <RadzenBadge class="p-1">@ViewModel.CurrentSettings.DroidLink</RadzenBadge>
+                    </a>
+                </p>
+                <p>
+                    iOS App:
+                    <a target="_blank" href="@ViewModel.CurrentSettings.IosLink">
+                        <RadzenBadge class="p-1">@ViewModel.CurrentSettings.IosLink</RadzenBadge>
+                    </a>
+                </p>
+                <p>
+                    Windows App:
+                    <a target="_blank" href="@ViewModel.CurrentSettings.WindowsLink">
+                        <RadzenBadge class="p-1">@ViewModel.CurrentSettings.WindowsLink</RadzenBadge>
+                    </a>
+                </p>
+                <p>
+                    Blazor App:
+                    <a target="_blank" href="@ViewModel.CurrentSettings.BlazorLink">
+                        <RadzenBadge class="p-1">@ViewModel.CurrentSettings.BlazorLink</RadzenBadge>
+                    </a>
+                </p>
+                <p>
+                    iOS Telemetrie:
+                    <a target="_blank" href="@ViewModel.CurrentSettings.IosTelemetryLink">
+                        <RadzenBadge class="p-1">@ViewModel.CurrentSettings.IosTelemetryLink</RadzenBadge>
+                    </a>
+                </p>
+                <p>
+                    Android Telemetrie:
+                    <a target="_blank" href="@ViewModel.CurrentSettings.DroidTelemetryLink">
+                        <RadzenBadge class="p-1">@ViewModel.CurrentSettings.DroidTelemetryLink</RadzenBadge>
+                    </a>
+                </p>
+                <p>
+                    Blazor Telemetrie:
+                    <a target="_blank" href="@ViewModel.CurrentSettings.BlazorTelemetryLink">
+                        <RadzenBadge class="p-1">@ViewModel.CurrentSettings.BlazorTelemetryLink</RadzenBadge>
+                    </a>
+                </p>
+                <p>
+                    DevOps:
+                    <a target="_blank" href="@ViewModel.CurrentSettings.DevOpsLink">
+                        <RadzenBadge class="p-1">@ViewModel.CurrentSettings.DevOpsLink</RadzenBadge>
+                    </a>
+                </p>
+                <p>
+                    Azure Ressource:
+                    <a target="_blank" href="@ViewModel.CurrentSettings.AzureResourceLink">
+                        <RadzenBadge class="p-1">@ViewModel.CurrentSettings.AzureResourceLink</RadzenBadge>
+                    </a>
+                </p>
+            </div>
+        </ChildContent>
+    </RadzenPanel>
+</RadzenCard>
+<RadzenCard>
+    <RadzenPanel AllowCollapse="true" Collapsed="true">
+        <HeaderTemplate>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="15px">
+                <h6 class="m-0">
+                    <b>DbSettings</b>
+                </h6>
+                <label>Allgemeine Einstellungen in der DB</label>
+            </RadzenStack>
+        </HeaderTemplate>
+        <ChildContent>
+            <div class="p-1 mt-2">
+                @* ReSharper disable once CSharpWarnings::CS8602 *@
+                <p>App Version: <RadzenBadge class="p-1">@ViewModel.Dc.DcExSettingsInDb.Data.CurrentAppVersionString</RadzenBadge></p>
+                @* ReSharper disable once CSharpWarnings::CS8602 *@
+                <p>Min App Version: <RadzenBadge class="p-1">@ViewModel.Dc.DcExSettingsInDb.Data.MinAppVersion</RadzenBadge></p>
+                @* ReSharper disable once CSharpWarnings::CS8602 *@
+                <p>AGB Version: <RadzenBadge class="p-1">@ViewModel.Dc.DcExSettingsInDb.Data.Agb</RadzenBadge></p>
+                @* ReSharper disable once CSharpWarnings::CS8602 *@
+                <p>Allgemeine Meldung: <RadzenBadge class="p-1">@ViewModel.Dc.DcExSettingsInDb.Data.CommonMessage</RadzenBadge></p>
+            </div>
+        </ChildContent>
+    </RadzenPanel>
+</RadzenCard>
+<RadzenCard>
+    <RadzenPanel AllowCollapse="true" Collapsed="true">
+        <HeaderTemplate>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="15px">
+                <h6 class="m-0">
+                    <b>Component Manager</b>
+                </h6>
+                <label>CManager aktuelle Dev Infos</label>
+            </RadzenStack>
+        </HeaderTemplate>
+        <ChildContent>
+            <div class="p-1 mt-2">
+                @* ReSharper disable once CSharpWarnings::CS8602 *@
+                @foreach (var devInfo in ViewModel.ComponentsDevInfos)
+                {
+                    <p>
+                        @devInfo.ComponentName <RadzenBadge BadgeStyle="BadgeStyle.Secondary">@devInfo.Description</RadzenBadge> <RadzenBadge class="p-1">@devInfo.Info</RadzenBadge>
+                    </p>
+                }
+            </div>
+        </ChildContent>
+    </RadzenPanel>
+</RadzenCard>
+<RadzenCard>
+    <RadzenPanel AllowCollapse="true" Collapsed="true">
+        <HeaderTemplate>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="15px">
+                <h6 class="m-0">
+                    <b>Log</b>
+                </h6>
+            </RadzenStack>
+        </HeaderTemplate>
+        <ChildContent>
+            <div class="p-1 mt-2">
+                <div class="bg-black p-3 overflow-scroll" style="max-height: 600px;">
+                    @* ReSharper disable once CSharpWarnings::CS8602 *@
+                    @foreach (var v in ViewModel.Log)
+                    {
+                        <div class="console">
+                            <span class="prompt @GetCssClassForLogLevel(v.LogLevel)">
+                                @v.LogLevel
+                            </span>
+                            <samp>
+                                <span class="date">@v.TimeStamp</span>
+                                <kbd class="cmd">@v.Message</kbd>
+                            </samp>
+                        </div>
+                    }
+                </div>
+            </div>
+        </ChildContent>
+    </RadzenPanel>
+</RadzenCard>

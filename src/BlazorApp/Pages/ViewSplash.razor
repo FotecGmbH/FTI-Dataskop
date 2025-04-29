@@ -1,0 +1,31 @@
+﻿@page "/"
+
+@namespace BlazorApp.Pages
+
+@inherits ProjectRazorPage<VmMenu>
+
+<div style="background-color: #163072; color: white; margin: 25px; text-align: center;">
+    <div style="padding-top: 50px;">
+        <h1>BDA Dev</h1>
+        <div style="margin:40px;">
+            <img src="/content/Loewe_weiß.png" style="max-width: 100%; width:200px;"/>
+        </div>
+        <div style="margin: 20px;">
+            <p>Applikation wird gestartet ...</p>
+        </div>
+        <div style="margin: 20px; padding-bottom: 50px;">
+            <div class="spinner-border text-primary" role="status"></div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    /// <inheritdoc />
+    protected override async Task OnViewLoaded()
+    {
+        await base.OnViewLoaded().ConfigureAwait(true);
+
+        await InvokeAsync(VmProjectBase.LaunchFirstView).ConfigureAwait(true);
+    }
+}

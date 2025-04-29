@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+import "Protos/common.proto";
+import "Protos/enums.proto";
+import "Protos/measurementresults.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BDA.Service.Com.GRPC.Protos";
+
+
+
+
+service MeasurementDefinition{
+	rpc UpdateMeasurementDefinitionByID (ProtoFilterRequestByID) returns (ProtoResult); // Update measurement definition with an additional property
+	rpc GetMeasurementDefinitionByID (ProtoRequestByID) returns (ProtoMeasurementDefinitionReply); // Get measurement definition by ID
+	rpc GetMeasurementDefinitionsByProjectID (ProtoFilterRequestByID) returns (ProtoMeasurementDefinitionsReply);
+	rpc GetLatestMeasurementResultsByProjectID (ProtoFilterRequestByID) returns (ProtoMeasurementResultQueryReply);
+	rpc GetLatestMeasurementResultsByID (ProtoRequestByID) returns (ProtoMeasurementResultReply);
+
+}
+
+
+
+// MeasurmentDefinition
+message ProtoMeasurementDefinitionModel{
+	int64 ID = 1;
+	ProtoInformation Information = 2;
+	string AdditionalProperties = 3;
+	int32 MeasurementInterval = 4;
+	ProtoEnumValueTypes ValueType = 5;
+	ProtoEnumDownstreamTypes DownstreamType = 6;
+}
+
+// Basic MeasurmentDefinition model
+message ProtoBasicMeasurementDefinitionModel{
+	ProtoBasicInformation Information = 1;
+}
+
+// Reply of a single measurement definition plus a generic result.
+message ProtoMeasurementDefinitionReply{
+	ProtoResult Result = 1;
+	ProtoMeasurementDefinitionModel MeasurementDefinition = 2;
+}
+
+// Reply of a list of measurement definitions plus a generic result.
+message ProtoMeasurementDefinitionsReply{
+	ProtoResult Result = 1;
+	repeated ProtoMeasurementDefinitionModel MeasurementDefinitions = 2;
+}
+
+
+
+
+
+

@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewUserQ"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:bcm="http://biss.schemas.com/markupextensions"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    x:Name="MyViewUserQ"
+    d:DataContext="{x:Static viewmodels:VmUser.DesignInstance}"
+    x:TypeArguments="viewmodels:VmUser"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="16" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <bcc:BxImage
+                Grid.Row="0"
+                Grid.Column="0"
+                HeightRequest="120"
+                HorizontalOptions="Center"
+                ImageSource="{Binding Dc.DcExUser.Data.UserImageLink, Converter={StaticResource ConverterImage}, ConverterParameter={x:Static resources:EnumEmbeddedImage.DefaultUserImage_png}}"
+                IsCircleMode="true"
+                WidthRequest="120" />
+
+            <StackLayout Grid.Row="0" Grid.Column="1">
+                <Label Text="{Binding Dc.DcExUser.Data.Fullname}" />
+                <Label Text="{Binding Dc.DcExUser.Data.LoginName}" />
+                <Label IsVisible="{Binding Dc.DcExUser.Data.IsAdmin}" Text="System Admin" />
+                <Label Text="{Binding UserId}" />
+                <Label Text="{Binding DeviceId}" />
+            </StackLayout>
+
+            <!--#region Button-->
+
+            <Grid Grid.Row="0" Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="0" />
+                        <On Platform="Android" Value="0" />
+                        <On Platform="WPF" Value="0,0,28,0" />
+                    </OnPlatform>
+                </Grid.Margin>
+
+                <!--#region Bearbeiten-->
+
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        FontSize="28"
+                        Style="{bcm:Sty LabelStyGlyph}"
+                        Text="{x:Static resources:Glyphs.Cog}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Text="Barbeiten"
+                        VerticalOptions="End" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Style="{bcm:Sty LabelStyDetail}"
+                        Text="Benutzerstammdaten bearbeiten"
+                        VerticalOptions="Start" />
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="3"
+                        FontSize="28"
+                        Style="{bcm:Sty LabelStyGlyph}"
+                        Text="{x:Static resources:Glyphs.Arrow_thick_circle_right_2}" />
+
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        BackgroundColor="Transparent">
+                        <BoxView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CmdEdit}" />
+                        </BoxView.GestureRecognizers>
+                    </BoxView>
+
+                    <BoxView
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        Style="{bcm:Sty BoxViewStySeperator}" />
+
+                </Grid>
+
+                <!--#endregion-->
+
+                <!--#region Passwort-->
+
+                <Grid Grid.Row="1" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        FontSize="28"
+                        Style="{bcm:Sty LabelStyGlyph}"
+                        Text="{x:Static resources:Glyphs.Password_lock_1}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Text="Passwort"
+                        VerticalOptions="End" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Style="{bcm:Sty LabelStyDetail}"
+                        Text="Passwort ändern"
+                        VerticalOptions="Start" />
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="3"
+                        FontSize="28"
+                        Style="{bcm:Sty LabelStyGlyph}"
+                        Text="{x:Static resources:Glyphs.Arrow_thick_circle_right_2}" />
+
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        BackgroundColor="Transparent">
+                        <BoxView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CmdChangePassword}" />
+                        </BoxView.GestureRecognizers>
+                    </BoxView>
+
+                    <BoxView
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        Style="{bcm:Sty BoxViewStySeperator}" />
+
+                </Grid>
+
+                <!--#endregion-->
+
+                <!--#region Token-->
+
+                <Grid Grid.Row="2" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        FontSize="28"
+                        Style="{bcm:Sty LabelStyGlyph}"
+                        Text="{x:Static resources:Glyphs.Password_approved}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Text="Token"
+                        VerticalOptions="End" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Style="{bcm:Sty LabelStyDetail}"
+                        Text="Neuen Zugriffstoken erstellen"
+                        VerticalOptions="Start" />
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="3"
+                        FontSize="28"
+                        Style="{bcm:Sty LabelStyGlyph}"
+                        Text="{x:Static resources:Glyphs.Add_circle_bold}" />
+
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        BackgroundColor="Transparent">
+                        <BoxView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CmdAddToken}" />
+                        </BoxView.GestureRecognizers>
+                    </BoxView>
+
+                    <BoxView
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        Style="{bcm:Sty BoxViewStySeperator}" />
+
+                </Grid>
+
+                <!--#endregion-->
+
+                <!--#region Logout-->
+
+                <Grid Grid.Row="3" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        FontSize="28"
+                        Style="{bcm:Sty LabelStyGlyph}"
+                        Text="{x:Static resources:Glyphs.User_logout}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Text="Logout"
+                        VerticalOptions="End" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Style="{bcm:Sty LabelStyDetail}"
+                        Text="Aktuellen Benutzer abmelden"
+                        VerticalOptions="Start" />
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="3"
+                        FontSize="28"
+                        Style="{bcm:Sty LabelStyGlyph}"
+                        Text="{x:Static resources:Glyphs.Arrow_thick_circle_right_2}" />
+
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        BackgroundColor="Transparent">
+                        <BoxView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CmdLogout}" />
+                        </BoxView.GestureRecognizers>
+                    </BoxView>
+
+                    <BoxView
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        Style="{bcm:Sty BoxViewStySeperator}" />
+
+                </Grid>
+
+                <!--#endregion-->
+
+
+            </Grid>
+
+            <!--#endregion-->
+
+            <!--#region Berechtigungen-->
+
+            <ScrollView Grid.Row="2" Grid.Column="0">
+                <ScrollView.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS, Android, macOS" Value="8,0" />
+                        <On Platform="WPF" Value="0" />
+                    </OnPlatform>
+                </ScrollView.Margin>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="Berechtigungen">
+                        <Label.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,8,0,4" />
+                                <On Platform="Android" Value="0,8,0,4" />
+                                <On Platform="WPF" Value="0,8,28,4" />
+                            </OnPlatform>
+                        </Label.Margin>
+                    </Label>
+                    <StackLayout
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        BindableLayout.ItemsSource="{Binding UiPermissions}">
+                        <StackLayout.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0" />
+                                <On Platform="Android" Value="0" />
+                                <On Platform="WPF" Value="0,0,28,0" />
+                            </OnPlatform>
+                        </StackLayout.Margin>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid d:DataContext="{x:Static viewmodels:VmUser.DesignInstanceExUserPremission}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <BoxView
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Style="{bcm:Sty BoxViewStySeperator}" />
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding UserRoleUi}" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding UserRightUi}"
+                                        TextColor="DodgerBlue" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding Company}"
+                                        TextColor="DodgerBlue" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+
+
+                </Grid>
+            </ScrollView>
+
+
+            <!--#endregion-->
+
+            <!--#region Geräte-->
+
+            <ScrollView Grid.Row="2" Grid.Column="1">
+                <ScrollView.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS, Android, macOS" Value="8,0" />
+                        <On Platform="WPF" Value="0" />
+                    </OnPlatform>
+                </ScrollView.Margin>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalOptions="Center"
+                        Text="Benutzergeräte">
+                        <Label.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,8,0,4" />
+                                <On Platform="Android" Value="0,8,0,4" />
+                                <On Platform="WPF" Value="0,8,28,4" />
+                            </OnPlatform>
+                        </Label.Margin>
+                    </Label>
+                    <StackLayout
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        BindableLayout.ItemsSource="{Binding Dc.DcExUser.Data.UserDevices}">
+                        <StackLayout.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0" />
+                                <On Platform="Android" Value="0" />
+                                <On Platform="WPF" Value="0,0,28,0" />
+                            </OnPlatform>
+                        </StackLayout.Margin>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid d:DataContext="{x:Static viewmodels:VmUser.DesignInstanceExUserDevice}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <BoxView
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Style="{bcm:Sty BoxViewStySeperator}" />
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding DeviceName}" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding Manufacturer}"
+                                        TextColor="DodgerBlue" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding Model}"
+                                        TextColor="DodgerBlue" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+
+
+                </Grid>
+            </ScrollView>
+
+            <!--#endregion-->
+
+            <!--#region Token-->
+
+            <ScrollView Grid.Row="2" Grid.Column="2">
+                <ScrollView.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS, Android, macOS" Value="8,0" />
+                        <On Platform="WPF" Value="0" />
+                    </OnPlatform>
+                </ScrollView.Margin>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalOptions="Center"
+                        Text="Zugriffstoken">
+                        <Label.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,8,0,4" />
+                                <On Platform="Android" Value="0,8,0,4" />
+                                <On Platform="WPF" Value="0,8,28,4" />
+                            </OnPlatform>
+                        </Label.Margin>
+                    </Label>
+                    <StackLayout
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        BindableLayout.ItemsSource="{Binding Dc.DcExUser.Data.Tokens}">
+                        <StackLayout.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0" />
+                                <On Platform="Android" Value="0" />
+                                <On Platform="WPF" Value="0,0,28,0" />
+                            </OnPlatform>
+                        </StackLayout.Margin>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid d:DataContext="{x:Static viewmodels:VmUser.DesignInstanceExAccessToken}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <BoxView
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="3"
+                                        Style="{bcm:Sty BoxViewStySeperator}" />
+
+
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Margin="0,0,4,0"
+                                        FontSize="20"
+                                        Style="{bcm:Sty LabelStyGlyph}"
+                                        Text="{x:Static resources:Glyphs.Copy_paste_1}" />
+
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        LineBreakMode="CharacterWrap"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding Token}" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Style="{bcm:Sty LabelStyDetail}"
+                                        Text="{Binding GuiltyUntilUtc}"
+                                        TextColor="DodgerBlue" />
+
+                                    <BoxView
+                                        Grid.Row="0"
+                                        Grid.RowSpan="3"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="3"
+                                        BackgroundColor="Transparent"
+                                        Color="Transparent">
+                                        <BoxView.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding ViewModel.CmdCopyToken, Source={x:Reference MyViewUserQ}}"
+                                                CommandParameter="{Binding .}"
+                                                NumberOfTapsRequired="1" />
+                                        </BoxView.GestureRecognizers>
+                                    </BoxView>
+
+                                    <bcc:BxGlyphButton
+                                        Grid.Row="1"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="2"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding ViewModel.CmdDeleteToken, Source={x:Reference MyViewUserQ}}"
+                                        CommandParameter="{Binding .}"
+                                        Glyph="{Binding ViewModel.CmdDeleteToken.Glyph, Source={x:Reference MyViewUserQ}}"
+                                        GlyphColor="DarkRed" />
+
+
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+
+
+                </Grid>
+            </ScrollView>
+
+            <!--#endregion-->
+
+
+        </Grid>
+
+
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

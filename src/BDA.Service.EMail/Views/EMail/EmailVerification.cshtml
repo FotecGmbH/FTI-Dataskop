@@ -1,0 +1,68 @@
+﻿@using Exchange
+@model BDA.Service.EMail.Services.EMailModelUser
+
+@{
+    Layout = "/Views/EMail/_EMailBase.cshtml";
+}
+
+@section HeaderContent
+{
+    <title>Best&auml;tigung ihres neuen Accounts!</title>
+}
+
+<!-- body -->
+@* ReSharper disable once Html.Obsolete *@
+<table class="body-wrap" bgcolor=#f6f6f6>
+    <tr>
+        <td></td>
+        @* ReSharper disable once Html.Obsolete *@
+        <td class="container" bgcolor="#f6f6f6">
+            <img src="@(AppSettings.Current().DcSignalHost)/Content/fotec.png" width="200" height=90/>
+            <br/>
+            <br/>
+            <br/>
+            <h3> Best&auml;tigen Sie ihren Account! </h3>
+            <!-- content -->
+            <div class="content">
+                <table>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td style="text-align: left" font-family:Arial>
+                                        <p>
+                                            @* ReSharper disable once RedundantSuppressNullableWarningExpression *@
+                                            Sehr geehrte(r) Frau/Herr @Model!.Firstname @Model.Lastname,<br/> vielen Dank f&uuml;r Ihre Registrierung!<br/>
+                                            Wir bitten Sie nun ihren Account mittels &Ouml;ffnen des folgenden Links zu best&auml;tigen:
+                                            <a href="@Model.Link">@Model.Link</a>
+                                        </p>
+
+                                        @if (!string.IsNullOrWhiteSpace(Model.Username) && !(string.IsNullOrWhiteSpace(Model.Password)))
+                                        {
+                                            <p>
+                                                Nach der Best&#228;tigung k&#246;nnen Sie sich in der App mit folgenden Benutzerdaten anmelden:<br/>
+                                                @* ReSharper disable once RedundantSuppressNullableWarningExpression *@
+                                                Email: @Model!.Username <br/>
+                                                @* ReSharper disable once RedundantSuppressNullableWarningExpression *@
+                                                Passwort: @Model!.Password <br/>
+
+                                                Bitte &#228;ndern Sie Ihr Passwort nach der Anmeldung<br/>
+                                            </p>
+                                        }
+
+                                        <p>Mit freundlichen Gr&uuml;&szlig;en,<br/>ihr Team der Fotec!</p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/><br/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- /content -->
+
+        </td>
+        <td></td>
+    </tr>
+
+</table>

@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+import "Protos/common.proto";
+import "Protos/enums.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BDA.Service.Com.GRPC.Protos";
+
+
+
+
+service Geo{
+	rpc GetResultsInArea (ProtoGeoRequest) returns (ProtoGeoReply);
+}
+
+
+message ProtoGeoResultModel{
+	int64 ID = 1;
+	google.protobuf.Timestamp TimeStamp = 2;
+	float Distance = 3;
+	bytes ValueBinary = 4;
+	string ValueText = 5;
+	float ValueNumber = 6;
+	bool ValueBit = 7;
+	ProtoEnumValueTypes ValueType = 8;
+	ProtoCoordinate Coordinate = 9;
+}
+
+
+message ProtoGeoRequest{
+	float Latitude = 1;
+	float Longitude = 2;
+	float AltitudeMinimum = 3;
+	float AltitudeMaximum = 4;
+	float Radius = 5;
+	int32 ProjectID = 6;
+	ProtoEnumValueTypes ValueType = 7;
+	bool IsAllTypes = 8; // This is needed to prevent redefining the ValueTypes enum with a "All" option
+	string AdditionalPropertyFilter = 9;
+	google.protobuf.Timestamp TimeStampFrom = 10;
+	google.protobuf.Timestamp TimeStampTo = 11;
+
+}
+
+// This model represents a reply of the 
+message ProtoGeoReply{
+	ProtoResult Result = 1;
+	repeated ProtoGeoResultModel GeoResults = 2;
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<dataTemplates:CollectionViewTemplate
+    x:Class="BaseApp.View.Xamarin.Controls.DataTemplates.TemplateWpfGatewaySwipe"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:bcm="clr-namespace:Biss.Apps.XF.MarkupExtensions;assembly=Biss.Apps.XF"
+    xmlns:converter="clr-namespace:Biss.Apps.XF.Converter;assembly=Biss.Apps.XF"
+    xmlns:dataTemplates="http://biss.schemas.com/coredatatemplates"
+    x:Name="WpfSwipeTemplate">
+    <dataTemplates:CollectionViewTemplate.Resources>
+        <converter:ConverterBooleanValueColor
+            x:Key="ConverterSelected"
+            ColorFalse="{StaticResource ColorTextDetail}"
+            ColorTrue="Green" />
+    </dataTemplates:CollectionViewTemplate.Resources>
+
+
+    <Grid
+        x:Name="Container"
+        Margin="0"
+        ColumnSpacing="0"
+        RowSpacing="0">
+        <!--#region Item Anzeige-->
+
+        <Frame
+            Margin="0"
+            Padding="2"
+            BackgroundColor="{Binding Content.BackgroundColor, Source={x:Reference ViewTemplatePresenter}}"
+            CornerRadius="4"
+            HasShadow="False">
+            <Grid
+                Margin="0"
+                BackgroundColor="{Binding Content.BackgroundColor, Source={x:Reference ViewTemplatePresenter}}"
+                ColumnDefinitions="Auto,*,Auto"
+                ColumnSpacing="0"
+                RowDefinitions="*,Auto"
+                RowSpacing="0">
+                <StackLayout
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0"
+                    IsVisible="{Binding Collection.ShowSelectionStatus, Source={x:Reference WpfSwipeTemplate}}"
+                    Spacing="0">
+                    <Grid
+                        x:Name="GridLeftMargin"
+                        Margin="0,0,8,0"
+                        ColumnDefinitions="*,20,*"
+                        HeightRequest="20"
+                        HorizontalOptions="Center"
+                        IsEnabled="{Binding Collection.SelectionMode, Source={x:Reference WpfSwipeTemplate}, Converter={bcm:Sty ConverterSelectionModeIsSingleType}}"
+                        IsVisible="{Binding Collection.SelectionMode, Source={x:Reference WpfSwipeTemplate}, Converter={bcm:Sty ConverterSelectionModeIsSingleType}}"
+                        MinimumHeightRequest="20"
+                        RowDefinitions="*,20,*"
+                        VerticalOptions="Center"
+                        WidthRequest="{Binding TouchMarginLeft, Source={x:Reference WpfSwipeTemplate}}">
+                        <Grid
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="0"
+                            Padding="0"
+                            HeightRequest="20"
+                            WidthRequest="20">
+                            <Frame
+                                Margin="0"
+                                Padding="0"
+                                BackgroundColor="{Binding Item.IsSelected, Source={x:Reference WpfSwipeTemplate}, Converter={StaticResource ConverterSelected}}"
+                                CornerRadius="10"
+                                HeightRequest="20"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                WidthRequest="20" />
+                        </Grid>
+                        <BoxView
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            BackgroundColor="Transparent"
+                            HorizontalOptions="Fill"
+                            IsEnabled="{Binding Collection.SelectionMode, Source={x:Reference WpfSwipeTemplate}, Converter={bcm:Sty ConverterSelectionModeIsSingleType}}"
+                            IsVisible="{Binding Collection.SelectionMode, Source={x:Reference WpfSwipeTemplate}, Converter={bcm:Sty ConverterSelectionModeIsSingleType}}"
+                            VerticalOptions="Fill">
+                            <BoxView.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Collection.CmdSelectItem, Source={x:Reference WpfSwipeTemplate}}"
+                                    CommandParameter="{Binding}" />
+                            </BoxView.GestureRecognizers>
+                        </BoxView>
+                    </Grid>
+                </StackLayout>
+
+                <bcc:BxCollectionViewTemplatePresenter
+                    x:Name="ViewTemplatePresenter"
+                    Grid.Column="1"
+                    Margin="0"
+                    Padding="0"
+                    BindingContext="{Binding}"
+                    ItemTemplate="{Binding DataTemplate, Source={x:Reference WpfSwipeTemplate}}" />
+
+                <BoxView
+                    x:Name="SelectionBoxView"
+                    Grid.Column="1"
+                    Margin="0"
+                    IsEnabled="{Binding Collection.SelectionMode, Source={x:Reference WpfSwipeTemplate}, Converter={bcm:Sty ConverterSelectionModeIsSingleType}}"
+                    IsVisible="{Binding Collection.SelectionMode, Source={x:Reference WpfSwipeTemplate}, Converter={bcm:Sty ConverterSelectionModeIsSingleType}}">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding Collection.CmdSelectItem, Source={x:Reference WpfSwipeTemplate}}"
+                            CommandParameter="{Binding}" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+                <!--#endregion-->
+
+                <!--#region Swipe alternative-->
+                <Grid
+                    Grid.Column="2"
+                    Margin="0,0,4,0"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center"
+                    WidthRequest="{Binding TouchMarginRight, Source={x:Reference WpfSwipeTemplate}}">
+                    <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
+                    <bcc:BxGlyphButton
+                        Animate="{Binding AnimationPlayed, Source={x:Reference WpfSwipeTemplate}, Converter={bcm:Sty ConverterBoolInverted}}"
+                        Command="{Binding CmdWpfSwipe, Source={x:Reference WpfSwipeTemplate}}"
+                        CommandParameter="{x:Reference WpfSwipeContent}"
+                        FontSize="{StaticResource FontSizeSmall}"
+                        Glyph="{Binding CmdWpfSwipe.Glyph, Source={x:Reference WpfSwipeTemplate}}"
+                        VerticalOptions="Center" />
+                </Grid>
+                <BoxView
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    IsVisible="{Binding IsVisible, Source={x:Reference WpfSwipeContent}}">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CmdWpfSwipe, Source={x:Reference WpfSwipeTemplate}}"
+                                              CommandParameter="{x:Reference WpfSwipeContent}" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+                <!--#endregion-->
+                <!--#region Swipe Content-->
+                <Frame
+                    x:Name="WpfSwipeContent"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Padding="4"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource ColorBackgroundFocus},
+                                                      Light={StaticResource ColorBackgroundFocusLight}}"
+                    BorderColor="{AppThemeBinding Dark={StaticResource ColorBackground},
+                                                  Light={StaticResource ColorBackgroundLight}}"
+                    HorizontalOptions="End"
+                    IsVisible="False"
+                    VerticalOptions="Center">
+
+                    <Grid
+                        Margin="0"
+                        Padding="0"
+                        ColumnDefinitions="Auto,Auto,Auto"
+                        ColumnSpacing="4">
+
+                        <bcc:BxGlyphButton
+                            Grid.Column="1"
+                            Animate="True"
+                            BackgroundColor="Transparent"
+                            Command="{Binding Collection.CmdEditItem, Source={x:Reference WpfSwipeTemplate}}"
+                            CommandParameter="{Binding}"
+                            FontSize="{StaticResource FontSizeSmall}"
+                            Glyph="{Binding Collection.CmdEditItem.Glyph, Source={x:Reference WpfSwipeTemplate}}" />
+
+
+                        <bcc:BxGlyphButton
+                            Grid.Column="2"
+                            Animate="True"
+                            BackgroundColor="Transparent"
+                            Command="{Binding Collection.CmdRemoveItem, Source={x:Reference WpfSwipeTemplate}}"
+                            CommandParameter="{Binding}"
+                            FontSize="{StaticResource FontSizeSmall}"
+                            Glyph="{Binding Collection.CmdRemoveItem.Glyph, Source={x:Reference WpfSwipeTemplate}}"
+                            GlyphColor="Red" />
+
+                    </Grid>
+                </Frame>
+                <!--#endregion-->
+
+
+                <BoxView
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="8,0"
+                    HeightRequest="1"
+                    IsVisible="{Binding ShowSeparator, Source={x:Reference WpfSwipeTemplate}}"
+                    Style="{bcm:Sty BoxViewStySeperator}"
+                    VerticalOptions="Center" />
+
+            </Grid>
+        </Frame>
+
+    </Grid>
+
+
+</dataTemplates:CollectionViewTemplate>

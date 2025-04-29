@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<linker>
+	<assembly fullname="Exchange">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="BaseApp">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss">
+		<type fullname="*" />
+	</assembly>
+
+	<assembly fullname="Biss.Apps">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.XF">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Biss.Apps.XF.iOs">
+		<type fullname="*" />
+	</assembly>
+
+	<assembly fullname="Microsoft.Extensions.Logging">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Microsoft.Extensions.Logging.Debug">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Microsoft.Extensions.Options">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="Plugin.Media">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="System.Text.Json">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="System.Net.Http">
+		<type fullname="*" />
+	</assembly>
+	<assembly fullname="System.Net.Http">
+		<type fullname="System.Net.Http.HttpClientHandler">
+			<method name="set_ServerCertificateCustomValidationCallback" />
+		</type>
+		<type fullname="System.Net.Http.HttpMessageHandler" />
+	</assembly>
+
+	<assembly fullname="System.Runtime">
+		<type fullname="*" />
+	</assembly>
+</linker>

@@ -1,0 +1,11 @@
+@page "/ViewSettingPush"
+@page "/ViewSettingPush/{Id:int}"
+
+@inherits ProjectRazorPage<VmSettingsPush>
+
+@if (ViewModel != null)
+{
+    <div>
+        <h3>@ViewModel.PageSubTitle</h3>
+    </div>
+}

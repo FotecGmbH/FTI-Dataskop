@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewEditGlobalConfig"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bc="clr-namespace:BaseApp.View.Xamarin.Controls;assembly=BaseApp.View.Xamarin"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    d:DataContext="{x:Static viewmodels:VmEditGlobalConfig.DesignInstance}"
+    x:TypeArguments="viewmodels:VmEditGlobalConfig"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+
+        <ScrollView>
+            <StackLayout>
+
+                <!--#region Stammdaten-->
+                <bcc:BxCollapseView HeaderSubTitle="Art der Konfiguration" HeaderTitle="Stammdaten">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Stammdaten" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="Art der Konfiguration" />
+                        <bcc:BxPicker
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            ObservableCollectionSelectable="{Binding PickerConfigType}" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryName.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryName}"
+                            HasFrame="False" />
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryDescription.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryDescription}"
+                            HasFrame="False" />
+                    </Grid>
+                </bcc:BxCollapseView>
+
+                <!--#endregion-->
+
+                <!--#region TTN-->
+                <bcc:BxCollapseView HeaderSubTitle="{Binding EntryTtnZone.Title}"
+                                    HeaderTitle="{Binding PickerConfigType.SelectedItem.Description}">
+                    <Grid IsVisible="{Binding TtnVisible}">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="{Binding PickerConfigType.SelectedItem.Description}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryTtnZone.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryTtnZone}"
+                            HasFrame="False" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryTtnApiKey.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryTtnApiKey}"
+                            HasFrame="False"
+                            Mulitiline="True" />
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryTtnAppId.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryTtnAppId}"
+                            HasFrame="False"
+                            Mulitiline="True" />
+
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryTtnUserId.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="4"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryTtnUserId}"
+                            HasFrame="False"
+                            Mulitiline="True" />
+                    </Grid>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Drei-->
+                <bcc:BxCollapseView HeaderTitle="{Binding PickerConfigType.SelectedItem.Description}">
+
+                    <Grid IsVisible="{Binding DreiVisible}">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="{Binding PickerConfigType.SelectedItem.Description}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryDreiLoginName.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryDreiLoginName}"
+                            HasFrame="False" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryDreiPassword.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryDreiPassword}"
+                            HasFrame="False"
+                            IsPassword="True" />
+
+                    </Grid>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Microtronics-->
+                <bcc:BxCollapseView HeaderTitle="{Binding PickerConfigType.SelectedItem.Description}">
+
+                    <Grid IsVisible="{Binding MicrotronicsVisible}">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="{Binding PickerConfigType.SelectedItem.Description}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryMicrotronicsUserName.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryMicrotronicsUserName}"
+                            HasFrame="False" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryMicrotronicsPassword.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryMicrotronicsPassword}"
+                            HasFrame="False"
+                            IsPassword="True" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="{Binding EntryMicrotronicsBackendDomain.Title}" />
+                        <bcc:BxEntry
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            EntryData="{Binding EntryMicrotronicsBackendDomain}"
+                            HasFrame="False" />
+
+                    </Grid>
+                </bcc:BxCollapseView>
+                <!--#endregion-->
+
+                <!--#region Zusätzliches-->
+                <!--<bcc:BxCollapseView HeaderSubTitle="Dyn. Konfiguration" HeaderTitle="Zusätzliche Daten">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource LabelStyEditHeader}"
+                            Text="Zusätzliche (dynamische) Daten" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelStyEditDescription}"
+                            Text="Dynamische Konfiguration:" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,0,0,8"
+                            Padding="0,0,16,0"
+                            LineBreakMode="CharacterWrap"
+                            Text="{Binding Data.AdditionalConfiguration}" />
+                    </Grid>
+                </bcc:BxCollapseView>-->
+
+                <!--#endregion-->
+
+                <!--#region Infos-->
+
+                <StackLayout>
+                    <bc:BxInformation DbId="{Binding Data.Id}" ExInformation="{Binding Data.Information}" />
+                </StackLayout>
+
+                <!--#endregion-->
+            </StackLayout>
+
+        </ScrollView>
+
+
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>

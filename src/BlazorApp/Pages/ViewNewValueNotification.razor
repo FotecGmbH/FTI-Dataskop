@@ -1,0 +1,70 @@
+﻿@page "/ViewNewValueNotification"
+@page "/ViewNewValueNotification/{Id:int}"
+@using BDA.Common.Exchange.Configs.NewValueNotifications.NewValueNotificationRules
+@using BDA.Common.Exchange.Enum
+@inherits ProjectRazorPage<VmNewValueNotification>
+
+@if (ViewModel != null!)
+{
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenStack>
+                <RadzenCard>
+                    <RadzenStack>
+                        <RadzenLabel class="labelstyeditheader">@ViewModel.PageTitle</RadzenLabel>
+                        <BxPicker PickerInstance="@ViewModel.PickerNewValueNotificationType" @bind-SelectedItem="@ViewModel.PickerNewValueNotificationType.SelectedItem"/>
+
+                        @if (ViewModel.PickerNewValueNotificationType.SelectedItem?.Key == EnumNewValueNotificationType.Webhook)
+                        {
+                            <BxEntry ShowFrame="false" Entry="ViewModel.EntryWebHookUrl"/>
+                        }
+
+                        @if (ViewModel.PickerNewValueNotificationType.SelectedItem?.Key == EnumNewValueNotificationType.Email)
+                        {
+                            <BxEntry ShowFrame="false" Entry="ViewModel.EntryEmailAddress"/>
+                        }
+
+                        @if (ViewModel.ValueTypeOfMeasurementDefinition is EnumValueTypes.Number or EnumValueTypes.Bit or EnumValueTypes.Text)
+                        {
+                            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
+                                <BxButton BxButtonType="EnumBxButtonType.TextAndGlyph" BissCommand="ViewModel.CmdAddRule"/>
+                            </RadzenStack>
+
+                            if (ViewModel.NewValueNotification?.Rules != null)
+                            {
+                                @foreach (var rule in ViewModel.NewValueNotification.Rules)
+                                {
+                                    @if (rule != ViewModel.NewValueNotification.Rules.First())
+                                    {
+                                        <RadzenText Text="oder"/>
+                                    }
+
+                                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+                                        @switch (rule.NewValueNotificationRuleType)
+                                        {
+                                            case EnumNewValueNotificationRuleType.String:
+                                                <NewValueNotificationRuleCompareStringComponent NewValueNotificationRule="@(rule as ExNewNotificationRuleCompareString)"/>
+                                                break;
+
+                                            case EnumNewValueNotificationRuleType.Boolean:
+                                                <NewValueNotificationRuleCompareBoolComponent NewValueNotificationRule="@(rule as ExNewNotificationRuleCompareBool)"/>
+                                                break;
+
+                                            case EnumNewValueNotificationRuleType.Number:
+                                                <NewValueNotificationRuleCompareNumberComponent NewValueNotificationRule="@(rule as ExNewNotificationRuleCompareNumbers)"/>
+                                                break;
+                                        }
+                                        <BxButton BxButtonType="EnumBxButtonType.JustGlyph" ButtonStyle="ButtonStyle.Danger" BissCommand="ViewModel.CmdDeleteRule" ExecutionParameter="rule"/>
+                                    </RadzenStack>
+                                }
+                            }
+                        }
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                            <BxButton BxButtonType="EnumBxButtonType.TextAndGlyph" ButtonStyle="ButtonStyle.Success" BissCommand="ViewModel.CmdSave"/>
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+}

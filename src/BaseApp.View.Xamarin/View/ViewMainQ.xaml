@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<view:BissContentPage
+    x:Class="BaseApp.View.Xamarin.View.ViewMainQ"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bcc="clr-namespace:Biss.Apps.XF.Controls;assembly=Biss.Apps.XF"
+    xmlns:bccnv="http://biss.schemas.com/coreconverter"
+    xmlns:bcm="http://biss.schemas.com/markupextensions"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=netstandard"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    x:Name="MyViewMainQ"
+    d:DataContext="{x:Static viewmodels:VmMain.DesignInstance}"
+    x:TypeArguments="viewmodels:VmMain"
+    IsBusy="{Binding View.IsBusy}"
+    mc:Ignorable="d">
+    <view:BissContentPage.Resources>
+        <bccnv:ConverterBooleanValueColor
+            x:Key="BackgroundColorConverter"
+            ColorFalse="Transparent"
+            ColorTrue="{StaticResource ColorAccent}" />
+    </view:BissContentPage.Resources>
+    <bcc:PageControl>
+
+        <!--#region View Content-->
+
+        <StackLayout
+            Margin="8,0,8,4"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+
+            <Grid
+                ColumnSpacing="8"
+                HorizontalOptions="FillAndExpand"
+                RowSpacing="4"
+                VerticalOptions="FillAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48" />
+                    <RowDefinition Height="56" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--#region Obere Leiste-->
+                <StackLayout
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="4"
+                    HorizontalOptions="FillAndExpand"
+                    Orientation="Horizontal">
+                    <Label
+                        Text="Firma:"
+                        VerticalOptions="Center"
+                        VerticalTextAlignment="Center" />
+                    <Picker
+                        HorizontalOptions="FillAndExpand"
+                        ItemDisplayBinding="{Binding Data.Information.Name}"
+                        ItemsSource="{Binding Dc.DcExCompanies}"
+                        MinimumWidthRequest="200"
+                        SelectedItem="{Binding Dc.DcExCompanies.SelectedItem}"
+                        WidthRequest="200" />
+                    <bcc:BxButton BissCommand="{Binding CmdEditCompanies}" FontSize="{StaticResource FontSizeSmall}" />
+                </StackLayout>
+
+                <BoxView
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    HeightRequest="1"
+                    VerticalOptions="End"
+                    Color="{AppThemeBinding Dark={StaticResource ColorAccent},
+                                            Light={StaticResource ColorAccentLight}}" />
+
+                <!--#endregion-->
+
+                <!--#region Erste Spalte Projekte-->
+
+                <Grid Grid.Row="1" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="16" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                    </Grid.RowDefinitions>
+
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.RowSpan="4"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource ColorAccent},
+                                                          Light={StaticResource ColorAccentLight}}"
+                        Opacity="0.7" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="Projekte" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Style="{bcm:Sty LabelStyDetail}"
+                        Text="{Binding Dc.DcExCompanies.SelectedItem.Data.Information.Name}" />
+
+                </Grid>
+
+                <!--  ReSharper disable once ObsoleteElement  -->
+                <bcc:BxListView
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    ItemsSource="{Binding UiProjects}">
+                    <!--  ReSharper disable once ObsoleteElement  -->
+                    <bcc:BxListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid
+                                    BackgroundColor="{Binding Data.IsSelected, Converter={StaticResource BackgroundColorConverter}}">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="2*" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="1*" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="8" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="2"
+                                            Margin="0,0,4,0"
+                                            Style="{bcm:Sty LabelStyDetail}"
+                                            Text="{Binding Index}"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            Text="{Binding Data.Information.Name}"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Margin="0,-8,0,0"
+                                            HorizontalOptions="Start"
+                                            Style="{bcm:Sty LabelStyDetail}"
+                                            Text="{Binding Data.Information.Description}"
+                                            VerticalOptions="Center" />
+
+                                        <BoxView
+                                            Grid.Row="0"
+                                            Grid.RowSpan="4"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="5"
+                                            BackgroundColor="Transparent"
+                                            Color="Transparent">
+                                            <BoxView.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding ViewModel.CmdSelectListItem, Source={x:Reference MyViewMainQ}}"
+                                                    CommandParameter="{Binding .}"
+                                                    NumberOfTapsRequired="1" />
+                                            </BoxView.GestureRecognizers>
+                                        </BoxView>
+
+                                        <BoxView
+                                            Grid.Row="3"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="5"
+                                            Style="{bcm:Sty BoxViewStySeperator}">
+                                            <BoxView.IsVisible>
+                                                <OnPlatform x:TypeArguments="system:Boolean">
+                                                    <On Platform="iOS, Android, macOS">false</On>
+                                                    <On Platform="WPF">true</On>
+                                                </OnPlatform>
+                                            </BoxView.IsVisible>
+                                        </BoxView>
+                                    </Grid>
+
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+
+                    </bcc:BxListView.ItemTemplate>
+
+                </bcc:BxListView>
+
+
+                <!--#endregion-->
+
+                <!--#region Zweite Spalte - Messwerte-->
+
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="16" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                    </Grid.RowDefinitions>
+
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.RowSpan="4"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource ColorAccent},
+                                                          Light={StaticResource ColorAccentLight}}"
+                        Opacity="0.7" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="Messwerte" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Style="{bcm:Sty LabelStyDetail}"
+                        Text="{Binding InfoSelectedMeasurements}" />
+
+                </Grid>
+                <!--  ReSharper disable once ObsoleteElement  -->
+                <bcc:BxListView
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    ItemsSource="{Binding UiMeasurement}">
+                    <!--  ReSharper disable once ObsoleteElement  -->
+                    <bcc:BxListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid
+                                    BackgroundColor="{Binding Data.IsSelected, Converter={StaticResource BackgroundColorConverter}}">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="2*" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="1*" />
+                                            <RowDefinition Height="8" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="8" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="2"
+                                            Margin="0,0,4,0"
+                                            Style="{bcm:Sty LabelStyDetail}"
+                                            Text="{Binding Index}"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="2"
+                                            Margin="0,-4,4,0"
+                                            Style="{bcm:Sty LabelStyDetail}"
+                                            Text="{Binding Data.CurrentValue.ValueCounter}"
+                                            VerticalOptions="Center" />
+
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            Text="{Binding Data.Information.UiNameShort}"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Margin="0,-4,0,0"
+                                            HorizontalOptions="Start"
+                                            Style="{bcm:Sty LabelStyDetail}"
+                                            Text="{Binding Data.CurrentValue.SourceInfo}"
+                                            VerticalOptions="Center" />
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.RowSpan="3"
+                                            Grid.Column="3"
+                                            Margin="0,0,8,0"
+                                            Text="{Binding Data.CurrentValue.Value}"
+                                            VerticalOptions="Center" />
+
+                                        <BoxView
+                                            Grid.Row="0"
+                                            Grid.RowSpan="4"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="5"
+                                            BackgroundColor="Transparent"
+                                            Color="Transparent">
+                                            <BoxView.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding ViewModel.CmdSelectListItem, Source={x:Reference MyViewMainQ}}"
+                                                    CommandParameter="{Binding .}"
+                                                    NumberOfTapsRequired="1" />
+                                            </BoxView.GestureRecognizers>
+                                        </BoxView>
+
+                                        <BoxView
+                                            Grid.Row="4"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="5"
+                                            Style="{bcm:Sty BoxViewStySeperator}">
+                                            <BoxView.IsVisible>
+                                                <OnPlatform x:TypeArguments="system:Boolean">
+                                                    <On Platform="iOS, Android, macOS">false</On>
+                                                    <On Platform="WPF">true</On>
+                                                </OnPlatform>
+                                            </BoxView.IsVisible>
+                                        </BoxView>
+                                    </Grid>
+
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+
+                    </bcc:BxListView.ItemTemplate>
+
+                </bcc:BxListView>
+
+                <!--#endregion-->
+
+                <!--#region Dritte Spalte - Infos zu einem Messwert-->
+
+                <Grid Grid.Row="1" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="16" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                    </Grid.RowDefinitions>
+
+                    <BoxView
+                        Grid.Row="0"
+                        Grid.RowSpan="4"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource ColorAccent},
+                                                          Light={StaticResource ColorAccentLight}}"
+                        Opacity="0.7" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="Details zum Messwert" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Style="{bcm:Sty LabelStyDetail}"
+                        Text="{Binding SelectedMeasurementDefinition.Data.CurrentValue.SourceInfo}" />
+                </Grid>
+
+                <Grid
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    IsVisible="{Binding ShowDetails}">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Id" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Index}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Name" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.Information.Name}" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Beschreibung" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.Information.Description}" />
+
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Value Type" />
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.ValueType}" />
+
+                        <Label
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Sensor Type" />
+                        <Label
+                            Grid.Row="5"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.DownstreamType}" />
+
+                        <Label
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Messintervall" />
+                        <Label
+                            Grid.Row="6"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.MeasurementInterval}" />
+
+                        <Label
+                            Grid.Row="7"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Config" />
+                        <Label
+                            Grid.Row="7"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.AdditionalConfiguration}" />
+
+                        <Label
+                            Grid.Row="8"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Attribute" />
+                        <Label
+                            Grid.Row="8"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.AdditionalProperties}" />
+
+                        <Label
+                            Grid.Row="9"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Messung Id" />
+                        <Label
+                            Grid.Row="9"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.CurrentValue.Id}" />
+
+                        <Label
+                            Grid.Row="10"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Messungen Gesamt" />
+                        <Label
+                            Grid.Row="10"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.CurrentValue.ValueCounter}" />
+
+                        <Label
+                            Grid.Row="11"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Messungen Zeitpunkt" />
+                        <Label
+                            Grid.Row="11"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.CurrentValue.TimeStamp}" />
+
+                        <Label
+                            Grid.Row="12"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Messungen Ort" />
+                        <Label
+                            Grid.Row="12"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.CurrentValue.Location.GoogleString}" />
+
+                        <Label
+                            Grid.Row="13"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Messungen Höhe" />
+                        <Label
+                            Grid.Row="13"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.CurrentValue.Location.Altitude}" />
+
+                        <Label
+                            Grid.Row="14"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Quelle Info" />
+                        <Label
+                            Grid.Row="14"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.CurrentValue.SourceInfo}" />
+
+                        <Label
+                            Grid.Row="15"
+                            Grid.Column="1"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="Wert" />
+                        <Label
+                            Grid.Row="15"
+                            Grid.Column="3"
+                            Style="{bcm:Sty LabelStyDetail}"
+                            Text="{Binding SelectedMeasurementDefinition.Data.CurrentValue.Value}" />
+
+                    </Grid>
+
+                </Grid>
+
+                <!--#endregion-->
+
+            </Grid>
+        </StackLayout>
+        <!--#endregion-->
+
+    </bcc:PageControl>
+</view:BissContentPage>
